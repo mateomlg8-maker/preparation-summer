@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Préparation Summer — Accueil</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#FBFAF5;--grid:#DCE6F2;--ink:#1C2B4A;--ink-soft:#5A6685;--red:#C0392B;
+  --green:#2F7D4F;--stabilo:#FFE873;--card:#FFFFFF;--kid:#7B4BC4;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+body{font-family:'Inter',sans-serif;color:var(--ink);background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px, transparent 1px),linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size:32px 32px;line-height:1.6;-webkit-font-smoothing:antialiased;}
+body::before{content:'';position:fixed;top:0;bottom:0;left:max(16px, calc(50% - 560px));width:2px;background:var(--red);opacity:.45;z-index:0;pointer-events:none;}
+.wrap{max-width:1020px;margin:0 auto;padding:0 24px 120px;position:relative;z-index:1}
+header{padding:56px 0 8px}
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--red);font-weight:600}
+h1{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(40px,7vw,76px);line-height:1.02;letter-spacing:-.01em;margin:10px 0 14px}
+h1 .hl{background:linear-gradient(transparent 55%, var(--stabilo) 55%);padding:0 4px}
+.sub{max-width:680px;color:var(--ink-soft);font-size:17px}
+
+.dash{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin:36px 0 12px}
+.dash-card{background:var(--card);border:1.5px solid var(--ink);padding:18px 20px;box-shadow:4px 4px 0 var(--ink)}
+.dash-card .label{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft)}
+.dash-card .big{font-family:'Fraunces',serif;font-weight:900;font-size:38px;line-height:1.1}
+.dash-card .small{font-size:13px;color:var(--ink-soft)}
+.bar{height:10px;background:#EEF1F6;border:1px solid var(--ink);margin-top:10px;overflow:hidden}
+.bar > span{display:block;height:100%;width:0%;background:var(--green);transition:width .5s ease}
+#qcm-bar > span{background:var(--kid)}
+
+.sec-title{font-family:'Fraunces',serif;font-weight:900;font-size:24px;margin:48px 0 4px}
+.sec-sub{font-size:14px;color:var(--ink-soft);margin-bottom:14px}
+
+.courses{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.course{display:block;text-decoration:none;color:inherit;background:var(--card);border:1.5px solid var(--ink);padding:18px 20px;box-shadow:4px 4px 0 var(--ink);transition:transform .12s ease, box-shadow .12s ease}
+.course:hover,.course:focus-visible{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--ink);outline:none}
+.course:focus-visible{outline:2px solid var(--red);outline-offset:3px}
+.course .num{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:var(--red);letter-spacing:.1em}
+.course h3{font-family:'Fraunces',serif;font-weight:900;font-size:22px;line-height:1.1;margin:4px 0 6px}
+.course .desc{font-size:13.5px;color:var(--ink-soft);min-height:38px}
+.course .meta{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-soft);margin:10px 0 4px;display:flex;justify-content:space-between}
+.course .prog-line{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-soft);margin-top:8px;display:flex;justify-content:space-between}
+.course .pbar{height:8px;background:#EEF1F6;border:1px solid var(--ink);overflow:hidden;margin-top:3px}
+.course .pbar > span{display:block;height:100%;width:0%;transition:width .5s ease}
+.course .pbar.cours > span{background:var(--green)}
+.course .pbar.qcm > span{background:var(--kid)}
+.course .go{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:var(--ink);margin-top:12px;display:inline-block;border-top:1.5px solid var(--ink);padding-top:8px;width:100%}
+.course .go::after{content:' →'}
+
+.bridge{border:1.5px solid var(--ink);background:#EEF4FF;padding:16px 20px;margin:20px 0;font-size:14.5px}
+.bridge h4{font-family:'Fraunces',serif;font-weight:900;font-size:18px;margin-bottom:6px}
+.bridge ul{margin:6px 0 0 20px}
+.bridge li{margin:5px 0}
+
+.sync{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:8px 0}
+.sync button,.sync .imp{font-family:'JetBrains Mono',monospace;font-size:12.5px;font-weight:600;color:var(--ink);background:var(--card);border:1.5px solid var(--ink);padding:11px 16px;cursor:pointer;box-shadow:3px 3px 0 var(--ink);transition:transform .1s,box-shadow .1s;min-height:44px;display:inline-flex;align-items:center}
+.sync button:hover,.sync .imp:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--ink)}
+.sync button:focus-visible,.sync .imp:focus-within{outline:2px solid var(--red);outline-offset:2px}
+.sync-note{flex-basis:100%;font-size:12.5px;color:var(--ink-soft);margin-top:4px}
+.sync-note code{font-family:'JetBrains Mono',monospace;font-size:11.5px;background:#EEF1F6;padding:1px 5px;border:1px solid var(--grid)}
+.sync input[type=text]{font-family:'JetBrains Mono',monospace;font-size:13px;padding:11px 14px;border:1.5px solid var(--ink);background:var(--card);min-height:44px;min-width:200px;flex:1}
+.sync input[type=text]:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+.sync .badge{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;padding:8px 12px;border:1.5px solid var(--green);color:var(--green);background:#E7F5EC}
+.sync .badge.off{border-color:var(--ink-soft);color:var(--ink-soft);background:#EEF1F6}
+
+.reset{margin-top:26px}
+.reset button{font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:600;color:var(--ink-soft);background:none;border:1.5px solid var(--grid);padding:8px 14px;cursor:pointer;border-radius:2px}
+.reset button:hover{border-color:var(--red);color:var(--red)}
+
+footer{margin-top:70px;padding-top:24px;border-top:1.5px solid var(--ink);font-size:13px;color:var(--ink-soft)}
+footer .sig{font-family:'Fraunces',serif;font-style:italic;font-size:15px;color:var(--ink)}
+
+@media(max-width:760px){
+  .dash{grid-template-columns:1fr}
+  .courses{grid-template-columns:1fr}
+  body::before{left:8px}
+  .wrap{padding:0 16px 90px}
+  header{padding:40px 0 8px}
+}
+</style>
+<script src="firebase-sync.js"></script>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">Préparation Summer · Programme de révision</div>
+  <h1>Carnet de<br><span class="hl">Prépa</span></h1>
+  <p class="sub">Portail des 5 cours condensés pour préparer le premier trimestre. Chaque matière : explications « comme à un enfant » 🧒, fiches, QCM interactifs, exercices corrigés et examen blanc. Ta progression est sauvegardée dans ce navigateur — clique sur une matière pour t'y mettre.</p>
+</header>
+
+<div class="dash">
+  <div class="dash-card">
+    <div class="label">Jours avant la rentrée</div>
+    <div class="big" id="countdown">—</div>
+    <div class="small">Rentrée estimée : 1ᵉʳ septembre 2026</div>
+  </div>
+  <div class="dash-card">
+    <div class="label">Cours maîtrisé (global)</div>
+    <div class="big"><span id="global-pct">0</span>%</div>
+    <div class="bar" id="global-bar"><span></span></div>
+    <div class="small" style="margin-top:6px">Cases « j'ai compris » des 5 matières</div>
+  </div>
+  <div class="dash-card">
+    <div class="label">QCM réussis (global)</div>
+    <div class="big"><span id="qcm-pct">0</span>%</div>
+    <div class="bar" id="qcm-bar"><span></span></div>
+    <div class="small" style="margin-top:6px"><span id="qcm-abs">0</span> / 173 QCM au 1ᵉʳ essai</div>
+  </div>
+</div>
+
+<div class="sec-title">Les 5 matières</div>
+<div class="sec-sub">Ordre conseillé : commence par les maths (01→03), puis les outils (04, 05). Chaque carte montre ta progression et ton score QCM.</div>
+
+<div class="courses" id="courses"></div>
+
+<div class="sec-title">La règle des ponts</div>
+<div class="sec-sub">Le carnet est conçu pour faire <b>collisionner les matières</b> — c'est là qu'on comprend vraiment.</div>
+<div class="bridge">
+  <h4>Les passerelles à chercher</h4>
+  <ul>
+    <li><b>Proba × Analyse</b> : une espérance est une intégrale — <code>∫₀^∞ x e⁻ˣ dx = 1</code> = E[X] de l'Exponentielle.</li>
+    <li><b>Algèbre × Analyse</b> : la Hessienne est une forme quadratique ; « définie positive » ⟺ minimum.</li>
+    <li><b>Algèbre × Python</b> : <code>np.linalg.eig</code> rejoue tes diagonalisations à la main.</li>
+    <li><b>SQL × Python</b> : tout <code>GROUP BY</code> / <code>JOIN</code> se refait en <code>groupby</code> / <code>merge</code> Pandas.</li>
+    <li><b>Le grand pont</b> : la régression <code>β̂ = (XᵀX)⁻¹Xᵀy</code> = projection (Algèbre) = minimum d'un coût (Analyse) = code (Python) sur des données bruitées (Proba).</li>
+  </ul>
+</div>
+
+<div class="sec-title">Synchro automatique (Firebase)</div>
+<div class="sec-sub">Une fois activée, ta progression se met à jour <b>toute seule</b> sur tous tes appareils : entre le même <b>code perso</b> partout et c'est synchronisé en temps réel.</div>
+<div class="sync" id="fb-sync"></div>
+
+<div class="sec-title">Sauvegarde manuelle (fichier / Drive)</div>
+<div class="sec-sub">Sans Firebase, ou en plus : <b>exporte</b> un fichier, range-le dans ton Drive perso, puis <b>importe</b>-le sur l'autre appareil.</div>
+<div class="sync">
+  <button id="export-btn" type="button">⬇︎ Exporter ma progression</button>
+  <label class="imp">⬆︎ Importer une sauvegarde<input type="file" id="import-file" accept="application/json,.json" hidden></label>
+  <p class="sync-note">Le fichier <code>progression-dsba.json</code> contient tes cases cochées et tes scores QCM des 5 matières. Garde-le dans Google Drive / iCloud et réimporte-le quand tu changes d'appareil.</p>
+</div>
+
+<div class="reset">
+  <button id="reset-btn" type="button">↺ Réinitialiser toute ma progression</button>
+</div>
+
+<footer>
+  <p class="sig">Préparation Summer.</p>
+  <p style="margin-top:8px">5 matières · ~173 QCM interactifs · 5 examens blancs de 30 questions. Objectif : un trimestre bien préparé.</p>
+  <p style="margin-top:8px;font-size:12px">Astuce : ouvre toujours les cours depuis le <b>même navigateur</b> pour que la progression affichée ici reste synchronisée.</p>
+</footer>
+
+</div>
+
+<script>
+(function(){
+  var COURSES = [
+    { num:'01', title:'Probabilités & Statistiques', file:'01-proba-stats.html',
+      desc:'All of Statistics ch.1–4 : ensembles, Bayes, lois, espérance, inégalités.',
+      ck:'dsba-ps-checks-v2', ckTotal:49, qk:'dsba-ps-qcm-v2', qTotal:48 },
+    { num:'02', title:'Algèbre linéaire', file:'02-algebre.html',
+      desc:'Vecteurs, déterminant, valeurs propres, projections & SVD/PCA.',
+      ck:'dsba-alg-checks-v1', ckTotal:43, qk:'dsba-alg-qcm-v1', qTotal:34 },
+    { num:'03', title:'Analyse & calcul', file:'03-analyse.html',
+      desc:'Dérivées, intégrales, gradient/Hessienne, optimisation & Lagrange.',
+      ck:'dsba-ana-checks-v1', ckTotal:39, qk:'dsba-ana-qcm-v1', qTotal:29 },
+    { num:'04', title:'SQL & Bases de données', file:'04-sql.html',
+      desc:'Ordre logique, NULL, agrégation, jointures — examen à l\'aveugle.',
+      ck:'dsba-sql-checks-v1', ckTotal:35, qk:'dsba-sql-qcm-v1', qTotal:31 },
+    { num:'05', title:'Python pour la data', file:'05-python.html',
+      desc:'Idiomes, NumPy, Pandas, et la régression from scratch.',
+      ck:'dsba-py-checks-v1', ckTotal:36, qk:'dsba-py-qcm-v1', qTotal:31 }
+  ];
+
+  function readObj(key){ try{ return JSON.parse(localStorage.getItem(key)||'{}'); }catch(e){ return {}; } }
+  function countTrue(o){ var n=0; for(var k in o){ if(o[k]===true) n++; } return n; }
+  function countQcm(o){ var n=0; for(var k in o){ if(o[k] && o[k].correct) n++; } return n; }
+
+  var el = document.getElementById('courses');
+  var totCk=0, doneCk=0, totQ=0, doneQ=0;
+
+  COURSES.forEach(function(c){
+    var ck = countTrue(readObj(c.ck));
+    var q  = countQcm(readObj(c.qk));
+    var pC = Math.round(100*ck/c.ckTotal);
+    var pQ = Math.round(100*q/c.qTotal);
+    totCk += c.ckTotal; doneCk += ck; totQ += c.qTotal; doneQ += q;
+
+    var a = document.createElement('a');
+    a.className='course'; a.href=c.file;
+    a.innerHTML =
+      '<div class="num">'+c.num+' / 05</div>'+
+      '<h3>'+c.title+'</h3>'+
+      '<div class="desc">'+c.desc+'</div>'+
+      '<div class="prog-line"><span>Cours</span><span>'+pC+'%</span></div>'+
+      '<div class="pbar cours"><span style="width:'+pC+'%"></span></div>'+
+      '<div class="prog-line"><span>QCM '+q+'/'+c.qTotal+'</span><span>'+pQ+'%</span></div>'+
+      '<div class="pbar qcm"><span style="width:'+pQ+'%"></span></div>'+
+      '<span class="go">Ouvrir le cours</span>';
+    el.appendChild(a);
+  });
+
+  var gp = totCk? Math.round(100*doneCk/totCk):0;
+  var qp = totQ? Math.round(100*doneQ/totQ):0;
+  document.getElementById('global-pct').textContent=gp;
+  document.querySelector('#global-bar > span').style.width=gp+'%';
+  document.getElementById('qcm-pct').textContent=qp;
+  document.querySelector('#qcm-bar > span').style.width=qp+'%';
+  document.getElementById('qcm-abs').textContent=doneQ;
+
+  // countdown
+  var rentree = new Date(2026,8,1); // 1 sept 2026
+  var today = new Date();
+  var days = Math.max(0, Math.ceil((rentree - today)/(1000*60*60*24)));
+  document.getElementById('countdown').textContent = days;
+
+  // Firebase sync panel
+  (function(){
+    var box = document.getElementById('fb-sync');
+    var S = window.PREP_SYNC || { configured:false, code:'' };
+    if(!S.configured){
+      box.innerHTML =
+        '<span class="badge off">Synchro non configurée</span>'+
+        '<p class="sync-note">Pour l\'activer : ouvre le fichier <code>firebase-sync.js</code> et colle ta config Firebase (étapes fournies). En attendant, utilise la sauvegarde manuelle ci-dessous.</p>';
+      return;
+    }
+    if(S.code){
+      box.innerHTML =
+        '<span class="badge">● Synchro active — code : '+ S.code.replace(/[<&]/g,'') +'</span>'+
+        '<button id="fb-off" type="button">Désactiver</button>'+
+        '<p class="sync-note">Entre ce <b>même code</b> sur tes autres appareils pour tout synchroniser automatiquement.</p>';
+      document.getElementById('fb-off').addEventListener('click', function(){ S.disable(); });
+    } else {
+      box.innerHTML =
+        '<input type="text" id="fb-code" placeholder="ton code perso (ex : summer-2026-x7k3)" autocomplete="off">'+
+        '<button id="fb-on" type="button">Activer la synchro</button>'+
+        '<p class="sync-note">Choisis un code <b>long et unique</b> (il sert d\'identifiant ET de clé d\'accès). Note-le : tu le retaperas sur ton téléphone.</p>';
+      document.getElementById('fb-on').addEventListener('click', function(){
+        var v = document.getElementById('fb-code').value.trim();
+        if(v.length < 6){ alert('Choisis un code d\'au moins 6 caractères.'); return; }
+        S.setCode(v);
+      });
+    }
+  })();
+
+  // export progress (all 10 keys) to a JSON file
+  document.getElementById('export-btn').addEventListener('click', function(){
+    var data = { _app:'carnet-prepa-dsba', _exported: new Date().toISOString() };
+    COURSES.forEach(function(c){
+      data[c.ck] = localStorage.getItem(c.ck) || '{}';
+      data[c.qk] = localStorage.getItem(c.qk) || '{}';
+    });
+    var blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'progression-dsba-' + new Date().toISOString().slice(0,10) + '.json';
+    document.body.appendChild(a); a.click(); a.remove();
+    URL.revokeObjectURL(url);
+  });
+
+  // import progress from a JSON file
+  document.getElementById('import-file').addEventListener('change', function(e){
+    var file = e.target.files[0]; if(!file) return;
+    var r = new FileReader();
+    r.onload = function(){
+      try{
+        var data = JSON.parse(r.result);
+        var n = 0;
+        Object.keys(data).forEach(function(k){
+          if(/^dsba-/.test(k)){
+            var v = data[k];
+            localStorage.setItem(k, typeof v === 'string' ? v : JSON.stringify(v));
+            n++;
+          }
+        });
+        if(n === 0){ alert('Ce fichier ne contient pas de progression valide.'); return; }
+        alert('Progression importée ✓ (' + n + ' éléments). La page va se recharger.');
+        location.reload();
+      }catch(err){ alert('Fichier illisible — vérifie que c\'est bien un export progression-dsba.json.'); }
+    };
+    r.readAsText(file);
+  });
+
+  // reset
+  document.getElementById('reset-btn').addEventListener('click', function(){
+    if(!confirm('Effacer toute ta progression (cases + QCM) des 5 matières ? Action irréversible.')) return;
+    COURSES.forEach(function(c){ localStorage.removeItem(c.ck); localStorage.removeItem(c.qk); });
+    location.reload();
+  });
+})();
+</script>
+</body>
+</html>

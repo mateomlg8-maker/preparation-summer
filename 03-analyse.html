@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Analyse — Cours Complet (dérivées, intégrales, optimisation)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script>
+window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] }, options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] } };
+</script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script>
+<style>
+:root{
+  --paper:#FBFAF5;--grid:#DCE6F2;--ink:#1C2B4A;--ink-soft:#5A6685;--red:#C0392B;
+  --green:#2F7D4F;--stabilo:#FFE873;--card:#FFFFFF;--kid:#7B4BC4;--kid-bg:#F3ECFF;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+body{font-family:'Inter',sans-serif;color:var(--ink);background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px, transparent 1px),linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size:32px 32px;line-height:1.6;-webkit-font-smoothing:antialiased;}
+body::before{content:'';position:fixed;top:0;bottom:0;left:max(16px, calc(50% - 560px));width:2px;background:var(--red);opacity:.45;z-index:0;pointer-events:none;}
+.wrap{max-width:1020px;margin:0 auto;padding:0 24px 120px;position:relative;z-index:1}
+header{padding:52px 0 8px}
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--red);font-weight:600}
+h1{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(38px,7vw,72px);line-height:1.02;letter-spacing:-.01em;margin:10px 0 14px}
+h1 .hl{background:linear-gradient(transparent 55%, var(--stabilo) 55%);padding:0 4px}
+.sub{max-width:680px;color:var(--ink-soft);font-size:17px}
+.dash{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin:32px 0 12px}
+.dash-card{background:var(--card);border:1.5px solid var(--ink);padding:16px 18px;box-shadow:4px 4px 0 var(--ink)}
+.dash-card .label{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft)}
+.dash-card .big{font-family:'Fraunces',serif;font-weight:900;font-size:36px;line-height:1.1}
+.dash-card .small{font-size:13px;color:var(--ink-soft)}
+.bar{height:10px;background:#EEF1F6;border:1px solid var(--ink);margin-top:10px;overflow:hidden}
+.bar > span{display:block;height:100%;width:0%;background:var(--green);transition:width .4s ease}
+#qcm-bar > span{background:var(--kid)}
+nav{display:flex;flex-wrap:nowrap;overflow-x:auto;gap:10px;margin:24px 0 8px;position:sticky;top:0;background:var(--paper);padding:12px 0;z-index:5;border-bottom:1.5px solid var(--ink);-webkit-overflow-scrolling:touch;scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
+nav a{font-family:'JetBrains Mono',monospace;font-size:12.5px;font-weight:600;text-decoration:none;color:var(--ink);border:1.5px solid var(--ink);background:var(--card);padding:8px 13px;white-space:nowrap;transition:transform .1s ease, box-shadow .1s ease}
+nav a:hover,nav a:focus-visible{box-shadow:3px 3px 0 var(--ink);transform:translate(-1px,-1px)}
+nav a:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+nav a .pct{color:var(--red)}
+section.module{margin-top:64px;scroll-margin-top:70px}
+.mod-head{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap}
+.mod-num{font-family:'Fraunces',serif;font-weight:900;font-size:18px;background:var(--ink);color:var(--paper);width:38px;height:38px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;align-self:center}
+h2{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(26px,4vw,38px);line-height:1.1}
+.mod-meta{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-soft);margin-top:4px}
+.mod-meta b{color:var(--red);font-weight:600}
+.mod-bar{height:7px;background:#EEF1F6;border:1px solid var(--ink);margin:16px 0 22px;overflow:hidden}
+.mod-fill{height:100%;width:0%;background:var(--green);transition:width .4s ease}
+.why{border-left:4px solid var(--stabilo);background:#FFFDF2;padding:12px 16px;margin-bottom:22px;font-size:14.5px}
+.why b{font-weight:700}
+.idea{border:1.5px solid var(--ink);background:#EEF4FF;padding:14px 18px;margin:18px 0;font-size:14.5px}
+.idea .idea-tag{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);font-weight:600;display:block;margin-bottom:6px}
+.subhead{font-family:'Fraunces',serif;font-weight:900;font-size:21px;margin:34px 0 6px;padding-bottom:6px;border-bottom:2px solid var(--ink)}
+.eli5{border:1.5px solid var(--kid);background:var(--kid-bg);padding:13px 16px 13px 46px;margin:14px 0;font-size:14.5px;position:relative;border-radius:2px}
+.eli5::before{content:'🧒';position:absolute;left:13px;top:11px;font-size:20px}
+.eli5 .eli5-tag{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--kid);font-weight:600;display:block;margin-bottom:3px}
+.eli5 b{color:var(--kid)}
+.fiche{border:1.5px solid var(--ink);background:#FDFDFB;padding:16px 18px;margin:16px 0;box-shadow:3px 3px 0 rgba(28,43,74,.10)}
+.fiche-tag{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#fff;background:var(--ink);display:inline-block;padding:3px 9px;margin-bottom:10px;font-weight:600}
+.fiche-tag.red{background:var(--red)}
+.fiche-tag.green{background:var(--green)}
+.fiche h4{font-family:'Fraunces',serif;font-weight:900;font-size:18px;margin-bottom:6px}
+.fiche p{font-size:14.5px;margin:7px 0}
+.fiche ul,.fiche ol{margin:6px 0 6px 20px;font-size:14.5px}
+.fiche li{margin:4px 0}
+.formula{background:#F4F7FB;border:1px solid var(--grid);padding:10px 14px;margin:10px 0;font-size:15px;overflow-x:auto}
+.note{font-size:13px;color:var(--ink-soft);font-style:italic}
+.warn{border-left:3px solid var(--red);background:#FFF6F4;padding:8px 12px;margin:10px 0;font-size:14px}
+.warn b{color:var(--red)}
+.table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:10px 0}
+.mini-table{width:100%;border-collapse:collapse;font-size:13.5px;background:var(--card);min-width:380px}
+.mini-table th{background:var(--ink);color:var(--paper);font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;padding:8px 10px;text-align:left;font-weight:600}
+.mini-table td{padding:8px 10px;border-bottom:1px solid var(--grid);vertical-align:top}
+.mini-table tr:last-child td{border-bottom:none}
+.mini-table code{font-family:'JetBrains Mono',monospace;font-size:12px;background:#EEF1F6;padding:1px 5px;border:1px solid var(--grid)}
+.exo{border:1.5px dashed var(--ink);background:#FFFEF6;padding:14px 16px;margin:14px 0}
+.exo-tag{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--red);font-weight:600;letter-spacing:.14em;text-transform:uppercase;display:block;margin-bottom:6px}
+.exo p{font-size:14.5px}
+.exo details{margin-top:10px}
+.exo details summary{cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:var(--ink);user-select:none;list-style:none;display:inline-block;border:1.5px solid var(--ink);padding:8px 14px;background:var(--card);min-height:38px}
+.exo details summary::-webkit-details-marker{display:none}
+.exo details summary:hover{box-shadow:2px 2px 0 var(--ink)}
+.exo details summary:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+.exo .sol{padding:12px 14px;background:#F2F7F2;border-left:3px solid var(--green);margin-top:10px;font-size:14px}
+.exo .sol p{margin:5px 0}
+.qcm{border:1.5px solid var(--kid);background:#FCFAFF;padding:14px 16px;margin:16px 0;border-radius:2px}
+.qcm .qcm-tag{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--kid);font-weight:600;letter-spacing:.12em;text-transform:uppercase;display:block;margin-bottom:6px}
+.qcm .qcm-q{font-size:14.5px;font-weight:500;margin-bottom:10px}
+.qcm-opts{display:flex;flex-direction:column;gap:8px}
+.qcm-opts button{font-family:'Inter',sans-serif;font-size:14px;text-align:left;color:var(--ink);background:var(--card);border:1.5px solid var(--ink);padding:11px 14px;cursor:pointer;min-height:44px;transition:box-shadow .1s, transform .1s;display:flex;align-items:center;gap:10px;width:100%}
+.qcm-opts button::before{content:attr(data-letter);font-family:'JetBrains Mono',monospace;font-weight:600;font-size:12px;background:#EEF1F6;border:1px solid var(--grid);width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+.qcm-opts button:not(:disabled):hover{box-shadow:2px 2px 0 var(--ink);transform:translate(-1px,-1px)}
+.qcm-opts button:disabled{cursor:default}
+.qcm-opts button.correct{background:#E7F5EC;border-color:var(--green);color:var(--green);font-weight:600}
+.qcm-opts button.correct::before{background:var(--green);color:#fff;border-color:var(--green);content:'✓'}
+.qcm-opts button.wrong{background:#FCEBEA;border-color:var(--red);color:var(--red)}
+.qcm-opts button.wrong::before{background:var(--red);color:#fff;border-color:var(--red);content:'✕'}
+.qcm-fb{display:none;margin-top:11px;padding:11px 14px;background:#F3ECFF;border-left:3px solid var(--kid);font-size:13.5px}
+.qcm-fb.show{display:block}
+.qcm-fb b{color:var(--kid)}
+.check-title{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--green);font-weight:600;margin:18px 0 4px;border-top:1.5px solid var(--ink);padding-top:12px}
+.check{display:flex;align-items:flex-start;gap:11px;padding:11px 0;border-bottom:1px solid #F0F2F6;font-size:14.5px}
+.check:last-child{border-bottom:none}
+.check input{appearance:none;-webkit-appearance:none;width:24px;height:24px;flex-shrink:0;margin-top:1px;border:1.5px solid var(--ink);background:var(--card);cursor:pointer;display:inline-grid;place-content:center}
+.check input:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+.check input::after{content:'✕';font-size:15px;font-weight:700;color:var(--red);transform:scale(0);transition:transform .1s}
+.check input:checked::after{transform:scale(1)}
+.check input:checked + label{color:var(--ink-soft);text-decoration:line-through;text-decoration-color:var(--red);text-decoration-thickness:1.5px}
+.check label{cursor:pointer}
+.check label code{font-family:'JetBrains Mono',monospace;font-size:12.5px;background:#EEF1F6;padding:1px 5px;border:1px solid var(--grid)}
+.exam-box{border:2px solid var(--red);background:#FFF6F4;padding:22px 22px 18px;margin:22px 0;position:relative}
+.exam-box::before{content:'⚠ À RETENIR POUR L\'EXAMEN';font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.12em;color:#fff;background:var(--red);position:absolute;top:-12px;left:16px;padding:3px 10px}
+.exam-box ol,.exam-box ul{margin:8px 0 0 20px;font-size:14.5px}
+.exam-box li{margin:6px 0}
+footer{margin-top:80px;padding-top:24px;border-top:1.5px solid var(--ink);font-size:13px;color:var(--ink-soft)}
+footer .sig{font-family:'Fraunces',serif;font-style:italic;font-size:15px;color:var(--ink)}
+.toast{position:fixed;bottom:20px;right:20px;background:var(--ink);color:var(--paper);font-family:'JetBrains Mono',monospace;font-size:12px;padding:10px 16px;opacity:0;transform:translateY(8px);transition:opacity .25s, transform .25s;pointer-events:none;z-index:50}
+.toast.show{opacity:1;transform:translateY(0)}
+@media(max-width:760px){
+  .dash{grid-template-columns:1fr}
+  body::before{left:8px}
+  .wrap{padding:0 16px 90px}
+  header{padding:36px 0 8px}
+  .sub{font-size:16px}
+  section.module{margin-top:52px}
+  .fiche,.exo,.qcm,.idea,.eli5{padding-left:14px;padding-right:14px}
+  .eli5{padding-left:44px}
+}
+</style>
+<script src="firebase-sync.js"></script>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">Préparation Summer · Matière 03 / 05</div>
+  <h1>Analyse<br><span class="hl">& calcul</span></h1>
+  <p class="sub">Cours complet et autonome : dérivées et intégrales jusqu'à 3 variables, gradient, Hessienne et optimisation. Chaque idée est expliquée <b>comme à un enfant</b> 🧒, puis proprement, avec exemples corrigés, <b>QCM cliquables</b> et une section <b>Approfondissements niveau Master</b>. À la fin : un examen blanc de 30 questions. Tout est sauvegardé dans ton navigateur.</p>
+</header>
+
+<div class="dash">
+  <div class="dash-card">
+    <div class="label">Progression du cours</div>
+    <div class="big"><span id="global-pct">0</span>%</div>
+    <div class="bar" id="global-bar"><span></span></div>
+    <div class="small" style="margin-top:6px">Cases « j'ai compris » cochées</div>
+  </div>
+  <div class="dash-card">
+    <div class="label">Score QCM</div>
+    <div class="big"><span id="qcm-correct">0</span><span style="font-size:18px;color:var(--ink-soft)">/<span id="qcm-total">0</span></span></div>
+    <div class="bar" id="qcm-bar"><span></span></div>
+    <div class="small" style="margin-top:6px">Bonnes réponses au 1ᵉʳ essai</div>
+  </div>
+  <div class="dash-card">
+    <div class="label">Contenu</div>
+    <div class="big">4<span style="font-size:18px;color:var(--ink-soft)"> ch.</span></div>
+    <div class="small">Dérivées · Intégrales · Multivariable · Optimisation &amp; Lagrange · + Examen 30 Q</div>
+  </div>
+</div>
+
+<nav aria-label="Chapitres">
+  <a href="#ch1">Ch.1 Dérivées <span class="pct" data-nav="ch1"></span></a>
+  <a href="#ch2">Ch.2 Intégrales <span class="pct" data-nav="ch2"></span></a>
+  <a href="#ch3">Ch.3 Multivariable <span class="pct" data-nav="ch3"></span></a>
+  <a href="#ch4">Ch.4 Optimisation <span class="pct" data-nav="ch4"></span></a>
+  <a href="#final">★ Examen final</a>
+</nav>
+
+<div class="why"><b>Méthode :</b> travaille d'abord la <b>technique de calcul</b> (dériver/intégrer sans réfléchir), puis le sens géométrique (pente, aire, surface, vallée). <b>Note sur le livre :</b> si « Analysis » renvoie au Tao ou à l'Amann &amp; Escher, ce sont des références très théoriques (démonstrations) — utile pour la rigueur, mais commence par la technique avec n'importe quel manuel L1/L2. Confirme le titre exact auprès du programme.</div>
+
+<!-- ============================================================ -->
+<!-- CHAPITRE 1 -->
+<!-- ============================================================ -->
+<section class="module" id="ch1" data-module="ch1">
+  <div class="mod-head">
+    <span class="mod-num">1</span>
+    <div>
+      <h2>Dérivées (une variable)</h2>
+      <div class="mod-meta">Pente, règles, règle de la chaîne, Taylor, convexité</div>
+    </div>
+  </div>
+  <div class="mod-bar"><div class="mod-fill"></div></div>
+
+  <div class="idea">
+    <span class="idea-tag">L'idée du chapitre</span>
+    La <b>dérivée mesure une vitesse de changement</b> : à quelle vitesse \(f\) monte ou descend en un point. C'est la pente de la tangente. Toute l'optimisation (et donc tout l'apprentissage automatique) repose dessus : « là où la pente est nulle, on est au sommet ou au creux ».
+  </div>
+
+  <div class="subhead">1.1 — Définition &amp; règles</div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair</span>
+    Imagine que tu roules en voiture. Ta position change avec le temps ; la <b>dérivée, c'est ton compteur de vitesse</b> : combien de mètres par seconde <i>à cet instant précis</i>. Sur un graphe, c'est la <b>pente</b> : si ça monte fort, dérivée grande et positive ; si c'est plat (sommet d'une colline), dérivée = 0 ; si ça descend, dérivée négative.
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag">Fiche · Définition &amp; règles de calcul</span>
+    <div class="formula">
+      \[ f'(x)=\lim_{h\to0}\frac{f(x+h)-f(x)}{h}\quad(\text{pente de la tangente}) \]
+    </div>
+    <div class="table-scroll"><table class="mini-table">
+      <tr><th>Règle</th><th>Formule</th></tr>
+      <tr><td>Linéarité</td><td>\((af+bg)'=af'+bg'\)</td></tr>
+      <tr><td>Produit</td><td>\((uv)'=u'v+uv'\)</td></tr>
+      <tr><td>Quotient</td><td>\(\left(\frac{u}{v}\right)'=\frac{u'v-uv'}{v^2}\)</td></tr>
+      <tr><td><b>Chaîne</b> (la plus importante)</td><td>\((f\circ g)'(x)=f'(g(x))\cdot g'(x)\)</td></tr>
+    </table></div>
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag">Fiche · Dérivées usuelles</span>
+    <div class="table-scroll"><table class="mini-table">
+      <tr><th>\(f(x)\)</th><td>\(x^n\)</td><td>\(e^x\)</td><td>\(\ln x\)</td><td>\(\sin x\)</td><td>\(\cos x\)</td><td>\(\frac{1}{x}\)</td><td>\(\sqrt{x}\)</td></tr>
+      <tr><th>\(f'(x)\)</th><td>\(nx^{n-1}\)</td><td>\(e^x\)</td><td>\(\frac{1}{x}\)</td><td>\(\cos x\)</td><td>\(-\sin x\)</td><td>\(-\frac{1}{x^2}\)</td><td>\(\frac{1}{2\sqrt{x}}\)</td></tr>
+    </table></div>
+  </div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair · règle de la chaîne</span>
+    Une fonction « emboîtée » \(f(g(x))\), c'est deux engrenages en série. Si le petit engrenage tourne 3× plus vite et le grand 2× plus vite que lui, la sortie tourne \(2\times3=6\) fois plus vite. La règle de la chaîne, c'est ça : <b>on multiplie les vitesses de chaque couche</b>. C'est exactement la « rétropropagation » qui entraîne les réseaux de neurones.
+  </div>
+
+  <div class="qcm" data-id="an1-q1" data-answer="2">
+    <span class="qcm-tag">QCM 1</span>
+    <p class="qcm-q">Dérivée de \(f(x)=3x^2+2x\) ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">\(3x+2\)</button>
+      <button type="button" data-letter="B">\(6x\)</button>
+      <button type="button" data-letter="C">\(6x+2\)</button>
+      <button type="button" data-letter="D">\(x^3+x^2\)</button>
+    </div>
+    <div class="qcm-fb"><b>C.</b> \((3x^2)'=6x\), \((2x)'=2\) ⇒ \(6x+2\).</div>
+  </div>
+
+  <div class="qcm" data-id="an1-q2" data-answer="1">
+    <span class="qcm-tag">QCM 2</span>
+    <p class="qcm-q">Dérivée de \(f(x)=e^{3x}\) (règle de la chaîne) ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">\(e^{3x}\)</button>
+      <button type="button" data-letter="B">\(3e^{3x}\)</button>
+      <button type="button" data-letter="C">\(3x\,e^{3x}\)</button>
+      <button type="button" data-letter="D">\(e^{3}\)</button>
+    </div>
+    <div class="qcm-fb"><b>B.</b> Couche externe \(e^u\) (dérivée \(e^u\)) × couche interne \(u=3x\) (dérivée 3) ⇒ \(3e^{3x}\).</div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">Exercice corrigé — produit + chaîne</span>
+    <p>Dérive \(f(x)=x^2 e^{-x}\).</p>
+    <details><summary>Voir la solution</summary>
+      <div class="sol">
+        <p>Produit \(u=x^2,\ v=e^{-x}\). \(u'=2x\), \(v'=-e^{-x}\) (chaîne).</p>
+        <p>\(f'=u'v+uv'=2x\,e^{-x}-x^2 e^{-x}=e^{-x}(2x-x^2)=x e^{-x}(2-x)\).</p>
+        <p>Remarque : \(f'=0\) en \(x=0\) et \(x=2\) — ce sont les points critiques (utile au ch. 4).</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="subhead">1.2 — Taylor &amp; convexité</div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair</span>
+    <b>Taylor</b>, c'est <b>remplacer une courbe compliquée par une approximation simple près d'un point</b> : d'abord une droite (la tangente), puis une parabole (en ajoutant la courbure). La dérivée seconde \(f''\) dit dans quel sens ça se courbe : \(f''>0\) = sourire (cuvette, <b>convexe</b>), \(f''<0\) = moue (dôme).
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag red">Fiche clé · Taylor &amp; convexité</span>
+    <div class="formula">
+      <b>Taylor à l'ordre 2</b> (fondement de toute l'optimisation) :
+      \[ f(x)\approx f(a)+f'(a)(x-a)+\tfrac12 f''(a)(x-a)^2 \]
+    </div>
+    <ul>
+      <li><b>Convexe :</b> \(f''\ge0\) partout ⇒ courbe « en cuvette » ⇒ <b>tout minimum local est global</b>.</li>
+      <li><b>Concave :</b> \(f''\le0\) ⇒ « en dôme » ⇒ tout maximum local est global.</li>
+      <li><b>Point d'inflexion :</b> \(f''\) change de signe.</li>
+    </ul>
+    <p class="note">Le ML adore les fonctions convexes : pas de « faux creux » où l'algorithme pourrait rester coincé.</p>
+  </div>
+
+  <div class="qcm" data-id="an1-q3" data-answer="0">
+    <span class="qcm-tag">QCM 3</span>
+    <p class="qcm-q">\(f(x)=x^2\). En quoi est-elle convexe ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">\(f''=2>0\) partout</button>
+      <button type="button" data-letter="B">\(f'=2x\)</button>
+      <button type="button" data-letter="C">parce qu'elle est positive</button>
+      <button type="button" data-letter="D">elle ne l'est pas</button>
+    </div>
+    <div class="qcm-fb"><b>A.</b> Convexité ⟺ \(f''\ge0\). Ici \(f''=2>0\) : cuvette parfaite, un seul minimum (en 0) qui est global.</div>
+  </div>
+
+  <div class="subhead">1.3 — Approfondissements (niveau Master)</div>
+
+  <div class="fiche">
+    <span class="fiche-tag">Fiche · Outils utiles</span>
+    <ul>
+      <li><b>Règle de l'Hôpital :</b> pour une forme \(\tfrac00\) ou \(\tfrac{\infty}{\infty}\), \(\lim\tfrac{f}{g}=\lim\tfrac{f'}{g'}\).</li>
+      <li><b>Développements à connaître</b> (en 0) : \(e^x=1+x+\tfrac{x^2}{2}+\cdots\) ; \(\ln(1+x)=x-\tfrac{x^2}{2}+\cdots\) ; \((1+x)^\alpha=1+\alpha x+\cdots\).</li>
+      <li><b>Différentielle :</b> \(df=f'(x)\,dx\) — variation linéarisée, base du calcul d'erreurs et du multivariable.</li>
+    </ul>
+  </div>
+
+  <div class="qcm" data-id="an1-q4" data-answer="1">
+    <span class="qcm-tag">QCM 4</span>
+    <p class="qcm-q">\(\lim_{x\to0}\dfrac{\sin x}{x}\) (l'Hôpital ou Taylor) ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">0</button>
+      <button type="button" data-letter="B">1</button>
+      <button type="button" data-letter="C">\(\infty\)</button>
+      <button type="button" data-letter="D">indéfini</button>
+    </div>
+    <div class="qcm-fb"><b>B.</b> Forme \(\tfrac00\) ⇒ l'Hôpital : \(\tfrac{\cos x}{1}\to1\). (Ou Taylor : \(\sin x\approx x\).)</div>
+  </div>
+
+  <div class="check-title">À valider — Chapitre 1</div>
+  <div class="check"><input type="checkbox" id="c1a"><label for="c1a">Dérivée = pente ; définition par la limite</label></div>
+  <div class="check"><input type="checkbox" id="c1b"><label for="c1b">Règles : produit, quotient, et surtout la chaîne</label></div>
+  <div class="check"><input type="checkbox" id="c1c"><label for="c1c">Table des dérivées usuelles de tête</label></div>
+  <div class="check"><input type="checkbox" id="c1d"><label for="c1d">Taylor ordre 1 et 2 ; convexité \(f''\ge0\)</label></div>
+  <div class="check"><input type="checkbox" id="c1e"><label for="c1e">l'Hôpital, DL usuels, différentielle</label></div>
+  <div class="check"><input type="checkbox" id="c1f"><label for="c1f">≥ 15 dérivées variées sans erreur</label></div>
+</section>
+
+<!-- ============================================================ -->
+<!-- CHAPITRE 2 -->
+<!-- ============================================================ -->
+<section class="module" id="ch2" data-module="ch2">
+  <div class="mod-head">
+    <span class="mod-num">2</span>
+    <div>
+      <h2>Intégrales (une variable)</h2>
+      <div class="mod-meta">Aire, primitives, IPP, substitution, intégrales impropres — <b>pont avec les probas</b></div>
+    </div>
+  </div>
+  <div class="mod-bar"><div class="mod-fill"></div></div>
+
+  <div class="idea">
+    <span class="idea-tag">L'idée du chapitre</span>
+    L'intégrale, c'est l'<b>aire sous la courbe</b> — ou, en probas, la « masse » qu'on accumule. Dériver et intégrer sont des <b>opérations inverses</b> (théorème fondamental). Tu en as besoin partout en stats : normaliser une densité, calculer une espérance, une probabilité.
+  </div>
+
+  <div class="subhead">2.1 — Primitive &amp; théorème fondamental</div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair</span>
+    Si la dérivée « découpe » (vitesse instantanée), l'intégrale « recolle » (distance totale parcourue). <b>Intégrer = additionner une infinité de petites tranches</b> de largeur minuscule pour obtenir l'aire totale sous une courbe. Et comme c'est l'inverse de la dérivée, pour intégrer on se demande : « quelle fonction, une fois dérivée, redonne ça ? ».
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag red">Fiche clé · Théorème fondamental</span>
+    <div class="formula">
+      \[ \int_a^b f(x)\,dx=F(b)-F(a)\quad\text{où}\quad F'=f \]
+    </div>
+    <p>\(F\) est une <b>primitive</b> de \(f\). Lien direct avec le ch. 1 : intégrer, c'est « dériver à l'envers ».</p>
+    <div class="table-scroll"><table class="mini-table">
+      <tr><th>\(f(x)\)</th><td>\(x^n\,(n\neq-1)\)</td><td>\(\frac1x\)</td><td>\(e^x\)</td><td>\(\cos x\)</td><td>\(\sin x\)</td></tr>
+      <tr><th>\(\int f\)</th><td>\(\frac{x^{n+1}}{n+1}\)</td><td>\(\ln|x|\)</td><td>\(e^x\)</td><td>\(\sin x\)</td><td>\(-\cos x\)</td></tr>
+    </table></div>
+    <p class="note">Toujours \(+C\) pour une primitive indéfinie (la constante disparaît à la dérivation).</p>
+  </div>
+
+  <div class="qcm" data-id="an2-q1" data-answer="2">
+    <span class="qcm-tag">QCM 1</span>
+    <p class="qcm-q">\(\int_0^2 3x^2\,dx\) ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">6</button>
+      <button type="button" data-letter="B">12</button>
+      <button type="button" data-letter="C">8</button>
+      <button type="button" data-letter="D">4</button>
+    </div>
+    <div class="qcm-fb"><b>C.</b> Primitive \(x^3\). \([x^3]_0^2=8-0=8\).</div>
+  </div>
+
+  <div class="subhead">2.2 — Les deux techniques reines</div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair</span>
+    Deux astuces pour intégrer ce qui résiste. La <b>substitution</b> (changement de variable) : on renomme un bout compliqué \(u\) pour simplifier — c'est la règle de la chaîne « à l'envers ». L'<b>intégration par parties (IPP)</b> : quand on a un <i>produit</i>, on « déplace » la dérivée d'un facteur vers l'autre — la règle du produit à l'envers.
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag">Fiche · Substitution &amp; IPP</span>
+    <div class="formula">
+      <b>Substitution :</b> \(\displaystyle\int f(g(x))g'(x)\,dx=\int f(u)\,du\) avec \(u=g(x)\).
+    </div>
+    <div class="formula">
+      <b>Intégration par parties :</b> \(\displaystyle\int u\,v'\,dx=uv-\int u'\,v\,dx\).
+    </div>
+    <p class="note">IPP : choisis \(u\) = ce qui se <i>simplifie</i> en dérivant (souvent un polynôme ou \(\ln\)), et \(v'\) = ce qui s'<i>intègre</i> facilement (souvent \(e^x\), \(\sin\), \(\cos\)).</p>
+  </div>
+
+  <div class="qcm" data-id="an2-q2" data-answer="0">
+    <span class="qcm-tag">QCM 2</span>
+    <p class="qcm-q">Pour \(\int 2x\,e^{x^2}\,dx\), quelle technique ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">Substitution \(u=x^2\) (donne \(e^{x^2}\))</button>
+      <button type="button" data-letter="B">IPP avec \(u=2x\)</button>
+      <button type="button" data-letter="C">Quotient</button>
+      <button type="button" data-letter="D">Aucune, c'est impossible</button>
+    </div>
+    <div class="qcm-fb"><b>A.</b> \(u=x^2\Rightarrow du=2x\,dx\), donc \(\int e^u\,du=e^u=e^{x^2}(+C)\). On reconnaît la dérivée interne devant.</div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">Exemple corrigé — IPP qui retombe sur une espérance (pont proba)</span>
+    <p>Calcule \(\int_0^\infty x\,e^{-x}\,dx\). (C'est \(\mathbb{E}[X]\) pour une Exponentielle de paramètre 1.)</p>
+    <details><summary>Voir la solution</summary>
+      <div class="sol">
+        <p>IPP : \(u=x\ (u'=1)\), \(v'=e^{-x}\ (v=-e^{-x})\).</p>
+        <p>\(\int_0^\infty x e^{-x}dx=[-x e^{-x}]_0^\infty+\int_0^\infty e^{-x}dx=0+[-e^{-x}]_0^\infty=0+1=\mathbf{1}\).</p>
+        <p>On retrouve \(\mathbb{E}[X]=\beta=1\) : exactement le calcul du module Proba & Stats, vu côté Analyse.</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="subhead">2.3 — Intégrales impropres &amp; Approfondissements (Master)</div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair</span>
+    Une intégrale <b>impropre</b> va jusqu'à l'infini (ou explose en un point). On la voit comme une limite : « jusqu'où va l'aire si je pousse le bord de plus en plus loin ? ». Parfois l'aire reste <b>finie</b> (elle converge), parfois elle grandit sans fin (elle diverge). C'est crucial en probas : une densité doit avoir une aire totale finie (= 1).
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag">Fiche · Convergence &amp; fonction Gamma</span>
+    <div class="formula">
+      \(\displaystyle\int_1^\infty \frac{dx}{x^p}\) <b>converge</b> ssi \(p>1\). &nbsp; \(\displaystyle\int_0^1\frac{dx}{x^p}\) converge ssi \(p<1\).
+    </div>
+    <div class="formula">
+      <b>Fonction Gamma :</b> \(\Gamma(n)=\displaystyle\int_0^\infty x^{n-1}e^{-x}\,dx=(n-1)!\) pour \(n\) entier.
+    </div>
+    <p class="note">La Gamma généralise la factorielle et structure les lois Gamma/Beta/Chi² du module Proba. L'IPP ci-dessus est le cas \(\Gamma(2)=1!=1\).</p>
+  </div>
+
+  <div class="qcm" data-id="an2-q3" data-answer="1">
+    <span class="qcm-tag">QCM 3</span>
+    <p class="qcm-q">\(\int_0^\infty e^{-x}\,dx\) vaut :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">\(\infty\)</button>
+      <button type="button" data-letter="B">1</button>
+      <button type="button" data-letter="C">0</button>
+      <button type="button" data-letter="D">\(e\)</button>
+    </div>
+    <div class="qcm-fb"><b>B.</b> \([-e^{-x}]_0^\infty=0-(-1)=1\). C'est pourquoi \(e^{-x}\) est une densité valide sur \([0,\infty)\).</div>
+  </div>
+
+  <div class="check-title">À valider — Chapitre 2</div>
+  <div class="check"><input type="checkbox" id="c2a"><label for="c2a">Intégrale = aire ; primitives + théorème fondamental</label></div>
+  <div class="check"><input type="checkbox" id="c2b"><label for="c2b">Table des primitives usuelles</label></div>
+  <div class="check"><input type="checkbox" id="c2c"><label for="c2c">Substitution (chaîne à l'envers)</label></div>
+  <div class="check"><input type="checkbox" id="c2d"><label for="c2d">IPP — refaire \(\int_0^\infty xe^{-x}dx=1\)</label></div>
+  <div class="check"><input type="checkbox" id="c2e"><label for="c2e">Intégrales impropres : critères de convergence ; fonction Gamma</label></div>
+  <div class="check"><input type="checkbox" id="c2f"><label for="c2f">≥ 15 intégrales variées sans erreur</label></div>
+</section>
+
+<!-- ============================================================ -->
+<!-- CHAPITRE 3 -->
+<!-- ============================================================ -->
+<section class="module" id="ch3" data-module="ch3">
+  <div class="mod-head">
+    <span class="mod-num">3</span>
+    <div>
+      <h2>Calcul multivariable</h2>
+      <div class="mod-meta">Dérivées partielles, <b>gradient</b>, <b>Hessienne</b>, intégrales doubles &amp; triples</div>
+    </div>
+  </div>
+  <div class="mod-bar"><div class="mod-fill"></div></div>
+
+  <div class="idea">
+    <span class="idea-tag">L'idée du chapitre</span>
+    Avec plusieurs variables, la « pente » devient une <b>flèche</b> : le <b>gradient</b>, qui pointe dans la direction de montée la plus raide. La <b>Hessienne</b> (les dérivées secondes) décrit la courbure et permet de dire si un point plat est un creux, un sommet ou une selle. C'est toute la base de l'optimisation en ML.
+  </div>
+
+  <div class="subhead">3.1 — Dérivées partielles &amp; gradient</div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair</span>
+    Sur une montagne (altitude \(f(x,y)\)), une <b>dérivée partielle</b> = la pente si tu marches <b>uniquement vers l'est</b> (en gardant le nord figé), ou uniquement vers le nord. Le <b>gradient</b> rassemble ces pentes en une flèche qui pointe <b>là où ça monte le plus vite</b>. Pour descendre (minimiser), on va dans le sens <i>opposé</i> au gradient : c'est la descente de gradient.
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag red">Fiche clé · Gradient</span>
+    <div class="formula">
+      \[ \nabla f=\left(\frac{\partial f}{\partial x},\frac{\partial f}{\partial y},\dots\right) \]
+    </div>
+    <ul>
+      <li>\(\frac{\partial f}{\partial x}\) : on dérive par rapport à \(x\) en <b>traitant les autres variables comme des constantes</b>.</li>
+      <li>Le gradient pointe vers la <b>plus forte montée</b> ; \(-\nabla f\) vers la plus forte descente.</li>
+      <li><b>Point critique</b> : \(\nabla f=0\) (toutes les pentes nulles).</li>
+    </ul>
+  </div>
+
+  <div class="qcm" data-id="an3-q1" data-answer="2">
+    <span class="qcm-tag">QCM 1</span>
+    <p class="qcm-q">\(f(x,y)=x^2y+y^3\). Que vaut \(\frac{\partial f}{\partial x}\) ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">\(x^2+3y^2\)</button>
+      <button type="button" data-letter="B">\(2xy+3y^2\)</button>
+      <button type="button" data-letter="C">\(2xy\)</button>
+      <button type="button" data-letter="D">\(2x+y\)</button>
+    </div>
+    <div class="qcm-fb"><b>C.</b> On traite \(y\) comme constante : \(\partial_x(x^2y)=2xy\), et \(\partial_x(y^3)=0\). Donc \(2xy\).</div>
+  </div>
+
+  <div class="qcm" data-id="an3-q2" data-answer="0">
+    <span class="qcm-tag">QCM 2</span>
+    <p class="qcm-q">Pour <b>minimiser</b> \(f\), la descente de gradient se déplace dans la direction :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">\(-\nabla f\) (sens opposé au gradient)</button>
+      <button type="button" data-letter="B">\(+\nabla f\)</button>
+      <button type="button" data-letter="C">perpendiculaire au gradient</button>
+      <button type="button" data-letter="D">aléatoire</button>
+    </div>
+    <div class="qcm-fb"><b>A.</b> Le gradient monte ; pour descendre vers un minimum, on suit \(-\nabla f\). C'est le cœur de l'entraînement des modèles.</div>
+  </div>
+
+  <div class="subhead">3.2 — Hessienne &amp; classification des points critiques</div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair</span>
+    Un point où le gradient est nul peut être un <b>creux</b> (minimum), un <b>sommet</b> (maximum) ou une <b>selle de cheval</b> (creux dans un sens, bosse dans l'autre). Pour trancher, on regarde la <b>courbure</b> dans toutes les directions : c'est la Hessienne (matrice des dérivées secondes). C'est exactement le test \(f''\) du ch. 1, en version « toutes directions ».
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag red">Fiche clé · Hessienne &amp; classification</span>
+    <div class="formula">
+      \[ H=\begin{pmatrix}f_{xx}&f_{xy}\\f_{yx}&f_{yy}\end{pmatrix}\quad(\text{symétrique : }f_{xy}=f_{yx}) \]
+    </div>
+    <div class="table-scroll"><table class="mini-table">
+      <tr><th>Au point critique \(H\) est…</th><th>Nature</th></tr>
+      <tr><td>définie positive (\(\lambda_i>0\))</td><td>minimum local</td></tr>
+      <tr><td>définie négative (\(\lambda_i<0\))</td><td>maximum local</td></tr>
+      <tr><td>valeurs propres de signes mêlés</td><td><b>point selle</b></td></tr>
+    </table></div>
+    <p>Test pratique 2×2 (avec \(D=\det H=f_{xx}f_{yy}-f_{xy}^2\)) : \(D>0\) et \(f_{xx}>0\) ⇒ min ; \(D>0\) et \(f_{xx}<0\) ⇒ max ; \(D<0\) ⇒ selle.</p>
+    <p class="note">Pont avec l'Algèbre : la Hessienne est une forme quadratique ; « définie positive » = toutes ses valeurs propres &gt; 0.</p>
+  </div>
+
+  <div class="qcm" data-id="an3-q3" data-answer="3">
+    <span class="qcm-tag">QCM 3</span>
+    <p class="qcm-q">Au point critique, \(\det H<0\). Le point est :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">un minimum</button>
+      <button type="button" data-letter="B">un maximum</button>
+      <button type="button" data-letter="C">indéterminé</button>
+      <button type="button" data-letter="D">un point selle</button>
+    </div>
+    <div class="qcm-fb"><b>D.</b> \(\det H<0\) ⇒ valeurs propres de signes opposés ⇒ point selle (creux dans une direction, bosse dans l'autre).</div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">Exercice corrigé — classer un point critique</span>
+    <p>\(f(x,y)=x^2+y^2-4x\). Trouve le point critique et sa nature.</p>
+    <details><summary>Voir la solution</summary>
+      <div class="sol">
+        <p>\(\nabla f=(2x-4,\ 2y)=0\Rightarrow (x,y)=(2,0)\).</p>
+        <p>\(H=\begin{pmatrix}2&0\\0&2\end{pmatrix}\) : \(\det=4>0\), \(f_{xx}=2>0\) ⇒ <b>minimum</b>. Valeur \(f(2,0)=4-8=-4\).</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="subhead">3.3 — Intégrales multiples</div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair</span>
+    Une intégrale simple donne une aire ; une <b>intégrale double donne un volume</b> sous une surface (et une triple, une « masse » dans un volume 3D). On la calcule <b>couche par couche</b> : on intègre d'abord selon une variable (les autres figées), puis selon la suivante. En probas, c'est exactement comme ça qu'on traite une densité jointe \(f(x,y)\).
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag">Fiche · Intégrales doubles/triples (Fubini)</span>
+    <div class="formula">
+      \[ \iint_R f(x,y)\,dA=\int_{y}\!\!\left(\int_{x} f(x,y)\,dx\right)dy \]
+    </div>
+    <ul>
+      <li><b>Fubini :</b> sur un rectangle, l'ordre d'intégration n'a pas d'importance (on peut commencer par \(x\) ou par \(y\)).</li>
+      <li>Sur un domaine non rectangulaire, les <b>bornes intérieures dépendent</b> de la variable extérieure.</li>
+      <li>Triple : même logique, trois couches \(\iiint f\,dV\).</li>
+    </ul>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">Exercice corrigé — intégrale double (pont densité jointe)</span>
+    <p>Vérifie que \(f(x,y)=x+y\) est une densité sur \([0,1]^2\) : calcule \(\iint_{[0,1]^2}(x+y)\,dx\,dy\).</p>
+    <details><summary>Voir la solution</summary>
+      <div class="sol">
+        <p>Couche \(x\) d'abord : \(\int_0^1(x+y)dx=[\tfrac{x^2}{2}+xy]_0^1=\tfrac12+y\).</p>
+        <p>Couche \(y\) : \(\int_0^1(\tfrac12+y)dy=\tfrac12+\tfrac12=\mathbf{1}\) ✓.</p>
+        <p>C'est exactement la vérification « densité valide » du module Proba — vue côté Analyse.</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="subhead">3.4 — Approfondissements (niveau Master)</div>
+
+  <div class="fiche">
+    <span class="fiche-tag">Fiche · Chaîne multivariée &amp; changement de variables</span>
+    <ul>
+      <li><b>Règle de la chaîne (multivariée) :</b> si \(z=f(x(t),y(t))\), \(\;\frac{dz}{dt}=\frac{\partial f}{\partial x}\frac{dx}{dt}+\frac{\partial f}{\partial y}\frac{dy}{dt}=\nabla f\cdot \mathbf{v}\).</li>
+      <li><b>Jacobien :</b> lors d'un changement de variables dans une intégrale double, on multiplie par \(|\det J|\) (le facteur de dilatation des aires — cf. le déterminant en Algèbre). Ex. coordonnées polaires : \(dx\,dy=r\,dr\,d\theta\).</li>
+      <li><b>Dérivée directionnelle :</b> \(D_\mathbf{u}f=\nabla f\cdot\mathbf{u}\) — la pente dans une direction \(\mathbf{u}\) quelconque.</li>
+    </ul>
+  </div>
+
+  <div class="qcm" data-id="an3-q4" data-answer="1">
+    <span class="qcm-tag">QCM 4</span>
+    <p class="qcm-q">En coordonnées polaires, l'élément d'aire \(dx\,dy\) devient :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">\(dr\,d\theta\)</button>
+      <button type="button" data-letter="B">\(r\,dr\,d\theta\)</button>
+      <button type="button" data-letter="C">\(r^2\,dr\,d\theta\)</button>
+      <button type="button" data-letter="D">\(\tfrac1r\,dr\,d\theta\)</button>
+    </div>
+    <div class="qcm-fb"><b>B.</b> Le Jacobien des polaires vaut \(r\) : \(dx\,dy=r\,dr\,d\theta\). C'est le déterminant qui corrige la dilatation des aires.</div>
+  </div>
+
+  <div class="check-title">À valider — Chapitre 3</div>
+  <div class="check"><input type="checkbox" id="c3a"><label for="c3a">Dérivées partielles ; gradient et son sens géométrique</label></div>
+  <div class="check"><input type="checkbox" id="c3b"><label for="c3b">Descente de gradient (\(-\nabla f\)) ; points critiques</label></div>
+  <div class="check"><input type="checkbox" id="c3c"><label for="c3c">Hessienne + classification min/max/selle (test \(\det H\))</label></div>
+  <div class="check"><input type="checkbox" id="c3d"><label for="c3d">Intégrales doubles/triples ; Fubini ; bornes non rectangulaires</label></div>
+  <div class="check"><input type="checkbox" id="c3e"><label for="c3e">Chaîne multivariée, dérivée directionnelle, Jacobien (polaires)</label></div>
+  <div class="check"><input type="checkbox" id="c3f"><label for="c3f">≥ 10 exercices (gradient, Hessienne, double intégrale)</label></div>
+</section>
+
+<!-- ============================================================ -->
+<!-- CHAPITRE 4 -->
+<!-- ============================================================ -->
+<section class="module" id="ch4" data-module="ch4">
+  <div class="mod-head">
+    <span class="mod-num">4</span>
+    <div>
+      <h2>Optimisation &amp; Lagrange</h2>
+      <div class="mod-meta">Trouver le creux : conditions d'optimalité, convexité, <b>multiplicateurs de Lagrange</b></div>
+    </div>
+  </div>
+  <div class="mod-bar"><div class="mod-fill"></div></div>
+
+  <div class="idea">
+    <span class="idea-tag">L'idée du chapitre</span>
+    Optimiser, c'est <b>trouver le fond de la vallée</b> (minimum) ou le sommet (maximum). Sans contrainte : on annule le gradient, puis on vérifie la courbure (Hessienne). Avec contrainte : <b>Lagrange</b> — le meilleur point est là où la contrainte « touche » tangentiellement une ligne de niveau de \(f\).
+  </div>
+
+  <div class="subhead">4.1 — Optimisation sans contrainte</div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair</span>
+    Pour trouver le point le plus bas d'un paysage : tu cherches les endroits <b>plats</b> (gradient nul), puis tu regardes si c'est bien un creux et pas un sommet ou une selle (Hessienne). En ML, le « paysage » est la fonction de coût (l'erreur du modèle), et on la descend par petits pas. <b>Si elle est convexe, il n'y a qu'un seul creux</b> et on est sûr de le trouver.
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag">Fiche · Conditions d'optimalité</span>
+    <ul>
+      <li><b>1ᵉʳ ordre (nécessaire) :</b> \(\nabla f=0\) → points critiques.</li>
+      <li><b>2ᵉ ordre (suffisant) :</b> Hessienne définie positive ⇒ minimum local ; définie négative ⇒ maximum.</li>
+      <li><b>Convexe :</b> tout minimum local est <b>global</b> ⇒ le gradient nul suffit à garantir l'optimum.</li>
+    </ul>
+  </div>
+
+  <div class="qcm" data-id="an4-q1" data-answer="1">
+    <span class="qcm-tag">QCM 1</span>
+    <p class="qcm-q">Pour une fonction <b>convexe</b>, un point où \(\nabla f=0\) est :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">un maximum</button>
+      <button type="button" data-letter="B">le minimum global</button>
+      <button type="button" data-letter="C">un point selle</button>
+      <button type="button" data-letter="D">indéterminé</button>
+    </div>
+    <div class="qcm-fb"><b>B.</b> Convexe = une seule cuvette : gradient nul ⇒ minimum global. C'est pourquoi le ML adore les problèmes convexes.</div>
+  </div>
+
+  <div class="subhead">4.2 — Multiplicateurs de Lagrange</div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair</span>
+    Tu veux le meilleur point, mais tu es <b>obligé de rester sur un chemin</b> (la contrainte \(g=0\)). Image : tu randonnes sur un sentier tracé sur la montagne et tu cherches le point le plus haut <i>du sentier</i>. Au sommet de ton parcours, le sentier est <b>tangent</b> à une courbe de niveau : impossible de monter sans quitter le chemin. Mathématiquement, les deux gradients sont alignés : \(\nabla f=\lambda\nabla g\).
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag red">Fiche clé · Lagrange</span>
+    <p>Pour optimiser \(f(x,y)\) sous la contrainte \(g(x,y)=0\), on résout :</p>
+    <div class="formula">
+      \[ \nabla f=\lambda\,\nabla g\quad\text{et}\quad g(x,y)=0 \]
+    </div>
+    <p>Le scalaire \(\lambda\) est le <b>multiplicateur de Lagrange</b>. Recette : poser le lagrangien \(\mathcal{L}=f-\lambda g\), annuler toutes ses dérivées partielles (y compris par rapport à \(\lambda\), ce qui redonne la contrainte), résoudre le système.</p>
+    <p class="note">\(\lambda\) a un sens : c'est le « prix » de la contrainte — de combien l'optimum s'améliorerait si on relâchait la contrainte d'une unité (prix fictif, « shadow price »).</p>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">Exercice corrigé — Lagrange</span>
+    <p>Maximise \(f(x,y)=xy\) sous \(x+y=10\).</p>
+    <details><summary>Voir la solution</summary>
+      <div class="sol">
+        <p>\(\nabla f=(y,x)\), \(\nabla g=(1,1)\). Système : \(y=\lambda\), \(x=\lambda\), donc \(x=y\). Avec \(x+y=10\) : \(x=y=5\).</p>
+        <p>Maximum \(f(5,5)=25\). (Intuition : à somme fixée, le produit est maximal quand les deux parts sont égales.)</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="qcm" data-id="an4-q2" data-answer="2">
+    <span class="qcm-tag">QCM 2</span>
+    <p class="qcm-q">La condition de Lagrange exprime que, à l'optimum contraint :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">\(\nabla f=0\)</button>
+      <button type="button" data-letter="B">\(g=0\) seulement</button>
+      <button type="button" data-letter="C">\(\nabla f\) et \(\nabla g\) sont parallèles</button>
+      <button type="button" data-letter="D">la Hessienne est nulle</button>
+    </div>
+    <div class="qcm-fb"><b>C.</b> \(\nabla f=\lambda\nabla g\) : les gradients sont colinéaires (la ligne de niveau de \(f\) est tangente à la contrainte).</div>
+  </div>
+
+  <div class="subhead">4.3 — Approfondissements (niveau Master)</div>
+
+  <div class="fiche">
+    <span class="fiche-tag">Fiche · KKT &amp; régularisation</span>
+    <ul>
+      <li><b>Contraintes d'inégalité (KKT) :</b> généralisation de Lagrange à \(g(x)\le0\). Conditions de Karush-Kuhn-Tucker : stationnarité, faisabilité, \(\lambda\ge0\), et <b>complémentarité</b> \(\lambda g=0\) (soit la contrainte est saturée, soit son multiplicateur est nul).</li>
+      <li><b>Lien ML :</b> la régularisation (Ridge, Lasso) <i>est</i> une optimisation sous contrainte sur la taille des coefficients — Lagrange explique la forme \(\min\ \text{erreur}+\lambda\|\beta\|^2\).</li>
+      <li><b>Descente de gradient :</b> \(x_{t+1}=x_t-\eta\,\nabla f(x_t)\) ; le pas \(\eta\) (learning rate) contrôle la vitesse/stabilité.</li>
+    </ul>
+  </div>
+
+  <div class="qcm" data-id="an4-q3" data-answer="0">
+    <span class="qcm-tag">QCM 3</span>
+    <p class="qcm-q">Dans \(x_{t+1}=x_t-\eta\nabla f(x_t)\), si \(\eta\) (le pas) est trop grand :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">l'algorithme peut diverger (osciller/exploser)</button>
+      <button type="button" data-letter="B">il converge toujours plus vite sans risque</button>
+      <button type="button" data-letter="C">le gradient devient nul</button>
+      <button type="button" data-letter="D">la fonction devient convexe</button>
+    </div>
+    <div class="qcm-fb"><b>A.</b> Un pas trop grand fait « sauter » par-dessus le creux : oscillations ou divergence. Trop petit = très lent. Régler \(\eta\) est central en pratique.</div>
+  </div>
+
+  <div class="exam-box">
+    <ul>
+      <li><b>Sans contrainte :</b> \(\nabla f=0\) puis Hessienne (définie positive ⇒ min). <b>Convexe ⇒ minimum global garanti.</b></li>
+      <li><b>Avec contrainte :</b> Lagrange \(\nabla f=\lambda\nabla g\), \(g=0\). \(\lambda\) = prix de la contrainte.</li>
+      <li>Gradient = direction de montée ; <b>descente</b> = \(-\nabla f\), pas \(\eta\) à régler.</li>
+      <li>Ponts : Hessienne = forme quadratique (Algèbre) ; intégrale double = densité jointe (Proba).</li>
+    </ul>
+  </div>
+
+  <div class="check-title">À valider — Chapitre 4</div>
+  <div class="check"><input type="checkbox" id="c4a"><label for="c4a">Conditions d'optimalité 1ᵉʳ/2ᵉ ordre ; rôle de la convexité</label></div>
+  <div class="check"><input type="checkbox" id="c4b"><label for="c4b">Descente de gradient et le pas \(\eta\)</label></div>
+  <div class="check"><input type="checkbox" id="c4c"><label for="c4c">Lagrange : \(\nabla f=\lambda\nabla g\) — refaire l'exemple \(xy\) sous \(x+y=10\)</label></div>
+  <div class="check"><input type="checkbox" id="c4d"><label for="c4d">Sens de \(\lambda\) (prix de la contrainte) ; idée des KKT</label></div>
+  <div class="check"><input type="checkbox" id="c4e"><label for="c4e">Lien régularisation Ridge/Lasso ↔ optimisation contrainte</label></div>
+  <div class="check"><input type="checkbox" id="c4f"><label for="c4f">≥ 8 exercices d'optimisation (libre + Lagrange)</label></div>
+</section>
+
+<!-- ============================================================ -->
+<!-- EXAMEN FINAL -->
+<!-- ============================================================ -->
+<section class="module" id="final" data-module="final">
+  <div class="mod-head">
+    <span class="mod-num">★</span>
+    <div>
+      <h2>Examen final — 30 questions</h2>
+      <div class="mod-meta">QCM cliquables (instantané) + problèmes à solution cachée · les 4 chapitres mélangés</div>
+    </div>
+  </div>
+  <div class="mod-bar"><div class="mod-fill"></div></div>
+
+  <div class="why"><b>Règle du jeu :</b> chronomètre-toi, feuille et stylo, <b>aucune note</b>. Réfléchis avant de cliquer (le score ne compte que le 1ᵉʳ essai). Pour les problèmes, rédige avant d'ouvrir, puis coche « réussi sans aide ».</div>
+
+  <div class="subhead">Partie A — 15 QCM rapides</div>
+
+  <div class="qcm" data-id="f-q1" data-answer="1">
+    <span class="qcm-tag">QCM 1 · Ch.1</span>
+    <p class="qcm-q">Dérivée de \(\ln(x^2+1)\) ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">\(\frac{1}{x^2+1}\)</button><button type="button" data-letter="B">\(\frac{2x}{x^2+1}\)</button>
+      <button type="button" data-letter="C">\(2x\)</button><button type="button" data-letter="D">\(\frac{1}{2x}\)</button>
+    </div>
+    <div class="qcm-fb"><b>B.</b> Chaîne : \(\frac{1}{u}\cdot u'\) avec \(u=x^2+1\), \(u'=2x\) ⇒ \(\frac{2x}{x^2+1}\).</div>
+  </div>
+
+  <div class="qcm" data-id="f-q2" data-answer="0">
+    <span class="qcm-tag">QCM 2 · Ch.1</span>
+    <p class="qcm-q">\(f(x)=-x^2\) en \(x=0\) : que dit \(f''\) ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">\(f''=-2<0\) ⇒ concave, maximum</button><button type="button" data-letter="B">\(f''=2>0\) ⇒ minimum</button>
+      <button type="button" data-letter="C">\(f''=0\)</button><button type="button" data-letter="D">point selle</button>
+    </div>
+    <div class="qcm-fb"><b>A.</b> \(f''=-2<0\) : dôme (concave), \(x=0\) est un maximum.</div>
+  </div>
+
+  <div class="qcm" data-id="f-q3" data-answer="2">
+    <span class="qcm-tag">QCM 3 · Ch.1</span>
+    <p class="qcm-q">Dérivée de \(x\ln x\) ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">\(1\)</button><button type="button" data-letter="B">\(\ln x\)</button>
+      <button type="button" data-letter="C">\(\ln x+1\)</button><button type="button" data-letter="D">\(\frac1x\)</button>
+    </div>
+    <div class="qcm-fb"><b>C.</b> Produit : \(1\cdot\ln x+x\cdot\frac1x=\ln x+1\).</div>
+  </div>
+
+  <div class="qcm" data-id="f-q4" data-answer="3">
+    <span class="qcm-tag">QCM 4 · Ch.2</span>
+    <p class="qcm-q">\(\int_1^e \frac{1}{x}\,dx\) ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">\(e\)</button><button type="button" data-letter="B">\(e-1\)</button>
+      <button type="button" data-letter="C">0</button><button type="button" data-letter="D">1</button>
+    </div>
+    <div class="qcm-fb"><b>D.</b> Primitive \(\ln x\). \([\ln x]_1^e=\ln e-\ln1=1-0=1\).</div>
+  </div>
+
+  <div class="qcm" data-id="f-q5" data-answer="1">
+    <span class="qcm-tag">QCM 5 · Ch.2</span>
+    <p class="qcm-q">\(\int_0^1 x^3\,dx\) ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">\(\frac13\)</button><button type="button" data-letter="B">\(\frac14\)</button>
+      <button type="button" data-letter="C">1</button><button type="button" data-letter="D">\(\frac12\)</button>
+    </div>
+    <div class="qcm-fb"><b>B.</b> \([\frac{x^4}{4}]_0^1=\frac14\).</div>
+  </div>
+
+  <div class="qcm" data-id="f-q6" data-answer="0">
+    <span class="qcm-tag">QCM 6 · Ch.2</span>
+    <p class="qcm-q">Quelle méthode pour \(\int x\cos x\,dx\) ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">IPP (\(u=x\), \(v'=\cos x\))</button><button type="button" data-letter="B">substitution \(u=\cos x\)</button>
+      <button type="button" data-letter="C">quotient</button><button type="button" data-letter="D">impossible</button>
+    </div>
+    <div class="qcm-fb"><b>A.</b> Produit polynôme × trigo ⇒ IPP : \(u=x\) (se simplifie), \(v'=\cos x\) (s'intègre). Résultat \(x\sin x+\cos x\).</div>
+  </div>
+
+  <div class="qcm" data-id="f-q7" data-answer="2">
+    <span class="qcm-tag">QCM 7 · Ch.3</span>
+    <p class="qcm-q">\(f(x,y)=3x^2y\). \(\frac{\partial f}{\partial y}\) ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">\(6xy\)</button><button type="button" data-letter="B">\(6x\)</button>
+      <button type="button" data-letter="C">\(3x^2\)</button><button type="button" data-letter="D">\(3x^2y\)</button>
+    </div>
+    <div class="qcm-fb"><b>C.</b> On dérive selon \(y\), \(x\) constant : \(\partial_y(3x^2 y)=3x^2\).</div>
+  </div>
+
+  <div class="qcm" data-id="f-q8" data-answer="1">
+    <span class="qcm-tag">QCM 8 · Ch.3</span>
+    <p class="qcm-q">Le gradient \(\nabla f\) pointe vers :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">la plus forte descente</button><button type="button" data-letter="B">la plus forte montée</button>
+      <button type="button" data-letter="C">un point selle</button><button type="button" data-letter="D">l'origine</button>
+    </div>
+    <div class="qcm-fb"><b>B.</b> Le gradient indique la direction de montée la plus raide ; on descend en suivant \(-\nabla f\).</div>
+  </div>
+
+  <div class="qcm" data-id="f-q9" data-answer="3">
+    <span class="qcm-tag">QCM 9 · Ch.3</span>
+    <p class="qcm-q">\(\det H>0\) et \(f_{xx}<0\). Nature du point critique ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">minimum</button><button type="button" data-letter="B">point selle</button>
+      <button type="button" data-letter="C">inflexion</button><button type="button" data-letter="D">maximum</button>
+    </div>
+    <div class="qcm-fb"><b>D.</b> \(\det H>0\) (pas une selle) + \(f_{xx}<0\) (courbure vers le bas) ⇒ maximum.</div>
+  </div>
+
+  <div class="qcm" data-id="f-q10" data-answer="0">
+    <span class="qcm-tag">QCM 10 · Ch.3</span>
+    <p class="qcm-q">\(\int_0^1\!\int_0^1 1\,dx\,dy\) (volume au-dessus du carré, hauteur 1) ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">1</button><button type="button" data-letter="B">2</button>
+      <button type="button" data-letter="C">0</button><button type="button" data-letter="D">\(\frac12\)</button>
+    </div>
+    <div class="qcm-fb"><b>A.</b> Aire du carré × hauteur = \(1\times1=1\).</div>
+  </div>
+
+  <div class="qcm" data-id="f-q11" data-answer="2">
+    <span class="qcm-tag">QCM 11 · Ch.4</span>
+    <p class="qcm-q">À l'optimum contraint, Lagrange impose :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">\(\nabla f=0\)</button><button type="button" data-letter="B">\(H=0\)</button>
+      <button type="button" data-letter="C">\(\nabla f=\lambda\nabla g\)</button><button type="button" data-letter="D">\(f=g\)</button>
+    </div>
+    <div class="qcm-fb"><b>C.</b> Les gradients sont colinéaires : \(\nabla f=\lambda\nabla g\), avec \(g=0\).</div>
+  </div>
+
+  <div class="qcm" data-id="f-q12" data-answer="1">
+    <span class="qcm-tag">QCM 12 · Ch.4</span>
+    <p class="qcm-q">Une fonction de coût convexe garantit :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">plusieurs minima locaux</button><button type="button" data-letter="B">un unique minimum (global)</button>
+      <button type="button" data-letter="C">aucun minimum</button><button type="button" data-letter="D">un maximum</button>
+    </div>
+    <div class="qcm-fb"><b>B.</b> Convexe = une seule cuvette : minimum unique et global, pas de piège pour la descente de gradient.</div>
+  </div>
+
+  <div class="qcm" data-id="f-q13" data-answer="0">
+    <span class="qcm-tag">QCM 13 · Ch.4</span>
+    <p class="qcm-q">Le « learning rate » \(\eta\) trop petit en descente de gradient :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">convergence très lente</button><button type="button" data-letter="B">divergence</button>
+      <button type="button" data-letter="C">change la fonction</button><button type="button" data-letter="D">supprime les minima</button>
+    </div>
+    <div class="qcm-fb"><b>A.</b> Petit pas = on avance par micro-déplacements ⇒ très lent. Trop grand = oscillations/divergence.</div>
+  </div>
+
+  <div class="qcm" data-id="f-q14" data-answer="2">
+    <span class="qcm-tag">QCM 14 · Ch.1-3</span>
+    <p class="qcm-q">La Hessienne est l'analogue multivariable de :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">la dérivée première</button><button type="button" data-letter="B">l'intégrale</button>
+      <button type="button" data-letter="C">la dérivée seconde \(f''\)</button><button type="button" data-letter="D">la primitive</button>
+    </div>
+    <div class="qcm-fb"><b>C.</b> La Hessienne rassemble les dérivées secondes ; comme \(f''\), elle donne la courbure (et classe min/max/selle).</div>
+  </div>
+
+  <div class="qcm" data-id="f-q15" data-answer="3">
+    <span class="qcm-tag">QCM 15 · Synthèse</span>
+    <p class="qcm-q">\(\int_0^\infty x e^{-x}\,dx\) (IPP) vaut :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">0</button><button type="button" data-letter="B">\(\infty\)</button>
+      <button type="button" data-letter="C">\(e\)</button><button type="button" data-letter="D">1</button>
+    </div>
+    <div class="qcm-fb"><b>D.</b> IPP ⇒ 1. C'est \(\mathbb{E}[X]\) d'une Exponentielle(1) — le pont avec le module Proba.</div>
+  </div>
+
+  <div class="subhead">Partie B — 15 problèmes rédigés</div>
+
+  <div class="exo">
+    <span class="exo-tag">P1 · Ch.1 — dérivée composée</span>
+    <p>Dérive \(f(x)=\sin(x^2)\).</p>
+    <details><summary>Solution</summary><div class="sol">
+      <p>Chaîne : \(\cos(x^2)\cdot 2x=2x\cos(x^2)\).</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp1"><label for="fp1">Réussi sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P2 · Ch.1 — points critiques 1D</span>
+    <p>Trouve et classe les points critiques de \(f(x)=x^3-3x\).</p>
+    <details><summary>Solution</summary><div class="sol">
+      <p>\(f'=3x^2-3=0\Rightarrow x=\pm1\). \(f''=6x\) : en \(x=1\), \(f''=6>0\) ⇒ minimum ; en \(x=-1\), \(f''=-6<0\) ⇒ maximum.</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp2"><label for="fp2">Réussi sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P3 · Ch.1 — Taylor</span>
+    <p>Donne le développement de \(e^x\) à l'ordre 2 en 0, puis approxime \(e^{0,1}\).</p>
+    <details><summary>Solution</summary><div class="sol">
+      <p>\(e^x\approx1+x+\frac{x^2}{2}\). En \(x=0{,}1\) : \(1+0{,}1+0{,}005=1{,}105\) (vraie valeur 1,1052…).</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp3"><label for="fp3">Réussi sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P4 · Ch.2 — substitution</span>
+    <p>Calcule \(\int_0^1 2x(x^2+1)^3\,dx\).</p>
+    <details><summary>Solution</summary><div class="sol">
+      <p>\(u=x^2+1\), \(du=2x\,dx\). Bornes \(1\to2\). \(\int_1^2 u^3\,du=[\frac{u^4}{4}]_1^2=\frac{16-1}{4}=\frac{15}{4}\).</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp4"><label for="fp4">Réussi sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P5 · Ch.2 — IPP</span>
+    <p>Calcule \(\int_0^1 x e^{x}\,dx\).</p>
+    <details><summary>Solution</summary><div class="sol">
+      <p>\(u=x,\ v'=e^x\). \([x e^x]_0^1-\int_0^1 e^x dx=e-[e^x]_0^1=e-(e-1)=\mathbf{1}\).</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp5"><label for="fp5">Réussi sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P6 · Ch.2 — densité (pont proba)</span>
+    <p>Trouve \(c\) pour que \(f(x)=c x^2\) soit une densité sur \([0,1]\), puis \(\int_0^1 f\).</p>
+    <details><summary>Solution</summary><div class="sol">
+      <p>\(\int_0^1 c x^2 dx=\frac c3=1\Rightarrow c=3\). (Et l'intégrale totale vaut 1 par construction.)</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp6"><label for="fp6">Réussi sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P7 · Ch.3 — gradient</span>
+    <p>\(f(x,y)=x^2+xy+y^2\). Calcule \(\nabla f\) et le point critique.</p>
+    <details><summary>Solution</summary><div class="sol">
+      <p>\(\nabla f=(2x+y,\ x+2y)\). Système \(=0\) : \(2x+y=0\), \(x+2y=0\) ⇒ \(x=y=0\). Point critique \((0,0)\).</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp7"><label for="fp7">Réussi sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P8 · Ch.3 — Hessienne</span>
+    <p>Pour \(f(x,y)=x^2+xy+y^2\), écris \(H\) et classe \((0,0)\).</p>
+    <details><summary>Solution</summary><div class="sol">
+      <p>\(H=\begin{pmatrix}2&1\\1&2\end{pmatrix}\). \(\det=3>0\), \(f_{xx}=2>0\) ⇒ <b>minimum</b>. (Valeurs propres 3 et 1, toutes &gt; 0 : définie positive.)</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp8"><label for="fp8">Réussi sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P9 · Ch.3 — point selle</span>
+    <p>Classe le point critique de \(f(x,y)=x^2-y^2\).</p>
+    <details><summary>Solution</summary><div class="sol">
+      <p>\(\nabla f=(2x,-2y)=0\Rightarrow(0,0)\). \(H=\begin{pmatrix}2&0\\0&-2\end{pmatrix}\), \(\det=-4<0\) ⇒ <b>point selle</b> (cuvette selon \(x\), bosse selon \(y\)).</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp9"><label for="fp9">Réussi sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P10 · Ch.3 — intégrale double</span>
+    <p>Calcule \(\int_0^1\!\int_0^2 (x+y)\,dx\,dy\).</p>
+    <details><summary>Solution</summary><div class="sol">
+      <p>Couche \(x\) : \(\int_0^2(x+y)dx=[\frac{x^2}{2}+xy]_0^2=2+2y\). Couche \(y\) : \(\int_0^1(2+2y)dy=2+1=\mathbf{3}\).</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp10"><label for="fp10">Réussi sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P11 · Ch.4 — optimisation libre</span>
+    <p>Minimise \(f(x)=x^2-6x+11\). Donne le minimum.</p>
+    <details><summary>Solution</summary><div class="sol">
+      <p>\(f'=2x-6=0\Rightarrow x=3\). \(f''=2>0\) ⇒ minimum. \(f(3)=9-18+11=2\).</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp11"><label for="fp11">Réussi sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P12 · Ch.4 — Lagrange (max)</span>
+    <p>Maximise \(f(x,y)=x+y\) sous \(x^2+y^2=1\).</p>
+    <details><summary>Solution</summary><div class="sol">
+      <p>\(\nabla f=(1,1)=\lambda(2x,2y)\) ⇒ \(x=y=\frac{1}{2\lambda}\). Contrainte : \(2x^2=1\Rightarrow x=y=\frac{1}{\sqrt2}\).</p>
+      <p>Max \(f=\frac{2}{\sqrt2}=\sqrt2\). (Le point le plus « nord-est » du cercle unité.)</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp12"><label for="fp12">Réussi sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P13 · Ch.4 — Lagrange (min)</span>
+    <p>Minimise \(f(x,y)=x^2+y^2\) sous \(x+2y=5\).</p>
+    <details><summary>Solution</summary><div class="sol">
+      <p>\(\nabla f=(2x,2y)=\lambda(1,2)\) ⇒ \(2x=\lambda\), \(2y=2\lambda\Rightarrow y=2x\). Contrainte : \(x+4x=5\Rightarrow x=1,y=2\).</p>
+      <p>Min \(f=1+4=5\). (Géométriquement : le point de la droite le plus proche de l'origine.)</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp13"><label for="fp13">Réussi sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P14 · Synthèse — convexité</span>
+    <p>Montre que \(f(x)=e^x\) est convexe, et déduis (Jensen) que \(\mathbb{E}[e^X]\ge e^{\mathbb{E}[X]}\).</p>
+    <details><summary>Solution</summary><div class="sol">
+      <p>\(f''=e^x>0\) partout ⇒ convexe. Jensen (vu en Proba ch.4) : pour \(g\) convexe, \(\mathbb{E}[g(X)]\ge g(\mathbb{E}[X])\), d'où \(\mathbb{E}[e^X]\ge e^{\mathbb{E}[X]}\). Pont direct Analyse ↔ Proba.</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp14"><label for="fp14">Réussi sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P15 · Synthèse — moindres carrés &amp; gradient</span>
+    <p>Soit \(J(\beta)=\|y-X\beta\|^2\). Calcule \(\nabla_\beta J\) et retrouve les équations normales.</p>
+    <details><summary>Solution</summary><div class="sol">
+      <p>\(J=(y-X\beta)^{\mathsf T}(y-X\beta)\). \(\nabla_\beta J=-2X^{\mathsf T}(y-X\beta)\). Annuler ⇒ \(X^{\mathsf T}X\beta=X^{\mathsf T}y\) ⇒ \(\hat\beta=(X^{\mathsf T}X)^{-1}X^{\mathsf T}y\). C'est la régression : Analyse (gradient) + Algèbre (projection) réunies.</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp15"><label for="fp15">Réussi sans aide</label></div>
+  </div>
+</section>
+
+<footer>
+  <p class="sig">Analyse &amp; calcul — Préparation Summer.</p>
+  <p style="margin-top:8px">Travaille la technique (n'importe quel manuel L1/L2 ou Khan Academy / MIT 18.01–18.02), garde un livre rigoureux (Tao, Amann &amp; Escher) pour les démonstrations. <b>Confirme le titre exact « Analysis » auprès du programme.</b> Prochaine matière : <b>04 SQL &amp; BDD</b>.</p>
+  <p style="margin-top:8px;font-size:12px">Progression et scores QCM sauvegardés localement dans ce navigateur.</p>
+</footer>
+
+</div>
+
+<div class="toast" id="toast">Sauvegardé ✓</div>
+
+<script>
+(function(){
+  var CK='dsba-ana-checks-v1', QK='dsba-ana-qcm-v1';
+  var checks={}, qcm={};
+  try{ checks=JSON.parse(localStorage.getItem(CK)||'{}'); }catch(e){ checks={}; }
+  try{ qcm=JSON.parse(localStorage.getItem(QK)||'{}'); }catch(e){ qcm={}; }
+  var toast=document.getElementById('toast'), tT;
+  function ping(){ toast.classList.add('show'); clearTimeout(tT); tT=setTimeout(function(){toast.classList.remove('show');},1100); }
+  function pct(arr){ if(!arr.length)return 0; var n=arr.filter(function(b){return b.checked;}).length; return Math.round(100*n/arr.length); }
+  var boxes=[].slice.call(document.querySelectorAll('input[type=checkbox]'));
+  function updModule(mod){
+    var sec=document.querySelector('section[data-module="'+mod+'"]'); if(!sec)return;
+    var arr=[].slice.call(sec.querySelectorAll('input[type=checkbox]'));
+    var p=pct(arr);
+    var fill=sec.querySelector('.mod-fill'); if(fill)fill.style.width=p+'%';
+    var nav=document.querySelector('[data-nav="'+mod+'"]'); if(nav)nav.textContent=p+'%';
+  }
+  function updGlobal(){
+    var p=pct(boxes);
+    document.getElementById('global-pct').textContent=p;
+    document.querySelector('#global-bar > span').style.width=p+'%';
+  }
+  boxes.forEach(function(b){
+    if(checks[b.id]) b.checked=true;
+    b.addEventListener('change',function(){
+      checks[b.id]=b.checked;
+      try{ localStorage.setItem(CK,JSON.stringify(checks)); }catch(e){}
+      var sec=b.closest('section[data-module]');
+      if(sec) updModule(sec.getAttribute('data-module'));
+      updGlobal(); ping();
+    });
+  });
+  var qcms=[].slice.call(document.querySelectorAll('.qcm'));
+  document.getElementById('qcm-total').textContent=qcms.length;
+  function updQcmScore(){
+    var correct=0;
+    qcms.forEach(function(q){ var id=q.getAttribute('data-id'); if(qcm[id]&&qcm[id].correct) correct++; });
+    document.getElementById('qcm-correct').textContent=correct;
+    document.querySelector('#qcm-bar > span').style.width=Math.round(100*correct/qcms.length)+'%';
+  }
+  qcms.forEach(function(q){
+    var ans=parseInt(q.getAttribute('data-answer'),10);
+    var id=q.getAttribute('data-id');
+    var opts=[].slice.call(q.querySelectorAll('.qcm-opts button'));
+    var fb=q.querySelector('.qcm-fb');
+    function lock(chosen){
+      opts.forEach(function(b){ b.disabled=true; });
+      opts[ans].classList.add('correct');
+      if(chosen!=null && chosen!==ans) opts[chosen].classList.add('wrong');
+      if(fb) fb.classList.add('show');
+      q.dataset.done='1';
+    }
+    if(qcm[id]){ lock(qcm[id].chosen); }
+    opts.forEach(function(b,i){
+      b.addEventListener('click',function(){
+        if(q.dataset.done) return;
+        lock(i);
+        qcm[id]={chosen:i, correct:(i===ans)};
+        try{ localStorage.setItem(QK,JSON.stringify(qcm)); }catch(e){}
+        updQcmScore(); ping();
+      });
+    });
+  });
+  ['ch1','ch2','ch3','ch4','final'].forEach(updModule);
+  updGlobal(); updQcmScore();
+})();
+</script>
+</body>
+</html>

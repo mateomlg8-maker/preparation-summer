@@ -1,0 +1,1286 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Algèbre linéaire — Cours Complet (pour le ML)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script>
+window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] }, options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] } };
+</script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script>
+<style>
+:root{
+  --paper:#FBFAF5;--grid:#DCE6F2;--ink:#1C2B4A;--ink-soft:#5A6685;--red:#C0392B;
+  --green:#2F7D4F;--stabilo:#FFE873;--card:#FFFFFF;--kid:#7B4BC4;--kid-bg:#F3ECFF;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+body{font-family:'Inter',sans-serif;color:var(--ink);background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px, transparent 1px),linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size:32px 32px;line-height:1.6;-webkit-font-smoothing:antialiased;}
+body::before{content:'';position:fixed;top:0;bottom:0;left:max(16px, calc(50% - 560px));width:2px;background:var(--red);opacity:.45;z-index:0;pointer-events:none;}
+.wrap{max-width:1020px;margin:0 auto;padding:0 24px 120px;position:relative;z-index:1}
+header{padding:52px 0 8px}
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--red);font-weight:600}
+h1{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(38px,7vw,72px);line-height:1.02;letter-spacing:-.01em;margin:10px 0 14px}
+h1 .hl{background:linear-gradient(transparent 55%, var(--stabilo) 55%);padding:0 4px}
+.sub{max-width:680px;color:var(--ink-soft);font-size:17px}
+.dash{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin:32px 0 12px}
+.dash-card{background:var(--card);border:1.5px solid var(--ink);padding:16px 18px;box-shadow:4px 4px 0 var(--ink)}
+.dash-card .label{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft)}
+.dash-card .big{font-family:'Fraunces',serif;font-weight:900;font-size:36px;line-height:1.1}
+.dash-card .small{font-size:13px;color:var(--ink-soft)}
+.bar{height:10px;background:#EEF1F6;border:1px solid var(--ink);margin-top:10px;overflow:hidden}
+.bar > span{display:block;height:100%;width:0%;background:var(--green);transition:width .4s ease}
+#qcm-bar > span{background:var(--kid)}
+nav{display:flex;flex-wrap:nowrap;overflow-x:auto;gap:10px;margin:24px 0 8px;position:sticky;top:0;background:var(--paper);padding:12px 0;z-index:5;border-bottom:1.5px solid var(--ink);-webkit-overflow-scrolling:touch;scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
+nav a{font-family:'JetBrains Mono',monospace;font-size:12.5px;font-weight:600;text-decoration:none;color:var(--ink);border:1.5px solid var(--ink);background:var(--card);padding:8px 13px;white-space:nowrap;transition:transform .1s ease, box-shadow .1s ease}
+nav a:hover,nav a:focus-visible{box-shadow:3px 3px 0 var(--ink);transform:translate(-1px,-1px)}
+nav a:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+nav a .pct{color:var(--red)}
+section.module{margin-top:64px;scroll-margin-top:70px}
+.mod-head{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap}
+.mod-num{font-family:'Fraunces',serif;font-weight:900;font-size:18px;background:var(--ink);color:var(--paper);width:38px;height:38px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;align-self:center}
+h2{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(26px,4vw,38px);line-height:1.1}
+.mod-meta{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-soft);margin-top:4px}
+.mod-meta b{color:var(--red);font-weight:600}
+.mod-bar{height:7px;background:#EEF1F6;border:1px solid var(--ink);margin:16px 0 22px;overflow:hidden}
+.mod-fill{height:100%;width:0%;background:var(--green);transition:width .4s ease}
+.why{border-left:4px solid var(--stabilo);background:#FFFDF2;padding:12px 16px;margin-bottom:22px;font-size:14.5px}
+.why b{font-weight:700}
+.idea{border:1.5px solid var(--ink);background:#EEF4FF;padding:14px 18px;margin:18px 0;font-size:14.5px}
+.idea .idea-tag{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);font-weight:600;display:block;margin-bottom:6px}
+.subhead{font-family:'Fraunces',serif;font-weight:900;font-size:21px;margin:34px 0 6px;padding-bottom:6px;border-bottom:2px solid var(--ink)}
+.eli5{border:1.5px solid var(--kid);background:var(--kid-bg);padding:13px 16px 13px 46px;margin:14px 0;font-size:14.5px;position:relative;border-radius:2px}
+.eli5::before{content:'🧒';position:absolute;left:13px;top:11px;font-size:20px}
+.eli5 .eli5-tag{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--kid);font-weight:600;display:block;margin-bottom:3px}
+.eli5 b{color:var(--kid)}
+.fiche{border:1.5px solid var(--ink);background:#FDFDFB;padding:16px 18px;margin:16px 0;box-shadow:3px 3px 0 rgba(28,43,74,.10)}
+.fiche-tag{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#fff;background:var(--ink);display:inline-block;padding:3px 9px;margin-bottom:10px;font-weight:600}
+.fiche-tag.red{background:var(--red)}
+.fiche-tag.green{background:var(--green)}
+.fiche h4{font-family:'Fraunces',serif;font-weight:900;font-size:18px;margin-bottom:6px}
+.fiche p{font-size:14.5px;margin:7px 0}
+.fiche ul,.fiche ol{margin:6px 0 6px 20px;font-size:14.5px}
+.fiche li{margin:4px 0}
+.formula{background:#F4F7FB;border:1px solid var(--grid);padding:10px 14px;margin:10px 0;font-size:15px;overflow-x:auto}
+.note{font-size:13px;color:var(--ink-soft);font-style:italic}
+.warn{border-left:3px solid var(--red);background:#FFF6F4;padding:8px 12px;margin:10px 0;font-size:14px}
+.warn b{color:var(--red)}
+.table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:10px 0}
+.mini-table{width:100%;border-collapse:collapse;font-size:13.5px;background:var(--card);min-width:380px}
+.mini-table th{background:var(--ink);color:var(--paper);font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;padding:8px 10px;text-align:left;font-weight:600}
+.mini-table td{padding:8px 10px;border-bottom:1px solid var(--grid);vertical-align:top}
+.mini-table tr:last-child td{border-bottom:none}
+.mini-table code{font-family:'JetBrains Mono',monospace;font-size:12px;background:#EEF1F6;padding:1px 5px;border:1px solid var(--grid)}
+.exo{border:1.5px dashed var(--ink);background:#FFFEF6;padding:14px 16px;margin:14px 0}
+.exo-tag{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--red);font-weight:600;letter-spacing:.14em;text-transform:uppercase;display:block;margin-bottom:6px}
+.exo p{font-size:14.5px}
+.exo details{margin-top:10px}
+.exo details summary{cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:var(--ink);user-select:none;list-style:none;display:inline-block;border:1.5px solid var(--ink);padding:8px 14px;background:var(--card);min-height:38px}
+.exo details summary::-webkit-details-marker{display:none}
+.exo details summary:hover{box-shadow:2px 2px 0 var(--ink)}
+.exo details summary:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+.exo .sol{padding:12px 14px;background:#F2F7F2;border-left:3px solid var(--green);margin-top:10px;font-size:14px}
+.exo .sol p{margin:5px 0}
+.qcm{border:1.5px solid var(--kid);background:#FCFAFF;padding:14px 16px;margin:16px 0;border-radius:2px}
+.qcm .qcm-tag{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--kid);font-weight:600;letter-spacing:.12em;text-transform:uppercase;display:block;margin-bottom:6px}
+.qcm .qcm-q{font-size:14.5px;font-weight:500;margin-bottom:10px}
+.qcm-opts{display:flex;flex-direction:column;gap:8px}
+.qcm-opts button{font-family:'Inter',sans-serif;font-size:14px;text-align:left;color:var(--ink);background:var(--card);border:1.5px solid var(--ink);padding:11px 14px;cursor:pointer;min-height:44px;transition:box-shadow .1s, transform .1s;display:flex;align-items:center;gap:10px;width:100%}
+.qcm-opts button::before{content:attr(data-letter);font-family:'JetBrains Mono',monospace;font-weight:600;font-size:12px;background:#EEF1F6;border:1px solid var(--grid);width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+.qcm-opts button:not(:disabled):hover{box-shadow:2px 2px 0 var(--ink);transform:translate(-1px,-1px)}
+.qcm-opts button:disabled{cursor:default}
+.qcm-opts button.correct{background:#E7F5EC;border-color:var(--green);color:var(--green);font-weight:600}
+.qcm-opts button.correct::before{background:var(--green);color:#fff;border-color:var(--green);content:'✓'}
+.qcm-opts button.wrong{background:#FCEBEA;border-color:var(--red);color:var(--red)}
+.qcm-opts button.wrong::before{background:var(--red);color:#fff;border-color:var(--red);content:'✕'}
+.qcm-fb{display:none;margin-top:11px;padding:11px 14px;background:#F3ECFF;border-left:3px solid var(--kid);font-size:13.5px}
+.qcm-fb.show{display:block}
+.qcm-fb b{color:var(--kid)}
+.check-title{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--green);font-weight:600;margin:18px 0 4px;border-top:1.5px solid var(--ink);padding-top:12px}
+.check{display:flex;align-items:flex-start;gap:11px;padding:11px 0;border-bottom:1px solid #F0F2F6;font-size:14.5px}
+.check:last-child{border-bottom:none}
+.check input{appearance:none;-webkit-appearance:none;width:24px;height:24px;flex-shrink:0;margin-top:1px;border:1.5px solid var(--ink);background:var(--card);cursor:pointer;display:inline-grid;place-content:center}
+.check input:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+.check input::after{content:'✕';font-size:15px;font-weight:700;color:var(--red);transform:scale(0);transition:transform .1s}
+.check input:checked::after{transform:scale(1)}
+.check input:checked + label{color:var(--ink-soft);text-decoration:line-through;text-decoration-color:var(--red);text-decoration-thickness:1.5px}
+.check label{cursor:pointer}
+.check label code{font-family:'JetBrains Mono',monospace;font-size:12.5px;background:#EEF1F6;padding:1px 5px;border:1px solid var(--grid)}
+.exam-box{border:2px solid var(--red);background:#FFF6F4;padding:22px 22px 18px;margin:22px 0;position:relative}
+.exam-box::before{content:'⚠ À RETENIR POUR L\'EXAMEN';font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.12em;color:#fff;background:var(--red);position:absolute;top:-12px;left:16px;padding:3px 10px}
+.exam-box ol,.exam-box ul{margin:8px 0 0 20px;font-size:14.5px}
+.exam-box li{margin:6px 0}
+footer{margin-top:80px;padding-top:24px;border-top:1.5px solid var(--ink);font-size:13px;color:var(--ink-soft)}
+footer .sig{font-family:'Fraunces',serif;font-style:italic;font-size:15px;color:var(--ink)}
+.toast{position:fixed;bottom:20px;right:20px;background:var(--ink);color:var(--paper);font-family:'JetBrains Mono',monospace;font-size:12px;padding:10px 16px;opacity:0;transform:translateY(8px);transition:opacity .25s, transform .25s;pointer-events:none;z-index:50}
+.toast.show{opacity:1;transform:translateY(0)}
+@media(max-width:760px){
+  .dash{grid-template-columns:1fr}
+  body::before{left:8px}
+  .wrap{padding:0 16px 90px}
+  header{padding:36px 0 8px}
+  .sub{font-size:16px}
+  section.module{margin-top:52px}
+  .fiche,.exo,.qcm,.idea,.eli5{padding-left:14px;padding-right:14px}
+  .eli5{padding-left:44px}
+}
+</style>
+<script src="firebase-sync.js"></script>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">Préparation Summer · Matière 02 / 05</div>
+  <h1>Algèbre<br><span class="hl">linéaire</span></h1>
+  <p class="sub">Cours complet et autonome, taillé pour le ML. Intuition d'abord (3Blue1Brown), technique ensuite (Strang). Chaque idée est expliquée <b>comme à un enfant</b> 🧒, puis proprement, avec exemples corrigés, <b>QCM cliquables</b> et une section <b>Approfondissements niveau Master</b>. À la fin : un examen blanc de 30 questions. Tout est sauvegardé dans ton navigateur.</p>
+</header>
+
+<div class="dash">
+  <div class="dash-card">
+    <div class="label">Progression du cours</div>
+    <div class="big"><span id="global-pct">0</span>%</div>
+    <div class="bar" id="global-bar"><span></span></div>
+    <div class="small" style="margin-top:6px">Cases « j'ai compris » cochées</div>
+  </div>
+  <div class="dash-card">
+    <div class="label">Score QCM</div>
+    <div class="big"><span id="qcm-correct">0</span><span style="font-size:18px;color:var(--ink-soft)">/<span id="qcm-total">0</span></span></div>
+    <div class="bar" id="qcm-bar"><span></span></div>
+    <div class="small" style="margin-top:6px">Bonnes réponses au 1ᵉʳ essai</div>
+  </div>
+  <div class="dash-card">
+    <div class="label">Contenu</div>
+    <div class="big">4<span style="font-size:18px;color:var(--ink-soft)"> ch.</span></div>
+    <div class="small">Vecteurs · Systèmes &amp; déterminant · Valeurs propres · Projections &amp; SVD · + Examen 30 Q</div>
+  </div>
+</div>
+
+<nav aria-label="Chapitres">
+  <a href="#ch1">Ch.1 Vecteurs &amp; matrices <span class="pct" data-nav="ch1"></span></a>
+  <a href="#ch2">Ch.2 Systèmes &amp; déterminant <span class="pct" data-nav="ch2"></span></a>
+  <a href="#ch3">Ch.3 Valeurs propres <span class="pct" data-nav="ch3"></span></a>
+  <a href="#ch4">Ch.4 Projections &amp; SVD <span class="pct" data-nav="ch4"></span></a>
+  <a href="#final">★ Examen final</a>
+</nav>
+
+<div class="why"><b>Méthode :</b> commence par les 16 vidéos « Essence of Linear Algebra » de 3Blue1Brown (3 h — l'algèbre devient géométrie), puis travaille la technique avec Strang (MIT 18.06). L'erreur classique : calculer sans visualiser. <b>Une matrice n'est pas un tableau de nombres : c'est une transformation de l'espace.</b></div>
+
+<!-- ============================================================ -->
+<!-- CHAPITRE 1 -->
+<!-- ============================================================ -->
+<section class="module" id="ch1" data-module="ch1">
+  <div class="mod-head">
+    <span class="mod-num">1</span>
+    <div>
+      <h2>Vecteurs &amp; matrices</h2>
+      <div class="mod-meta">Combinaisons linéaires, span, indépendance, produit, transposée, <b>une matrice = une transformation</b></div>
+    </div>
+  </div>
+  <div class="mod-bar"><div class="mod-fill"></div></div>
+
+  <div class="idea">
+    <span class="idea-tag">L'idée du chapitre</span>
+    Un <b>vecteur</b> est une flèche dans l'espace (ou une liste de nombres). Une <b>matrice</b> est une <b>machine qui déplace tout l'espace d'un coup</b> : ses colonnes disent où atterrissent les flèches de base. Tout le reste (produit, inverse, rang) décrit comment ces machines agissent et se composent.
+  </div>
+
+  <div class="subhead">1.1 — Vecteurs, combinaisons, span, indépendance</div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair</span>
+    Un <b>vecteur</b>, c'est une recette de déplacement : « avance de 3 vers la droite, 2 vers le haut » = \((3,2)\). Une <b>combinaison linéaire</b>, c'est mélanger des recettes avec des doses (les coefficients). Le <b>span</b> = tous les endroits que tu peux atteindre en mélangeant tes vecteurs. <b>Indépendants</b> = aucun vecteur n'est inutile (aucun ne se fabrique à partir des autres).
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag">Fiche · Le vocabulaire de base</span>
+    <h4>Combinaison, span, indépendance</h4>
+    <ul>
+      <li><b>Combinaison linéaire</b> de \(v_1,\dots,v_k\) : \(c_1 v_1+\cdots+c_k v_k\) (les \(c_i\) sont des scalaires).</li>
+      <li><b>Span</b> = l'ensemble de <i>toutes</i> ces combinaisons. Span de 2 vecteurs non colinéaires du plan = tout le plan.</li>
+      <li><b>Indépendance linéaire</b> : la seule façon d'obtenir \(0\) est \(c_1=\cdots=c_k=0\). Sinon, ils sont <b>dépendants</b> (l'un est combinaison des autres).</li>
+      <li><b>Base</b> : une famille à la fois <i>indépendante</i> et qui <i>engendre</i> (span = tout l'espace). Nombre d'éléments = <b>dimension</b>.</li>
+    </ul>
+  </div>
+
+  <div class="qcm" data-id="a1-q1" data-answer="2">
+    <span class="qcm-tag">QCM 1</span>
+    <p class="qcm-q">Les vecteurs \((1,2)\) et \((2,4)\) sont :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">Indépendants</button>
+      <button type="button" data-letter="B">Orthogonaux</button>
+      <button type="button" data-letter="C">Dépendants (colinéaires)</button>
+      <button type="button" data-letter="D">Une base du plan</button>
+    </div>
+    <div class="qcm-fb"><b>C.</b> \((2,4)=2\cdot(1,2)\) : l'un est un multiple de l'autre. Leur span n'est qu'une droite, pas tout le plan.</div>
+  </div>
+
+  <div class="subhead">1.2 — La matrice comme transformation</div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair</span>
+    Imagine une feuille de caoutchouc quadrillée. Une matrice <b>étire, tourne ou écrase</b> cette feuille, mais les droites restent droites et l'origine ne bouge pas. Les <b>colonnes de la matrice</b> te disent où vont les deux flèches de base \((1,0)\) et \((0,1)\). Multiplier la matrice par un vecteur, c'est demander : « où atterrit ce point après la déformation ? ».
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag red">Fiche clé · Produit matriciel</span>
+    <h4>Deux façons de le voir</h4>
+    <div class="formula">
+      <b>Dimensions :</b> \((m\times n)(n\times p)=(m\times p)\). Les dimensions <i>intérieures</i> doivent coïncider. \(AB\neq BA\) en général !
+    </div>
+    <ul>
+      <li><b>Vue ligne × colonne :</b> \((AB)_{ij}=\) (ligne \(i\) de \(A\)) · (colonne \(j\) de \(B\)).</li>
+      <li><b>Vue colonne (la bonne pour le ML) :</b> \(Ax\) = combinaison linéaire des <b>colonnes</b> de \(A\), pondérée par \(x\). Donc « \(Ax=b\) a une solution » ⟺ « \(b\) est dans le span des colonnes de \(A\) ».</li>
+    </ul>
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag">Fiche · Transposée, inverse, produit scalaire</span>
+    <h4>Les opérations à automatiser</h4>
+    <div class="formula">
+      <b>Inverse 2×2 :</b> \(A=\begin{pmatrix}a&b\\c&d\end{pmatrix}\), \(\det A=ad-bc\neq0\) :
+      \[ A^{-1}=\frac{1}{ad-bc}\begin{pmatrix}d&-b\\-c&a\end{pmatrix} \]
+    </div>
+    <ul>
+      <li><b>Transposée :</b> \((AB)^{\mathsf T}=B^{\mathsf T}A^{\mathsf T}\) — l'ordre s'inverse. Idem \((AB)^{-1}=B^{-1}A^{-1}\).</li>
+      <li><b>Symétrique :</b> \(A=A^{\mathsf T}\). Les matrices \(X^{\mathsf T}X\) (omniprésentes en stats) sont <i>toujours</i> symétriques.</li>
+      <li><b>Produit scalaire :</b> \(u\cdot v=u^{\mathsf T}v=\sum u_i v_i\) ; norme \(\|u\|=\sqrt{u^{\mathsf T}u}\) ; <b>orthogonaux</b> \(\iff u^{\mathsf T}v=0\).</li>
+    </ul>
+  </div>
+
+  <div class="qcm" data-id="a1-q2" data-answer="1">
+    <span class="qcm-tag">QCM 2</span>
+    <p class="qcm-q">\(A\) est \(3\times2\) et \(B\) est \(2\times4\). Quelle est la dimension de \(AB\) ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">\(2\times2\)</button>
+      <button type="button" data-letter="B">\(3\times4\)</button>
+      <button type="button" data-letter="C">\(4\times3\)</button>
+      <button type="button" data-letter="D">Impossible</button>
+    </div>
+    <div class="qcm-fb"><b>B.</b> \((3\times2)(2\times4)\) : les 2 intérieurs coïncident, il reste les extérieurs \(3\times4\).</div>
+  </div>
+
+  <div class="qcm" data-id="a1-q3" data-answer="0">
+    <span class="qcm-tag">QCM 3</span>
+    <p class="qcm-q">Que vaut \((3,0,-1)\cdot(2,5,4)\) (produit scalaire) ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">2</button>
+      <button type="button" data-letter="B">0</button>
+      <button type="button" data-letter="C">10</button>
+      <button type="button" data-letter="D">−1</button>
+    </div>
+    <div class="qcm-fb"><b>A.</b> \(3\cdot2+0\cdot5+(-1)\cdot4=6+0-4=2\). (Si ça avait fait 0, les vecteurs seraient orthogonaux.)</div>
+  </div>
+
+  <div class="qcm" data-id="a1-q4" data-answer="3">
+    <span class="qcm-tag">QCM 4</span>
+    <p class="qcm-q">\((AB)^{\mathsf T}\) est égal à :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">\(A^{\mathsf T}B^{\mathsf T}\)</button>
+      <button type="button" data-letter="B">\(AB\)</button>
+      <button type="button" data-letter="C">\(BA\)</button>
+      <button type="button" data-letter="D">\(B^{\mathsf T}A^{\mathsf T}\)</button>
+    </div>
+    <div class="qcm-fb"><b>D.</b> La transposée d'un produit <b>inverse l'ordre</b> : \((AB)^{\mathsf T}=B^{\mathsf T}A^{\mathsf T}\). Même règle pour l'inverse.</div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">Exercice corrigé — produit & inverse</span>
+    <p>Soit \(A=\begin{pmatrix}2&1\\1&3\end{pmatrix}\). Calcule \(\det A\) et \(A^{-1}\).</p>
+    <details><summary>Voir la solution</summary>
+      <div class="sol">
+        <p>\(\det A=2\cdot3-1\cdot1=5\).</p>
+        <p>\(A^{-1}=\frac15\begin{pmatrix}3&-1\\-1&2\end{pmatrix}=\begin{pmatrix}0{,}6&-0{,}2\\-0{,}2&0{,}4\end{pmatrix}\).</p>
+        <p>Vérif rapide : \(AA^{-1}\) doit donner l'identité. (Échange la diagonale, change le signe des coins, divise par le déterminant.)</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="subhead">1.3 — Approfondissements (niveau Master)</div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair</span>
+    Un <b>espace vectoriel</b>, c'est juste « un monde où l'on peut additionner des objets et les multiplier par des nombres » (vecteurs, mais aussi polynômes, fonctions, images…). Un <b>sous-espace</b> = une partie plate passant par l'origine (droite, plan…). Une <b>base</b> = le plus petit jeu de flèches pour décrire tout le monde, et la <b>dimension</b> = combien il en faut.
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag">Fiche · Espaces &amp; sous-espaces</span>
+    <ul>
+      <li><b>Espace vectoriel :</b> stable par addition et par multiplication scalaire.</li>
+      <li><b>Sous-espace :</b> sous-ensemble non vide, stable par combinaisons linéaires, contenant \(0\).</li>
+      <li><b>Base :</b> famille indépendante <i>et</i> génératrice. Toute base d'un espace a le même nombre d'éléments = la <b>dimension</b>.</li>
+      <li><b>Coordonnées :</b> dans une base fixée, tout vecteur s'écrit de façon <i>unique</i> comme combinaison des vecteurs de base.</li>
+    </ul>
+    <p class="note">En ML, les « features » forment une base de l'espace des données ; changer de base (ex. PCA) = regarder les mêmes données sous de meilleurs axes.</p>
+  </div>
+
+  <div class="qcm" data-id="a1-q5" data-answer="2">
+    <span class="qcm-tag">QCM 5</span>
+    <p class="qcm-q">Quelle est la dimension du span de \((1,0,0)\), \((0,1,0)\), \((1,1,0)\) ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">3</button>
+      <button type="button" data-letter="B">1</button>
+      <button type="button" data-letter="C">2</button>
+      <button type="button" data-letter="D">0</button>
+    </div>
+    <div class="qcm-fb"><b>C.</b> Le 3ᵉ est la somme des deux premiers (dépendant). Il ne reste que 2 vecteurs indépendants : le span est un plan, dimension 2.</div>
+  </div>
+
+  <div class="check-title">À valider — Chapitre 1</div>
+  <div class="check"><input type="checkbox" id="c1a"><label for="c1a">Combinaison linéaire, span, indépendance linéaire</label></div>
+  <div class="check"><input type="checkbox" id="c1b"><label for="c1b">Matrice = transformation (vidéos 3–4 de 3Blue1Brown)</label></div>
+  <div class="check"><input type="checkbox" id="c1c"><label for="c1c">Produit matriciel : ligne×colonne ET vue par colonnes</label></div>
+  <div class="check"><input type="checkbox" id="c1d"><label for="c1d">Transposée, inverse 2×2 de tête, règles \((AB)^{\mathsf T}\), \((AB)^{-1}\)</label></div>
+  <div class="check"><input type="checkbox" id="c1e"><label for="c1e">Produit scalaire, norme, orthogonalité</label></div>
+  <div class="check"><input type="checkbox" id="c1f"><label for="c1f">Espace, sous-espace, base, dimension, coordonnées</label></div>
+  <div class="check"><input type="checkbox" id="c1g"><label for="c1g">≥ 10 exercices (Strang ch. 1–2)</label></div>
+</section>
+
+<!-- ============================================================ -->
+<!-- CHAPITRE 2 -->
+<!-- ============================================================ -->
+<section class="module" id="ch2" data-module="ch2">
+  <div class="mod-head">
+    <span class="mod-num">2</span>
+    <div>
+      <h2>Systèmes, rang, déterminant</h2>
+      <div class="mod-meta">Gauss, espaces fondamentaux, théorème du rang, <b>déterminant = facteur de volume</b></div>
+    </div>
+  </div>
+  <div class="mod-bar"><div class="mod-fill"></div></div>
+
+  <div class="idea">
+    <span class="idea-tag">L'idée du chapitre</span>
+    Résoudre \(Ax=b\), c'est demander : <b>« quel mélange des colonnes de \(A\) donne \(b\) ? »</b>. Gauss est la méthode mécanique pour répondre. Le <b>rang</b> dit combien de directions « utiles » la matrice possède, et le <b>déterminant</b> dit si la transformation écrase l'espace (det = 0 = non inversible).
+  </div>
+
+  <div class="subhead">2.1 — Élimination de Gauss</div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair</span>
+    Gauss, c'est <b>simplifier un système d'équations en faisant des soustractions de lignes</b> jusqu'à obtenir un escalier (des zéros sous la diagonale). Une fois l'escalier obtenu, tu lis la dernière équation (1 inconnue), tu remontes, et tu déballes les autres. C'est exactement ce que tu faisais au lycée, rendu systématique.
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag">Fiche · La méthode</span>
+    <ul>
+      <li>Opérations autorisées sur les lignes : échanger, multiplier par un scalaire \(\neq0\), ajouter un multiple d'une autre ligne. Elles <b>ne changent pas</b> l'ensemble des solutions.</li>
+      <li>But : forme <b>échelonnée</b> (triangulaire) → on lit les solutions par remontée.</li>
+      <li>Les colonnes avec un <b>pivot</b> (premier non-nul d'une ligne) correspondent aux variables « de base » ; les autres sont libres.</li>
+    </ul>
+    <p>À pratiquer jusqu'à l'automatisme sur du 3×3.</p>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">Exercice corrigé — résoudre par Gauss</span>
+    <p>\(\begin{cases}x+y=3\\2x+3y=8\end{cases}\)</p>
+    <details><summary>Voir la solution</summary>
+      <div class="sol">
+        <p>\(L_2\leftarrow L_2-2L_1\) : \(\;y=8-6=2\). Puis \(x=3-y=1\). Solution \((x,y)=(1,2)\).</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="subhead">2.2 — Rang &amp; espaces fondamentaux</div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair</span>
+    Le <b>rang</b>, c'est le <b>nombre de directions vraiment différentes</b> qu'une matrice contient (ses colonnes réellement utiles). Le <b>noyau</b> (null space), c'est l'ensemble des vecteurs que la matrice <b>écrase sur zéro</b>. Plus le noyau est gros, plus la matrice « perd » d'information, et plus son rang est petit.
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag red">Fiche clé · Rang &amp; théorème du rang</span>
+    <ul>
+      <li><b>Rang</b> = nombre de pivots = dim de l'espace colonne = nb de colonnes indépendantes.</li>
+      <li><b>Espace colonne</b> \(C(A)\) : tous les \(b\) atteignables (\(=\)span des colonnes).</li>
+      <li><b>Noyau</b> \(N(A)\) : tous les \(x\) tels que \(Ax=0\).</li>
+    </ul>
+    <div class="formula">
+      <b>Théorème du rang :</b> \(\;\text{rang}(A)+\dim N(A)=n\) (nb de colonnes).
+    </div>
+    <p class="note">Strang : retiens les <b>4 sous-espaces fondamentaux</b> — espace colonne et noyau de \(A\), idem pour \(A^{\mathsf T}\).</p>
+  </div>
+
+  <div class="qcm" data-id="a2-q1" data-answer="1">
+    <span class="qcm-tag">QCM 1</span>
+    <p class="qcm-q">Une matrice \(4\times4\) a un rang de 3. Quelle est la dimension de son noyau ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">0</button>
+      <button type="button" data-letter="B">1</button>
+      <button type="button" data-letter="C">3</button>
+      <button type="button" data-letter="D">4</button>
+    </div>
+    <div class="qcm-fb"><b>B.</b> Théorème du rang : \(\dim N(A)=n-\text{rang}=4-3=1\). La matrice est donc <b>singulière</b> (noyau non trivial).</div>
+  </div>
+
+  <div class="subhead">2.3 — Déterminant</div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair</span>
+    Le <b>déterminant</b> mesure de combien la transformation <b>gonfle ou rétrécit les aires/volumes</b>. \(\det=3\) : les aires triplent. \(\det=0\) : tout est <b>aplati</b> sur une droite ou un point (la matrice écrase une dimension → pas inversible). Un signe négatif = l'espace est retourné comme un gant (orientation inversée).
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag red">Fiche clé · Déterminant</span>
+    <div class="formula">
+      \(\det\begin{pmatrix}a&b\\c&d\end{pmatrix}=ad-bc\). En 3×3 : développement par cofacteurs (règle de Sarrus possible).
+    </div>
+    <ul>
+      <li><b>Géométrie :</b> \(|\det|\) = facteur de dilatation des volumes.</li>
+      <li><b>Inversibilité :</b> \(\det A=0\iff A\) non inversible \(\iff\) colonnes dépendantes \(\iff\) noyau non trivial.</li>
+      <li><b>Propriétés :</b> \(\det(AB)=\det A\,\det B\) ; \(\det A^{\mathsf T}=\det A\) ; \(\det A^{-1}=1/\det A\).</li>
+    </ul>
+  </div>
+
+  <div class="qcm" data-id="a2-q2" data-answer="2">
+    <span class="qcm-tag">QCM 2</span>
+    <p class="qcm-q">Que vaut \(\det\begin{pmatrix}3&2\\1&4\end{pmatrix}\) ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">14</button>
+      <button type="button" data-letter="B">5</button>
+      <button type="button" data-letter="C">10</button>
+      <button type="button" data-letter="D">7</button>
+    </div>
+    <div class="qcm-fb"><b>C.</b> \(ad-bc=3\cdot4-2\cdot1=12-2=10\). Comme \(\neq0\), la matrice est inversible.</div>
+  </div>
+
+  <div class="qcm" data-id="a2-q3" data-answer="0">
+    <span class="qcm-tag">QCM 3</span>
+    <p class="qcm-q">Si \(\det A=0\), alors :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">\(A\) n'est pas inversible (colonnes dépendantes)</button>
+      <button type="button" data-letter="B">\(A\) est l'identité</button>
+      <button type="button" data-letter="C">\(A\) est symétrique</button>
+      <button type="button" data-letter="D">\(Ax=b\) a toujours une solution unique</button>
+    </div>
+    <div class="qcm-fb"><b>A.</b> \(\det=0\) = la transformation écrase une dimension : colonnes dépendantes, noyau non trivial, pas d'inverse.</div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">Exercice corrigé — déterminant 3×3</span>
+    <p>Calcule \(\det\begin{pmatrix}1&2&0\\0&3&1\\2&0&1\end{pmatrix}\).</p>
+    <details><summary>Voir la solution</summary>
+      <div class="sol">
+        <p>Développement par la 1ʳᵉ ligne :</p>
+        <p>\(1\cdot\det\begin{pmatrix}3&1\\0&1\end{pmatrix}-2\cdot\det\begin{pmatrix}0&1\\2&1\end{pmatrix}+0\)</p>
+        <p>\(=1\cdot(3-0)-2\cdot(0-2)=3+4=\mathbf{7}\).</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="subhead">2.4 — Approfondissements (niveau Master)</div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair</span>
+    Il existe une <b>liste magique de conditions toutes équivalentes</b> : si l'une est vraie, toutes le sont (la matrice est « parfaitement inversible »). En savoir une, c'est les connaître toutes. C'est le théorème le plus rentable de tout le cours.
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag red">Fiche clé · Théorème de la matrice inversible</span>
+    <h4>Pour \(A\) carrée \(n\times n\), tout ceci est équivalent</h4>
+    <ul>
+      <li>\(A\) est inversible ; \(\det A\neq0\).</li>
+      <li>\(\text{rang}(A)=n\) ; les colonnes (et lignes) sont indépendantes.</li>
+      <li>\(N(A)=\{0\}\) (noyau trivial) ; \(Ax=0\) n'a que la solution nulle.</li>
+      <li>\(Ax=b\) a une <b>solution unique</b> pour tout \(b\) ; les colonnes engendrent \(\mathbb{R}^n\).</li>
+      <li>\(0\) n'est <b>pas</b> valeur propre de \(A\).</li>
+    </ul>
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag">Fiche · Décomposition LU</span>
+    <p>Gauss revient à factoriser \(A=LU\) (\(L\) triangulaire inférieure, \(U\) supérieure). Utile pour résoudre rapidement plusieurs systèmes \(Ax=b_i\) avec la même \(A\) (on factorise une fois, on résout par descente/remontée). C'est ce que fait <code>scipy.linalg.lu</code>.</p>
+  </div>
+
+  <div class="qcm" data-id="a2-q4" data-answer="3">
+    <span class="qcm-tag">QCM 4</span>
+    <p class="qcm-q">Pour une matrice carrée \(A\), laquelle N'EST PAS équivalente aux autres ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">\(\det A\neq0\)</button>
+      <button type="button" data-letter="B">\(\text{rang}(A)=n\)</button>
+      <button type="button" data-letter="C">\(N(A)=\{0\}\)</button>
+      <button type="button" data-letter="D">\(A\) est symétrique</button>
+    </div>
+    <div class="qcm-fb"><b>D.</b> La symétrie n'a rien à voir avec l'inversibilité (une matrice symétrique peut être singulière, et une non-symétrique inversible). Les trois autres sont équivalentes.</div>
+  </div>
+
+  <div class="check-title">À valider — Chapitre 2</div>
+  <div class="check"><input type="checkbox" id="c2a"><label for="c2a">Gauss sur des systèmes 3×3 — 10 systèmes sans erreur</label></div>
+  <div class="check"><input type="checkbox" id="c2b"><label for="c2b">Rang, espace colonne, noyau + théorème du rang</label></div>
+  <div class="check"><input type="checkbox" id="c2c"><label for="c2c">Les 4 sous-espaces fondamentaux (diagramme de Strang)</label></div>
+  <div class="check"><input type="checkbox" id="c2d"><label for="c2d">Déterminants 2×2 et 3×3 + interprétation volume</label></div>
+  <div class="check"><input type="checkbox" id="c2e"><label for="c2e">Théorème de la matrice inversible (toutes les équivalences)</label></div>
+  <div class="check"><input type="checkbox" id="c2f"><label for="c2f">Décomposition LU (idée + un exemple)</label></div>
+  <div class="check"><input type="checkbox" id="c2g"><label for="c2g">≥ 10 exercices (Strang ch. 2–3, 5)</label></div>
+</section>
+
+<!-- ============================================================ -->
+<!-- CHAPITRE 3 -->
+<!-- ============================================================ -->
+<section class="module" id="ch3" data-module="ch3">
+  <div class="mod-head">
+    <span class="mod-num">3</span>
+    <div>
+      <h2>Valeurs propres &amp; diagonalisation</h2>
+      <div class="mod-meta">\(Av=\lambda v\), raccourci trace/det, théorème spectral, matrices définies positives</div>
+    </div>
+  </div>
+  <div class="mod-bar"><div class="mod-fill"></div></div>
+
+  <div class="idea">
+    <span class="idea-tag">L'idée du chapitre</span>
+    Parmi toutes les directions, certaines sont <b>spéciales</b> : la matrice ne fait que les <b>étirer</b>, sans les tourner. Ce sont les <b>vecteurs propres</b>, et le facteur d'étirement est la <b>valeur propre</b> \(\lambda\). Les trouver, c'est comprendre la matrice « de l'intérieur » — et c'est le cœur de la PCA.
+  </div>
+
+  <div class="subhead">3.1 — Valeurs &amp; vecteurs propres</div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair</span>
+    Quand une matrice déforme l'espace, la plupart des flèches changent de direction. Mais quelques flèches privilégiées <b>gardent leur direction</b> et sont juste rallongées (ou raccourcies) : ce sont les <b>vecteurs propres</b>. De combien on les rallonge = la <b>valeur propre</b>. Trouver ces axes, c'est trouver le « squelette » de la transformation.
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag red">Fiche clé · La recette</span>
+    <div class="formula">\[ Av=\lambda v,\quad v\neq0 \]</div>
+    <ol>
+      <li>Résoudre \(\det(A-\lambda I)=0\) → les valeurs propres \(\lambda_i\) (polynôme caractéristique).</li>
+      <li>Pour chaque \(\lambda_i\), résoudre \((A-\lambda_i I)v=0\) → les vecteurs propres (le noyau).</li>
+    </ol>
+    <div class="formula">
+      <b>Raccourcis 2×2 (à toujours utiliser) :</b> \(\;\lambda_1+\lambda_2=\text{trace}(A)\) &nbsp;et&nbsp; \(\lambda_1\lambda_2=\det(A)\).
+    </div>
+    <p class="note">Plus généralement : la <b>somme</b> des valeurs propres = la trace, le <b>produit</b> = le déterminant. Vérifie toujours tes calculs avec ça.</p>
+  </div>
+
+  <div class="qcm" data-id="a3-q1" data-answer="2">
+    <span class="qcm-tag">QCM 1</span>
+    <p class="qcm-q">\(A=\begin{pmatrix}4&1\\2&3\end{pmatrix}\). Avec trace = 7 et det = 10, les valeurs propres sont :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">7 et 10</button>
+      <button type="button" data-letter="B">1 et 6</button>
+      <button type="button" data-letter="C">5 et 2</button>
+      <button type="button" data-letter="D">3 et 4</button>
+    </div>
+    <div class="qcm-fb"><b>C.</b> On cherche deux nombres de somme 7 et produit 10 : \(5\) et \(2\). (Polynôme \(\lambda^2-7\lambda+10\).)</div>
+  </div>
+
+  <div class="qcm" data-id="a3-q2" data-answer="1">
+    <span class="qcm-tag">QCM 2</span>
+    <p class="qcm-q">Le <b>produit</b> des valeurs propres d'une matrice est toujours égal à :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">sa trace</button>
+      <button type="button" data-letter="B">son déterminant</button>
+      <button type="button" data-letter="C">son rang</button>
+      <button type="button" data-letter="D">1</button>
+    </div>
+    <div class="qcm-fb"><b>B.</b> Produit des \(\lambda_i\) = déterminant ; somme des \(\lambda_i\) = trace. (D'où : \(\det=0\) ⟺ \(0\) est valeur propre.)</div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">Exercice corrigé — diagonaliser une 2×2</span>
+    <p>Trouve valeurs et vecteurs propres de \(A=\begin{pmatrix}2&1\\1&2\end{pmatrix}\).</p>
+    <details><summary>Voir la solution</summary>
+      <div class="sol">
+        <p>\(\det(A-\lambda I)=(2-\lambda)^2-1=\lambda^2-4\lambda+3=(\lambda-3)(\lambda-1)\) → \(\lambda_1=3,\lambda_2=1\). Vérif : trace 4 = 3+1 ✓, det 3 = 3×1 ✓.</p>
+        <p>\(\lambda=3\) : \(\begin{pmatrix}-1&1\\1&-1\end{pmatrix}v=0\Rightarrow v_1=(1,1)\).</p>
+        <p>\(\lambda=1\) : \(\begin{pmatrix}1&1\\1&1\end{pmatrix}v=0\Rightarrow v_2=(1,-1)\).</p>
+        <p>\(A\) symétrique → \(v_1\perp v_2\) (\(1\cdot1+1\cdot(-1)=0\) ✓). La matrice étire ×3 selon \((1,1)\) et ×1 selon \((1,-1)\).</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="subhead">3.2 — Diagonalisation &amp; théorème spectral</div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair</span>
+    <b>Diagonaliser</b>, c'est choisir les axes propres comme nouveau repère : dans ce repère, la matrice devient ultra-simple (juste des étirements sur chaque axe, des zéros partout ailleurs). Et pour les matrices <b>symétriques</b> — celles qu'on rencontre tout le temps en stats — la bonne nouvelle est garantie : leurs axes propres sont <b>perpendiculaires</b> et leurs étirements sont des nombres réels. C'est ça le théorème spectral.
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag">Fiche · Diagonalisation</span>
+    <div class="formula">
+      \(A=PDP^{-1}\) où \(D\) = diagonale des \(\lambda_i\), \(P\) = colonnes = vecteurs propres.
+      Puissances faciles : \(A^k=PD^kP^{-1}\).
+    </div>
+    <p>Possible ssi il existe une base de vecteurs propres (assez de vecteurs propres indépendants).</p>
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag red">Fiche clé · Théorème spectral</span>
+    <p>Si \(A\) est <b>symétrique</b> (\(A=A^{\mathsf T}\)) :</p>
+    <div class="formula">
+      \[ A=Q\Lambda Q^{\mathsf T} \]
+      \(Q\) <b>orthogonale</b> (vecteurs propres orthonormés, \(Q^{\mathsf T}Q=I\)), \(\Lambda\) diagonale <b>réelle</b>.
+    </div>
+    <p>C'est le théorème derrière la <b>PCA</b> : on diagonalise la matrice de covariance (symétrique) pour trouver les axes principaux.</p>
+  </div>
+
+  <div class="subhead">3.3 — Matrices définies positives</div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair</span>
+    Une matrice est <b>définie positive</b> si elle « pointe toujours vers l'extérieur » : peu importe le vecteur (non nul) que tu lui donnes, le produit \(x^{\mathsf T}Ax\) ressort <b>strictement positif</b>. Image : un bol (une cuvette) parfaitement convexe — il y a un unique fond. C'est exactement la condition qui garantit qu'un problème d'optimisation a un minimum unique.
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag">Fiche · Définie positive (SDP)</span>
+    <ul>
+      <li><b>Définition :</b> \(x^{\mathsf T}Ax>0\) pour tout \(x\neq0\) (et \(A\) symétrique).</li>
+      <li><b>Critère valeurs propres :</b> toutes les \(\lambda_i>0\).</li>
+      <li>\(\ge0\) (semi-définie positive) : \(\lambda_i\ge0\). Ex. toute matrice \(X^{\mathsf T}X\) est SDP.</li>
+    </ul>
+  </div>
+
+  <div class="qcm" data-id="a3-q3" data-answer="0">
+    <span class="qcm-tag">QCM 3</span>
+    <p class="qcm-q">Une matrice symétrique est <b>définie positive</b> si et seulement si :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">toutes ses valeurs propres sont &gt; 0</button>
+      <button type="button" data-letter="B">son déterminant est &gt; 0</button>
+      <button type="button" data-letter="C">toutes ses entrées sont &gt; 0</button>
+      <button type="button" data-letter="D">sa trace est &gt; 0</button>
+    </div>
+    <div class="qcm-fb"><b>A.</b> Critère exact : toutes les \(\lambda_i>0\). (Det &gt; 0 ou trace &gt; 0 ne suffisent pas ; les entrées peuvent être négatives.)</div>
+  </div>
+
+  <div class="qcm" data-id="a3-q4" data-answer="3">
+    <span class="qcm-tag">QCM 4</span>
+    <p class="qcm-q">Les valeurs propres d'une matrice <b>symétrique réelle</b> sont toujours :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">positives</button>
+      <button type="button" data-letter="B">complexes</button>
+      <button type="button" data-letter="C">entières</button>
+      <button type="button" data-letter="D">réelles, et vecteurs propres orthogonaux</button>
+    </div>
+    <div class="qcm-fb"><b>D.</b> Théorème spectral : symétrique ⇒ valeurs propres réelles + vecteurs propres orthogonaux. (Réelles ≠ forcément positives : il faut « définie positive » pour ça.)</div>
+  </div>
+
+  <div class="subhead">3.4 — Approfondissements (niveau Master)</div>
+
+  <div class="fiche">
+    <span class="fiche-tag">Fiche · Multiplicités &amp; diagonalisabilité</span>
+    <ul>
+      <li><b>Multiplicité algébrique</b> de \(\lambda\) : son ordre comme racine du polynôme caractéristique.</li>
+      <li><b>Multiplicité géométrique</b> : \(\dim N(A-\lambda I)\) (nb de vecteurs propres indépendants).</li>
+      <li>\(A\) diagonalisable ⟺ pour chaque \(\lambda\), géométrique = algébrique. Sinon, matrice « défective » (ex. \(\begin{pmatrix}1&1\\0&1\end{pmatrix}\)).</li>
+      <li>Valeurs propres <b>distinctes</b> ⇒ toujours diagonalisable.</li>
+    </ul>
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag">Fiche · Formes quadratiques</span>
+    <p>Une forme quadratique \(q(x)=x^{\mathsf T}Ax\) (avec \(A\) symétrique) décrit des « bols », « selles » ou « dômes » selon le signe des valeurs propres : toutes &gt; 0 → minimum (bol), toutes &lt; 0 → maximum (dôme), signes mêlés → point selle. C'est exactement la <b>Hessienne</b> en optimisation (module Analyse) qui classe les points critiques.</p>
+  </div>
+
+  <div class="qcm" data-id="a3-q5" data-answer="1">
+    <span class="qcm-tag">QCM 5</span>
+    <p class="qcm-q">Une matrice \(n\times n\) avec \(n\) valeurs propres <b>distinctes</b> est :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">jamais diagonalisable</button>
+      <button type="button" data-letter="B">toujours diagonalisable</button>
+      <button type="button" data-letter="C">toujours symétrique</button>
+      <button type="button" data-letter="D">toujours orthogonale</button>
+    </div>
+    <div class="qcm-fb"><b>B.</b> Valeurs propres distinctes ⇒ vecteurs propres indépendants ⇒ base propre ⇒ diagonalisable. (Les problèmes n'arrivent qu'avec des valeurs propres répétées.)</div>
+  </div>
+
+  <div class="check-title">À valider — Chapitre 3</div>
+  <div class="check"><input type="checkbox" id="c3a"><label for="c3a">Recette valeurs/vecteurs propres + raccourci trace/det — 10 matrices 2×2</label></div>
+  <div class="check"><input type="checkbox" id="c3b"><label for="c3b">Diagonalisation \(A=PDP^{-1}\), puissances \(A^k\)</label></div>
+  <div class="check"><input type="checkbox" id="c3c"><label for="c3c">Théorème spectral pour matrices symétriques (\(A=Q\Lambda Q^{\mathsf T}\))</label></div>
+  <div class="check"><input type="checkbox" id="c3d"><label for="c3d">Matrices définies positives (déf. + critère \(\lambda_i>0\))</label></div>
+  <div class="check"><input type="checkbox" id="c3e"><label for="c3e">Multiplicités algébrique/géométrique ; diagonalisabilité</label></div>
+  <div class="check"><input type="checkbox" id="c3f"><label for="c3f">Formes quadratiques (lien Hessienne / optimisation)</label></div>
+  <div class="check"><input type="checkbox" id="c3g"><label for="c3g">≥ 10 exercices (Strang ch. 6)</label></div>
+</section>
+
+<!-- ============================================================ -->
+<!-- CHAPITRE 4 -->
+<!-- ============================================================ -->
+<section class="module" id="ch4" data-module="ch4">
+  <div class="mod-head">
+    <span class="mod-num">4</span>
+    <div>
+      <h2>Projections, moindres carrés &amp; SVD</h2>
+      <div class="mod-meta">Le cœur du ML : <b>la régression linéaire EST une projection</b>, et la SVD/PCA</div>
+    </div>
+  </div>
+  <div class="mod-bar"><div class="mod-fill"></div></div>
+
+  <div class="idea">
+    <span class="idea-tag">L'idée du chapitre</span>
+    Quand \(Ax=b\) n'a <b>pas</b> de solution (trop d'équations, données bruitées), on cherche le « presque » : la combinaison des colonnes la <b>plus proche</b> de \(b\). Géométriquement, on <b>projette</b> \(b\) sur l'espace des colonnes. C'est la régression linéaire. La <b>SVD</b> généralise tout ça et fonde la PCA.
+  </div>
+
+  <div class="subhead">4.1 — Projections orthogonales</div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair</span>
+    Projeter un point sur une droite (ou un plan), c'est trouver son <b>ombre</b> quand la lumière tombe à la perpendiculaire. L'ombre est le point de la droite le <b>plus proche</b> de toi, et le trait qui te relie à ton ombre est <b>perpendiculaire</b> à la droite. Toute la régression repose sur cette image : l'erreur (le résidu) est perpendiculaire à l'espace des prédictions.
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag">Fiche · Projection</span>
+    <div class="formula">
+      <b>Sur la droite portée par \(a\) :</b> \(\;\text{proj}_a(b)=\dfrac{a^{\mathsf T}b}{a^{\mathsf T}a}\,a\).
+    </div>
+    <div class="formula">
+      <b>Sur l'espace colonne de \(A\) :</b> matrice de projection \(P=A(A^{\mathsf T}A)^{-1}A^{\mathsf T}\). Propriétés : \(P^2=P\), \(P^{\mathsf T}=P\).
+    </div>
+    <p class="note">Le résidu \(b-Pb\) est orthogonal à toutes les colonnes de \(A\) : c'est la condition « les équations normales ».</p>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">Exercice corrigé — projeter sur une droite</span>
+    <p>Projette \(b=(3,4)\) sur la droite portée par \(a=(1,0)\).</p>
+    <details><summary>Voir la solution</summary>
+      <div class="sol">
+        <p>\(\text{proj}_a(b)=\dfrac{a^{\mathsf T}b}{a^{\mathsf T}a}a=\dfrac{3}{1}(1,0)=(3,0)\).</p>
+        <p>L'ombre de \((3,4)\) sur l'axe \(x\) est \((3,0)\) : on « oublie » la composante verticale. Le résidu \((0,4)\) est bien \(\perp\) à \(a\).</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="subhead">4.2 — Moindres carrés = régression linéaire</div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair</span>
+    Tu as un nuage de points et tu veux la <b>meilleure droite</b> qui passe « au milieu ». « Meilleure » = celle qui minimise la somme des carrés des écarts verticaux. La solution n'est pas magique : c'est la <b>projection</b> de tes données sur l'espace des droites possibles. La formule \(\hat\beta=(X^{\mathsf T}X)^{-1}X^{\mathsf T}y\) tombe directement de là.
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag red">Fiche clé · Moindres carrés</span>
+    <div class="formula">
+      Quand \(Ax=b\) n'a pas de solution, on minimise \(\|b-Ax\|^2\). Les <b>équations normales</b> \(A^{\mathsf T}A\,\hat x=A^{\mathsf T}b\) donnent :
+      \[ \hat x=(A^{\mathsf T}A)^{-1}A^{\mathsf T}b \]
+    </div>
+    <p>En régression : \(\;\hat\beta=(X^{\mathsf T}X)^{-1}X^{\mathsf T}y\) — les coefficients qui minimisent \(\|y-X\beta\|^2\). Tu reverras cette formule en Économétrie, Intro ML et Forecasting. <b>Apprends-la maintenant, comprends-la comme une projection, et le Term 1 te paraîtra familier.</b></p>
+  </div>
+
+  <div class="qcm" data-id="a4-q1" data-answer="2">
+    <span class="qcm-tag">QCM 1</span>
+    <p class="qcm-q">La solution des moindres carrés \(\hat x=(A^{\mathsf T}A)^{-1}A^{\mathsf T}b\) revient géométriquement à :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">inverser \(A\)</button>
+      <button type="button" data-letter="B">résoudre \(Ax=b\) exactement</button>
+      <button type="button" data-letter="C">projeter \(b\) sur l'espace colonne de \(A\)</button>
+      <button type="button" data-letter="D">diagonaliser \(A\)</button>
+    </div>
+    <div class="qcm-fb"><b>C.</b> On projette \(b\) sur \(C(A)\) : \(A\hat x\) est le point de l'espace colonne le plus proche de \(b\). C'est la régression linéaire.</div>
+  </div>
+
+  <div class="qcm" data-id="a4-q2" data-answer="0">
+    <span class="qcm-tag">QCM 2</span>
+    <p class="qcm-q">Pourquoi \(X^{\mathsf T}X\) apparaît-elle dans la formule de régression ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">Elle vient des équations normales \(X^{\mathsf T}X\hat\beta=X^{\mathsf T}y\)</button>
+      <button type="button" data-letter="B">Par convention arbitraire</button>
+      <button type="button" data-letter="C">Parce que \(X\) est carrée</button>
+      <button type="button" data-letter="D">Pour rendre \(X\) symétrique</button>
+    </div>
+    <div class="qcm-fb"><b>A.</b> Imposer que le résidu soit orthogonal aux colonnes de \(X\) donne \(X^{\mathsf T}(y-X\beta)=0\), d'où les équations normales. \(X^{\mathsf T}X\) est de plus symétrique et (souvent) inversible.</div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">Exercice corrigé — ajuster une droite</span>
+    <p>Trois points : \((0,1),(1,2),(2,2)\). Trouve la droite des moindres carrés \(y=\beta_0+\beta_1 x\).</p>
+    <details><summary>Voir la solution</summary>
+      <div class="sol">
+        <p>\(X=\begin{pmatrix}1&0\\1&1\\1&2\end{pmatrix}\), \(y=(1,2,2)\). \(X^{\mathsf T}X=\begin{pmatrix}3&3\\3&5\end{pmatrix}\), \(X^{\mathsf T}y=\begin{pmatrix}5\\6\end{pmatrix}\).</p>
+        <p>\(\det=3\cdot5-9=6\). \(\hat\beta=\frac16\begin{pmatrix}5&-3\\-3&3\end{pmatrix}\begin{pmatrix}5\\6\end{pmatrix}=\frac16\begin{pmatrix}7\\3\end{pmatrix}\).</p>
+        <p>Donc \(\beta_0=7/6\approx1{,}17\), \(\beta_1=1/2\) : la droite \(y\approx1{,}17+0{,}5x\).</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="subhead">4.3 — Bases orthonormées, Gram-Schmidt, QR</div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair</span>
+    Travailler avec des axes <b>perpendiculaires et de longueur 1</b> (orthonormés), c'est comme avoir un quadrillage parfait : tout devient simple (les projections sont juste des produits scalaires). <b>Gram-Schmidt</b> est la recette pour redresser n'importe quel jeu d'axes de travers en axes perpendiculaires. La <b>décomposition QR</b> est ce procédé écrit sous forme \(A=QR\).
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag">Fiche · Orthonormé &amp; QR</span>
+    <ul>
+      <li><b>Orthonormé :</b> vecteurs \(\perp\) deux à deux et de norme 1. Matrice \(Q\) avec \(Q^{\mathsf T}Q=I\).</li>
+      <li><b>Gram-Schmidt :</b> transforme une base quelconque en base orthonormée (on retire à chaque vecteur ses projections sur les précédents, puis on normalise).</li>
+      <li><b>QR :</b> \(A=QR\) (\(Q\) orthonormée, \(R\) triangulaire). Rend les moindres carrés numériquement stables.</li>
+    </ul>
+  </div>
+
+  <div class="subhead">4.4 — SVD &amp; PCA (niveau Master)</div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair</span>
+    La <b>SVD</b> dit que <b>n'importe quelle</b> matrice, même rectangulaire, est en réalité « une rotation, puis des étirements le long d'axes, puis une autre rotation ». Les facteurs d'étirement (les <b>valeurs singulières</b>) sont triés du plus grand au plus petit : ils classent l'information par importance. Garder les premiers = compresser / résumer les données. C'est exactement ce que fait la <b>PCA</b>.
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag red">Fiche clé · SVD</span>
+    <div class="formula">
+      \[ A=U\Sigma V^{\mathsf T} \]
+      \(U,V\) orthogonales (rotations), \(\Sigma\) diagonale des <b>valeurs singulières</b> \(\sigma_1\ge\sigma_2\ge\cdots\ge0\).
+    </div>
+    <ul>
+      <li>Existe pour <b>toute</b> matrice (carrée ou non).</li>
+      <li>Les \(\sigma_i^2\) sont les valeurs propres de \(A^{\mathsf T}A\) ; les colonnes de \(V\) en sont les vecteurs propres.</li>
+      <li><b>Approximation de rang faible :</b> garder les \(k\) plus grandes \(\sigma_i\) donne la meilleure approximation de \(A\) (compression d'images, systèmes de recommandation).</li>
+    </ul>
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag">Fiche · PCA, pseudo-inverse, conditionnement</span>
+    <ul>
+      <li><b>PCA :</b> diagonaliser la matrice de covariance (symétrique → théorème spectral) <i>ou</i> faire la SVD des données centrées. Les axes principaux = directions de plus grande variance.</li>
+      <li><b>Pseudo-inverse</b> \(A^{+}=V\Sigma^{+}U^{\mathsf T}\) : généralise l'inverse aux matrices non carrées ; \(\hat x=A^{+}b\) redonne les moindres carrés.</li>
+      <li><b>Conditionnement</b> \(\kappa=\sigma_{\max}/\sigma_{\min}\) : grand \(\kappa\) = calculs instables (colinéarité des features).</li>
+    </ul>
+  </div>
+
+  <div class="qcm" data-id="a4-q3" data-answer="1">
+    <span class="qcm-tag">QCM 3</span>
+    <p class="qcm-q">La décomposition SVD \(A=U\Sigma V^{\mathsf T}\) existe pour :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">seulement les matrices carrées</button>
+      <button type="button" data-letter="B">toute matrice, même rectangulaire</button>
+      <button type="button" data-letter="C">seulement les matrices symétriques</button>
+      <button type="button" data-letter="D">seulement les matrices inversibles</button>
+    </div>
+    <div class="qcm-fb"><b>B.</b> La SVD existe <b>toujours</b> — c'est sa force par rapport à la diagonalisation (qui exige carrée + diagonalisable).</div>
+  </div>
+
+  <div class="qcm" data-id="a4-q4" data-answer="0">
+    <span class="qcm-tag">QCM 4</span>
+    <p class="qcm-q">En PCA, les axes principaux sont les vecteurs propres de :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">la matrice de covariance des données</button>
+      <button type="button" data-letter="B">la matrice identité</button>
+      <button type="button" data-letter="C">n'importe quelle matrice carrée</button>
+      <button type="button" data-letter="D">la matrice des labels</button>
+    </div>
+    <div class="qcm-fb"><b>A.</b> PCA = diagonalisation de la covariance (symétrique). Les vecteurs propres associés aux plus grandes valeurs propres = directions de plus grande variance.</div>
+  </div>
+
+  <div class="qcm" data-id="a4-q5" data-answer="3">
+    <span class="qcm-tag">QCM 5</span>
+    <p class="qcm-q">Que représentent les valeurs singulières \(\sigma_i\) ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">les angles de rotation</button>
+      <button type="button" data-letter="B">les entrées de la diagonale de \(A\)</button>
+      <button type="button" data-letter="C">le rang de \(A\)</button>
+      <button type="button" data-letter="D">les facteurs d'étirement, triés par importance</button>
+    </div>
+    <div class="qcm-fb"><b>D.</b> Les \(\sigma_i\) (≥ 0, triées) mesurent combien la matrice étire selon chaque axe. Garder les plus grandes = garder l'essentiel de l'information (compression).</div>
+  </div>
+
+  <div class="exam-box">
+    <ul>
+      <li><b>La régression linéaire EST une projection</b> : \(\hat\beta=(X^{\mathsf T}X)^{-1}X^{\mathsf T}y\), résidu \(\perp\) colonnes de \(X\).</li>
+      <li>Projection sur une droite : \(\frac{a^{\mathsf T}b}{a^{\mathsf T}a}a\). Matrice de projection : \(P^2=P,\;P^{\mathsf T}=P\).</li>
+      <li><b>SVD existe toujours</b> ; \(\sigma_i^2\) = valeurs propres de \(A^{\mathsf T}A\) ; base de la <b>PCA</b> et de l'approximation de rang faible.</li>
+      <li>Sache tout refaire en NumPy : <code>np.linalg.eig, solve, lstsq, svd, inv, qr</code>.</li>
+    </ul>
+  </div>
+
+  <div class="check-title">À valider — Chapitre 4</div>
+  <div class="check"><input type="checkbox" id="c4a"><label for="c4a">Projection sur une droite, puis sur un sous-espace ; \(P^2=P\)</label></div>
+  <div class="check"><input type="checkbox" id="c4b"><label for="c4b">Moindres carrés : équations normales + lien régression (démo)</label></div>
+  <div class="check"><input type="checkbox" id="c4c"><label for="c4c">Bases orthonormées, Gram-Schmidt, décomposition QR</label></div>
+  <div class="check"><input type="checkbox" id="c4d"><label for="c4d">SVD : énoncé, lien avec \(A^{\mathsf T}A\), approximation de rang faible</label></div>
+  <div class="check"><input type="checkbox" id="c4e"><label for="c4e">PCA, pseudo-inverse, conditionnement</label></div>
+  <div class="check"><input type="checkbox" id="c4f"><label for="c4f">Tout refaire en NumPy (<code>np.linalg</code>)</label></div>
+  <div class="check"><input type="checkbox" id="c4g"><label for="c4g">≥ 8 exercices (Strang ch. 4, 7)</label></div>
+</section>
+
+<!-- ============================================================ -->
+<!-- EXAMEN FINAL -->
+<!-- ============================================================ -->
+<section class="module" id="final" data-module="final">
+  <div class="mod-head">
+    <span class="mod-num">★</span>
+    <div>
+      <h2>Examen final — 30 questions</h2>
+      <div class="mod-meta">QCM cliquables (instantané) + problèmes à solution cachée · les 4 chapitres mélangés</div>
+    </div>
+  </div>
+  <div class="mod-bar"><div class="mod-fill"></div></div>
+
+  <div class="why"><b>Règle du jeu :</b> chronomètre-toi, feuille et stylo, <b>aucune note</b>. Pour les QCM, réfléchis avant de cliquer (le score ne compte que le 1ᵉʳ essai). Pour les problèmes, rédige avant d'ouvrir la correction, puis coche « réussi sans aide ».</div>
+
+  <div class="subhead">Partie A — 15 QCM rapides</div>
+
+  <div class="qcm" data-id="f-q1" data-answer="1">
+    <span class="qcm-tag">QCM 1 · Ch.1</span>
+    <p class="qcm-q">\(A\) est \(2\times3\), \(B\) est \(3\times3\). Dimension de \(AB\) ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">3×2</button><button type="button" data-letter="B">2×3</button>
+      <button type="button" data-letter="C">3×3</button><button type="button" data-letter="D">impossible</button>
+    </div>
+    <div class="qcm-fb"><b>B.</b> \((2\times3)(3\times3)=2\times3\).</div>
+  </div>
+
+  <div class="qcm" data-id="f-q2" data-answer="2">
+    <span class="qcm-tag">QCM 2 · Ch.1</span>
+    <p class="qcm-q">\((1,2,2)\cdot(2,-1,0)\) ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">4</button><button type="button" data-letter="B">2</button>
+      <button type="button" data-letter="C">0</button><button type="button" data-letter="D">−2</button>
+    </div>
+    <div class="qcm-fb"><b>C.</b> \(2-2+0=0\) ⇒ vecteurs orthogonaux.</div>
+  </div>
+
+  <div class="qcm" data-id="f-q3" data-answer="0">
+    <span class="qcm-tag">QCM 3 · Ch.1</span>
+    <p class="qcm-q">Les vecteurs \((1,1)\), \((2,2)\), \((0,1)\) dans \(\mathbb{R}^2\) sont :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">dépendants (3 vecteurs dans un plan)</button><button type="button" data-letter="B">une base</button>
+      <button type="button" data-letter="C">orthonormés</button><button type="button" data-letter="D">tous colinéaires</button>
+    </div>
+    <div class="qcm-fb"><b>A.</b> Dans \(\mathbb{R}^2\), 3 vecteurs sont forcément dépendants (la dimension est 2).</div>
+  </div>
+
+  <div class="qcm" data-id="f-q4" data-answer="3">
+    <span class="qcm-tag">QCM 4 · Ch.2</span>
+    <p class="qcm-q">\(\det\begin{pmatrix}2&4\\1&2\end{pmatrix}\) ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">8</button><button type="button" data-letter="B">−2</button>
+      <button type="button" data-letter="C">4</button><button type="button" data-letter="D">0</button>
+    </div>
+    <div class="qcm-fb"><b>D.</b> \(2\cdot2-4\cdot1=0\) ⇒ singulière (la 2ᵉ ligne est la moitié de la 1ʳᵉ).</div>
+  </div>
+
+  <div class="qcm" data-id="f-q5" data-answer="1">
+    <span class="qcm-tag">QCM 5 · Ch.2</span>
+    <p class="qcm-q">Matrice \(5\times5\) de rang 4. Dimension du noyau ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">0</button><button type="button" data-letter="B">1</button>
+      <button type="button" data-letter="C">4</button><button type="button" data-letter="D">5</button>
+    </div>
+    <div class="qcm-fb"><b>B.</b> \(n-\text{rang}=5-4=1\).</div>
+  </div>
+
+  <div class="qcm" data-id="f-q6" data-answer="2">
+    <span class="qcm-tag">QCM 6 · Ch.2</span>
+    <p class="qcm-q">\(\det(AB)\) est égal à :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">\(\det A+\det B\)</button><button type="button" data-letter="B">\(\det A-\det B\)</button>
+      <button type="button" data-letter="C">\(\det A\cdot\det B\)</button><button type="button" data-letter="D">\(\det(BA)\) seulement si symétrique</button>
+    </div>
+    <div class="qcm-fb"><b>C.</b> \(\det(AB)=\det A\det B\) (et donc \(=\det(BA)\) toujours, même si \(AB\neq BA\)).</div>
+  </div>
+
+  <div class="qcm" data-id="f-q7" data-answer="0">
+    <span class="qcm-tag">QCM 7 · Ch.3</span>
+    <p class="qcm-q">trace = 6, det = 8. Valeurs propres ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">2 et 4</button><button type="button" data-letter="B">6 et 8</button>
+      <button type="button" data-letter="C">1 et 8</button><button type="button" data-letter="D">3 et 3</button>
+    </div>
+    <div class="qcm-fb"><b>A.</b> Somme 6, produit 8 → 2 et 4.</div>
+  </div>
+
+  <div class="qcm" data-id="f-q8" data-answer="3">
+    <span class="qcm-tag">QCM 8 · Ch.3</span>
+    <p class="qcm-q">\(0\) est valeur propre de \(A\) ⟺</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">\(A\) symétrique</button><button type="button" data-letter="B">\(A=I\)</button>
+      <button type="button" data-letter="C">trace = 0</button><button type="button" data-letter="D">\(\det A=0\) (\(A\) non inversible)</button>
+    </div>
+    <div class="qcm-fb"><b>D.</b> Produit des \(\lambda_i=\det A\) ; un \(\lambda=0\) ⟺ \(\det=0\) ⟺ singulière.</div>
+  </div>
+
+  <div class="qcm" data-id="f-q9" data-answer="1">
+    <span class="qcm-tag">QCM 9 · Ch.3</span>
+    <p class="qcm-q">Pour \(A\) symétrique, \(A=Q\Lambda Q^{\mathsf T}\) avec \(Q\) :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">triangulaire</button><button type="button" data-letter="B">orthogonale (\(Q^{\mathsf T}Q=I\))</button>
+      <button type="button" data-letter="C">diagonale</button><button type="button" data-letter="D">singulière</button>
+    </div>
+    <div class="qcm-fb"><b>B.</b> Théorème spectral : \(Q\) orthogonale (vecteurs propres orthonormés), \(\Lambda\) réelle diagonale.</div>
+  </div>
+
+  <div class="qcm" data-id="f-q10" data-answer="2">
+    <span class="qcm-tag">QCM 10 · Ch.3</span>
+    <p class="qcm-q">\(A\) définie positive signifie :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">toutes les entrées &gt; 0</button><button type="button" data-letter="B">det &gt; 0</button>
+      <button type="button" data-letter="C">toutes les valeurs propres &gt; 0</button><button type="button" data-letter="D">trace &gt; 0</button>
+    </div>
+    <div class="qcm-fb"><b>C.</b> Critère exact : \(\lambda_i>0\) (équivaut à \(x^{\mathsf T}Ax>0\) pour \(x\neq0\)).</div>
+  </div>
+
+  <div class="qcm" data-id="f-q11" data-answer="0">
+    <span class="qcm-tag">QCM 11 · Ch.4</span>
+    <p class="qcm-q">Projection de \(b=(2,5)\) sur la droite de \(a=(0,1)\) ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">\((0,5)\)</button><button type="button" data-letter="B">\((2,0)\)</button>
+      <button type="button" data-letter="C">\((2,5)\)</button><button type="button" data-letter="D">\((0,2)\)</button>
+    </div>
+    <div class="qcm-fb"><b>A.</b> \(\frac{a^{\mathsf T}b}{a^{\mathsf T}a}a=\frac{5}{1}(0,1)=(0,5)\) : l'ombre sur l'axe \(y\).</div>
+  </div>
+
+  <div class="qcm" data-id="f-q12" data-answer="3">
+    <span class="qcm-tag">QCM 12 · Ch.4</span>
+    <p class="qcm-q">La formule de régression \(\hat\beta=(X^{\mathsf T}X)^{-1}X^{\mathsf T}y\) minimise :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">\(\|\beta\|\)</button><button type="button" data-letter="B">\(\det(X)\)</button>
+      <button type="button" data-letter="C">le rang</button><button type="button" data-letter="D">\(\|y-X\beta\|^2\)</button>
+    </div>
+    <div class="qcm-fb"><b>D.</b> Moindres carrés : on minimise la somme des carrés des résidus \(\|y-X\beta\|^2\).</div>
+  </div>
+
+  <div class="qcm" data-id="f-q13" data-answer="1">
+    <span class="qcm-tag">QCM 13 · Ch.4</span>
+    <p class="qcm-q">Une matrice de projection \(P\) vérifie :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">\(P=P^{-1}\)</button><button type="button" data-letter="B">\(P^2=P\) et \(P^{\mathsf T}=P\)</button>
+      <button type="button" data-letter="C">\(\det P=1\)</button><button type="button" data-letter="D">\(P\) orthogonale</button>
+    </div>
+    <div class="qcm-fb"><b>B.</b> Projeter deux fois = projeter une fois (\(P^2=P\)), et la projection orthogonale est symétrique (\(P^{\mathsf T}=P\)).</div>
+  </div>
+
+  <div class="qcm" data-id="f-q14" data-answer="2">
+    <span class="qcm-tag">QCM 14 · Ch.4</span>
+    <p class="qcm-q">La PCA s'appuie sur la diagonalisation de :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">la matrice identité</button><button type="button" data-letter="B">la matrice des labels</button>
+      <button type="button" data-letter="C">la matrice de covariance (symétrique)</button><button type="button" data-letter="D">une matrice triangulaire</button>
+    </div>
+    <div class="qcm-fb"><b>C.</b> Covariance symétrique → théorème spectral → axes principaux orthogonaux.</div>
+  </div>
+
+  <div class="qcm" data-id="f-q15" data-answer="0">
+    <span class="qcm-tag">QCM 15 · Ch.4</span>
+    <p class="qcm-q">Quel énoncé est vrai pour la SVD ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">elle existe pour toute matrice</button><button type="button" data-letter="B">seulement si \(A\) inversible</button>
+      <button type="button" data-letter="C">seulement si \(A\) symétrique</button><button type="button" data-letter="D">elle donne des \(\sigma_i<0\)</button>
+    </div>
+    <div class="qcm-fb"><b>A.</b> La SVD existe toujours ; les valeurs singulières sont \(\ge0\), triées.</div>
+  </div>
+
+  <div class="subhead">Partie B — 15 problèmes rédigés</div>
+
+  <div class="exo">
+    <span class="exo-tag">P1 · Ch.1 — produit & inverse</span>
+    <p>\(A=\begin{pmatrix}1&2\\3&4\end{pmatrix}\). Calcule \(\det A\), puis \(A^{-1}\).</p>
+    <details><summary>Solution</summary><div class="sol">
+      <p>\(\det=1\cdot4-2\cdot3=-2\). \(A^{-1}=\frac{1}{-2}\begin{pmatrix}4&-2\\-3&1\end{pmatrix}=\begin{pmatrix}-2&1\\1{,}5&-0{,}5\end{pmatrix}\).</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp1"><label for="fp1">Réussi sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P2 · Ch.1 — combinaison & span</span>
+    <p>Le vecteur \((4,7)\) est-il dans le span de \((1,1)\) et \((1,2)\) ? Donne les coefficients.</p>
+    <details><summary>Solution</summary><div class="sol">
+      <p>On résout \(c_1(1,1)+c_2(1,2)=(4,7)\) : \(c_1+c_2=4\), \(c_1+2c_2=7\) ⇒ \(c_2=3,c_1=1\). Oui, \((4,7)=1\cdot(1,1)+3\cdot(1,2)\). (Les deux vecteurs forment une base ⇒ tout \(\mathbb{R}^2\) est atteignable.)</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp2"><label for="fp2">Réussi sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P3 · Ch.2 — Gauss</span>
+    <p>Résous \(\begin{cases}x+y+z=6\\2y+z=7\\z=3\end{cases}\)</p>
+    <details><summary>Solution</summary><div class="sol">
+      <p>Remontée : \(z=3\) ; \(2y+3=7\Rightarrow y=2\) ; \(x+2+3=6\Rightarrow x=1\). Solution \((1,2,3)\).</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp3"><label for="fp3">Réussi sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P4 · Ch.2 — déterminant 3×3</span>
+    <p>\(\det\begin{pmatrix}2&0&1\\1&3&2\\0&1&1\end{pmatrix}\) ?</p>
+    <details><summary>Solution</summary><div class="sol">
+      <p>1ʳᵉ ligne : \(2\det\begin{pmatrix}3&2\\1&1\end{pmatrix}-0+1\det\begin{pmatrix}1&3\\0&1\end{pmatrix}=2(3-2)+1(1-0)=2+1=\mathbf{3}\).</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp4"><label for="fp4">Réussi sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P5 · Ch.2 — rang & noyau</span>
+    <p>\(A=\begin{pmatrix}1&2\\2&4\end{pmatrix}\). Donne le rang, la dimension du noyau, et un vecteur du noyau.</p>
+    <details><summary>Solution</summary><div class="sol">
+      <p>2ᵉ ligne = 2× la 1ʳᵉ ⇒ rang 1. \(\dim N=2-1=1\). \(N(A)\) : \(x+2y=0\Rightarrow (2,-1)\) (ou tout multiple).</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp5"><label for="fp5">Réussi sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P6 · Ch.3 — diagonaliser</span>
+    <p>Valeurs et vecteurs propres de \(A=\begin{pmatrix}3&1\\0&2\end{pmatrix}\).</p>
+    <details><summary>Solution</summary><div class="sol">
+      <p>Triangulaire ⇒ \(\lambda\) = diagonale : \(\lambda_1=3,\lambda_2=2\).</p>
+      <p>\(\lambda=3\) : \((A-3I)v=0\Rightarrow \begin{pmatrix}0&1\\0&-1\end{pmatrix}v=0\Rightarrow v_1=(1,0)\). \(\lambda=2\) : \(\begin{pmatrix}1&1\\0&0\end{pmatrix}v=0\Rightarrow v_2=(1,-1)\).</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp6"><label for="fp6">Réussi sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P7 · Ch.3 — raccourci trace/det</span>
+    <p>Sans poser le polynôme entier, trouve les valeurs propres de \(\begin{pmatrix}5&2\\2&5\end{pmatrix}\).</p>
+    <details><summary>Solution</summary><div class="sol">
+      <p>trace = 10, det = 25−4 = 21. Somme 10, produit 21 → \(\lambda=7\) et \(\lambda=3\). (Symétrique ⇒ vecteurs propres \(\perp\) : \((1,1)\) et \((1,-1)\).)</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp7"><label for="fp7">Réussi sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P8 · Ch.3 — puissance via diagonalisation</span>
+    <p>\(A=PDP^{-1}\) avec \(D=\text{diag}(2,1)\). Que vaut le spectre de \(A^{10}\) ?</p>
+    <details><summary>Solution</summary><div class="sol">
+      <p>\(A^{10}=PD^{10}P^{-1}\), donc valeurs propres \(2^{10}=1024\) et \(1^{10}=1\). Les <b>vecteurs propres ne changent pas</b>, seules les valeurs sont élevées à la puissance.</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp8"><label for="fp8">Réussi sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P9 · Ch.3 — définie positive ?</span>
+    <p>\(A=\begin{pmatrix}2&1\\1&2\end{pmatrix}\) est-elle définie positive ?</p>
+    <details><summary>Solution</summary><div class="sol">
+      <p>Valeurs propres (trace 4, det 3) : 3 et 1, toutes &gt; 0 ⇒ <b>définie positive</b>. (Confirmation : \(x^{\mathsf T}Ax=2x_1^2+2x_1x_2+2x_2^2>0\).)</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp9"><label for="fp9">Réussi sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P10 · Ch.4 — projection</span>
+    <p>Projette \(b=(1,2,2)\) sur la droite portée par \(a=(1,1,1)\).</p>
+    <details><summary>Solution</summary><div class="sol">
+      <p>\(a^{\mathsf T}b=1+2+2=5\), \(a^{\mathsf T}a=3\). \(\text{proj}=\frac53(1,1,1)=(\tfrac53,\tfrac53,\tfrac53)\).</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp10"><label for="fp10">Réussi sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P11 · Ch.4 — moindres carrés</span>
+    <p>Points \((1,1),(2,2),(3,2)\). Ajuste \(y=\beta_0+\beta_1x\).</p>
+    <details><summary>Solution</summary><div class="sol">
+      <p>\(X=\begin{pmatrix}1&1\\1&2\\1&3\end{pmatrix}\), \(y=(1,2,2)\). \(X^{\mathsf T}X=\begin{pmatrix}3&6\\6&14\end{pmatrix}\), \(X^{\mathsf T}y=\begin{pmatrix}5\\11\end{pmatrix}\), \(\det=6\).</p>
+      <p>\(\hat\beta=\frac16\begin{pmatrix}14&-6\\-6&3\end{pmatrix}\begin{pmatrix}5\\11\end{pmatrix}=\frac16\begin{pmatrix}4\\3\end{pmatrix}\Rightarrow \beta_0=\tfrac23\approx0{,}67,\ \beta_1=0{,}5\).</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp11"><label for="fp11">Réussi sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P12 · Ch.4 — régression = projection</span>
+    <p>Explique en une phrase pourquoi le résidu \(y-X\hat\beta\) est orthogonal aux colonnes de \(X\).</p>
+    <details><summary>Solution</summary><div class="sol">
+      <p>Parce que \(\hat\beta\) minimise la distance de \(y\) à l'espace colonne : le point le plus proche est le pied de la perpendiculaire, donc le résidu est \(\perp\) à \(C(X)\), ce qui s'écrit \(X^{\mathsf T}(y-X\hat\beta)=0\) (les équations normales).</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp12"><label for="fp12">Réussi sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P13 · Ch.4 — orthogonalité</span>
+    <p>Les colonnes de \(Q=\frac{1}{\sqrt2}\begin{pmatrix}1&1\\1&-1\end{pmatrix}\) sont-elles orthonormées ? Que vaut \(Q^{\mathsf T}Q\) ?</p>
+    <details><summary>Solution</summary><div class="sol">
+      <p>Norme de chaque colonne : \(\sqrt{(1/\sqrt2)^2+(1/\sqrt2)^2}=1\) ✓. Produit scalaire des deux colonnes : \(\frac12(1\cdot1+1\cdot(-1))=0\) ✓. Donc \(Q^{\mathsf T}Q=I\) : \(Q\) est orthogonale.</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp13"><label for="fp13">Réussi sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P14 · Ch.4 — SVD & valeurs singulières</span>
+    <p>Pourquoi les valeurs singulières de \(A\) sont-elles les racines des valeurs propres de \(A^{\mathsf T}A\) ?</p>
+    <details><summary>Solution</summary><div class="sol">
+      <p>Si \(A=U\Sigma V^{\mathsf T}\), alors \(A^{\mathsf T}A=V\Sigma^{\mathsf T}U^{\mathsf T}U\Sigma V^{\mathsf T}=V\Sigma^2 V^{\mathsf T}\) (car \(U^{\mathsf T}U=I\)). C'est la diagonalisation de \(A^{\mathsf T}A\) : ses valeurs propres sont les \(\sigma_i^2\), donc \(\sigma_i=\sqrt{\lambda_i(A^{\mathsf T}A)}\).</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp14"><label for="fp14">Réussi sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P15 · Synthèse — pont avec la covariance</span>
+    <p>En ML, la matrice \(X^{\mathsf T}X\) revient partout (régression, PCA). Cite deux de ses propriétés et leur conséquence.</p>
+    <details><summary>Solution</summary><div class="sol">
+      <p>(1) <b>Symétrique</b> ⇒ théorème spectral applicable ⇒ vecteurs propres orthogonaux (axes de la PCA). (2) <b>Semi-définie positive</b> (\(x^{\mathsf T}X^{\mathsf T}Xx=\|Xx\|^2\ge0\)) ⇒ valeurs propres \(\ge0\) ⇒ inversible (équations normales solubles) dès que les colonnes de \(X\) sont indépendantes.</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp15"><label for="fp15">Réussi sans aide</label></div>
+  </div>
+</section>
+
+<footer>
+  <p class="sig">Algèbre linéaire — Préparation Summer.</p>
+  <p style="margin-top:8px">Intuition : <b>3Blue1Brown</b> « Essence of Linear Algebra ». Technique : <b>Gilbert Strang</b>, MIT 18.06 (OpenCourseWare). Prochaine matière : <b>03 Analyse</b>.</p>
+  <p style="margin-top:8px;font-size:12px">Progression et scores QCM sauvegardés localement dans ce navigateur.</p>
+</footer>
+
+</div>
+
+<div class="toast" id="toast">Sauvegardé ✓</div>
+
+<script>
+(function(){
+  var CK='dsba-alg-checks-v1', QK='dsba-alg-qcm-v1';
+  var checks={}, qcm={};
+  try{ checks=JSON.parse(localStorage.getItem(CK)||'{}'); }catch(e){ checks={}; }
+  try{ qcm=JSON.parse(localStorage.getItem(QK)||'{}'); }catch(e){ qcm={}; }
+  var toast=document.getElementById('toast'), tT;
+  function ping(){ toast.classList.add('show'); clearTimeout(tT); tT=setTimeout(function(){toast.classList.remove('show');},1100); }
+  function pct(arr){ if(!arr.length)return 0; var n=arr.filter(function(b){return b.checked;}).length; return Math.round(100*n/arr.length); }
+  var boxes=[].slice.call(document.querySelectorAll('input[type=checkbox]'));
+  function updModule(mod){
+    var sec=document.querySelector('section[data-module="'+mod+'"]'); if(!sec)return;
+    var arr=[].slice.call(sec.querySelectorAll('input[type=checkbox]'));
+    var p=pct(arr);
+    var fill=sec.querySelector('.mod-fill'); if(fill)fill.style.width=p+'%';
+    var nav=document.querySelector('[data-nav="'+mod+'"]'); if(nav)nav.textContent=p+'%';
+  }
+  function updGlobal(){
+    var p=pct(boxes);
+    document.getElementById('global-pct').textContent=p;
+    document.querySelector('#global-bar > span').style.width=p+'%';
+  }
+  boxes.forEach(function(b){
+    if(checks[b.id]) b.checked=true;
+    b.addEventListener('change',function(){
+      checks[b.id]=b.checked;
+      try{ localStorage.setItem(CK,JSON.stringify(checks)); }catch(e){}
+      var sec=b.closest('section[data-module]');
+      if(sec) updModule(sec.getAttribute('data-module'));
+      updGlobal(); ping();
+    });
+  });
+  var qcms=[].slice.call(document.querySelectorAll('.qcm'));
+  document.getElementById('qcm-total').textContent=qcms.length;
+  function updQcmScore(){
+    var correct=0;
+    qcms.forEach(function(q){ var id=q.getAttribute('data-id'); if(qcm[id]&&qcm[id].correct) correct++; });
+    document.getElementById('qcm-correct').textContent=correct;
+    document.querySelector('#qcm-bar > span').style.width=Math.round(100*correct/qcms.length)+'%';
+  }
+  qcms.forEach(function(q){
+    var ans=parseInt(q.getAttribute('data-answer'),10);
+    var id=q.getAttribute('data-id');
+    var opts=[].slice.call(q.querySelectorAll('.qcm-opts button'));
+    var fb=q.querySelector('.qcm-fb');
+    function lock(chosen){
+      opts.forEach(function(b){ b.disabled=true; });
+      opts[ans].classList.add('correct');
+      if(chosen!=null && chosen!==ans) opts[chosen].classList.add('wrong');
+      if(fb) fb.classList.add('show');
+      q.dataset.done='1';
+    }
+    if(qcm[id]){ lock(qcm[id].chosen); }
+    opts.forEach(function(b,i){
+      b.addEventListener('click',function(){
+        if(q.dataset.done) return;
+        lock(i);
+        qcm[id]={chosen:i, correct:(i===ans)};
+        try{ localStorage.setItem(QK,JSON.stringify(qcm)); }catch(e){}
+        updQcmScore(); ping();
+      });
+    });
+  });
+  ['ch1','ch2','ch3','ch4','final'].forEach(updModule);
+  updGlobal(); updQcmScore();
+})();
+</script>
+</body>
+</html>

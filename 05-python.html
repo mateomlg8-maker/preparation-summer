@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Python pour la Data — Cours Complet (NumPy, Pandas, régression)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script>
+window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] }, options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] } };
+</script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script>
+<style>
+:root{
+  --paper:#FBFAF5;--grid:#DCE6F2;--ink:#1C2B4A;--ink-soft:#5A6685;--red:#C0392B;
+  --green:#2F7D4F;--stabilo:#FFE873;--card:#FFFFFF;--kid:#7B4BC4;--kid-bg:#F3ECFF;
+  --code-bg:#141E36;--code-text:#D8E2F5;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+body{font-family:'Inter',sans-serif;color:var(--ink);background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px, transparent 1px),linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size:32px 32px;line-height:1.6;-webkit-font-smoothing:antialiased;}
+body::before{content:'';position:fixed;top:0;bottom:0;left:max(16px, calc(50% - 560px));width:2px;background:var(--red);opacity:.45;z-index:0;pointer-events:none;}
+.wrap{max-width:1020px;margin:0 auto;padding:0 24px 120px;position:relative;z-index:1}
+header{padding:52px 0 8px}
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--red);font-weight:600}
+h1{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(38px,7vw,72px);line-height:1.02;letter-spacing:-.01em;margin:10px 0 14px}
+h1 .hl{background:linear-gradient(transparent 55%, var(--stabilo) 55%);padding:0 4px}
+.sub{max-width:680px;color:var(--ink-soft);font-size:17px}
+.dash{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin:32px 0 12px}
+.dash-card{background:var(--card);border:1.5px solid var(--ink);padding:16px 18px;box-shadow:4px 4px 0 var(--ink)}
+.dash-card .label{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft)}
+.dash-card .big{font-family:'Fraunces',serif;font-weight:900;font-size:36px;line-height:1.1}
+.dash-card .small{font-size:13px;color:var(--ink-soft)}
+.bar{height:10px;background:#EEF1F6;border:1px solid var(--ink);margin-top:10px;overflow:hidden}
+.bar > span{display:block;height:100%;width:0%;background:var(--green);transition:width .4s ease}
+#qcm-bar > span{background:var(--kid)}
+nav{display:flex;flex-wrap:nowrap;overflow-x:auto;gap:10px;margin:24px 0 8px;position:sticky;top:0;background:var(--paper);padding:12px 0;z-index:5;border-bottom:1.5px solid var(--ink);-webkit-overflow-scrolling:touch;scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
+nav a{font-family:'JetBrains Mono',monospace;font-size:12.5px;font-weight:600;text-decoration:none;color:var(--ink);border:1.5px solid var(--ink);background:var(--card);padding:8px 13px;white-space:nowrap;transition:transform .1s ease, box-shadow .1s ease}
+nav a:hover,nav a:focus-visible{box-shadow:3px 3px 0 var(--ink);transform:translate(-1px,-1px)}
+nav a:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+nav a .pct{color:var(--red)}
+section.module{margin-top:64px;scroll-margin-top:70px}
+.mod-head{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap}
+.mod-num{font-family:'Fraunces',serif;font-weight:900;font-size:18px;background:var(--ink);color:var(--paper);width:38px;height:38px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;align-self:center}
+h2{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(26px,4vw,38px);line-height:1.1}
+.mod-meta{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-soft);margin-top:4px}
+.mod-meta b{color:var(--red);font-weight:600}
+.mod-bar{height:7px;background:#EEF1F6;border:1px solid var(--ink);margin:16px 0 22px;overflow:hidden}
+.mod-fill{height:100%;width:0%;background:var(--green);transition:width .4s ease}
+.why{border-left:4px solid var(--stabilo);background:#FFFDF2;padding:12px 16px;margin-bottom:22px;font-size:14.5px}
+.why b{font-weight:700}
+.idea{border:1.5px solid var(--ink);background:#EEF4FF;padding:14px 18px;margin:18px 0;font-size:14.5px}
+.idea .idea-tag{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);font-weight:600;display:block;margin-bottom:6px}
+.subhead{font-family:'Fraunces',serif;font-weight:900;font-size:21px;margin:34px 0 6px;padding-bottom:6px;border-bottom:2px solid var(--ink)}
+.eli5{border:1.5px solid var(--kid);background:var(--kid-bg);padding:13px 16px 13px 46px;margin:14px 0;font-size:14.5px;position:relative;border-radius:2px}
+.eli5::before{content:'🧒';position:absolute;left:13px;top:11px;font-size:20px}
+.eli5 .eli5-tag{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--kid);font-weight:600;display:block;margin-bottom:3px}
+.eli5 b{color:var(--kid)}
+.fiche{border:1.5px solid var(--ink);background:#FDFDFB;padding:16px 18px;margin:16px 0;box-shadow:3px 3px 0 rgba(28,43,74,.10)}
+.fiche-tag{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#fff;background:var(--ink);display:inline-block;padding:3px 9px;margin-bottom:10px;font-weight:600}
+.fiche-tag.red{background:var(--red)}
+.fiche-tag.green{background:var(--green)}
+.fiche h4{font-family:'Fraunces',serif;font-weight:900;font-size:18px;margin-bottom:6px}
+.fiche p{font-size:14.5px;margin:7px 0}
+.fiche ul,.fiche ol{margin:6px 0 6px 20px;font-size:14.5px}
+.fiche li{margin:4px 0}
+.formula{background:#F4F7FB;border:1px solid var(--grid);padding:10px 14px;margin:10px 0;font-size:15px;overflow-x:auto}
+.note{font-size:13px;color:var(--ink-soft);font-style:italic}
+.warn{border-left:3px solid var(--red);background:#FFF6F4;padding:8px 12px;margin:10px 0;font-size:14px}
+.warn b{color:var(--red)}
+.table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:10px 0}
+.mini-table{width:100%;border-collapse:collapse;font-size:13.5px;background:var(--card);min-width:380px}
+.mini-table th{background:var(--ink);color:var(--paper);font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;padding:8px 10px;text-align:left;font-weight:600}
+.mini-table td{padding:8px 10px;border-bottom:1px solid var(--grid);vertical-align:top}
+.mini-table tr:last-child td{border-bottom:none}
+.mini-table code{font-family:'JetBrains Mono',monospace;font-size:12px;background:#EEF1F6;padding:1px 5px;border:1px solid var(--grid)}
+.exo{border:1.5px dashed var(--ink);background:#FFFEF6;padding:14px 16px;margin:14px 0}
+.exo-tag{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--red);font-weight:600;letter-spacing:.14em;text-transform:uppercase;display:block;margin-bottom:6px}
+.exo p{font-size:14.5px}
+.exo details{margin-top:10px}
+.exo details summary{cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:var(--ink);user-select:none;list-style:none;display:inline-block;border:1.5px solid var(--ink);padding:8px 14px;background:var(--card);min-height:38px}
+.exo details summary::-webkit-details-marker{display:none}
+.exo details summary:hover{box-shadow:2px 2px 0 var(--ink)}
+.exo details summary:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+.exo .sol{padding:12px 14px;background:#F2F7F2;border-left:3px solid var(--green);margin-top:10px;font-size:14px}
+.exo .sol p{margin:5px 0}
+.qcm{border:1.5px solid var(--kid);background:#FCFAFF;padding:14px 16px;margin:16px 0;border-radius:2px}
+.qcm .qcm-tag{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--kid);font-weight:600;letter-spacing:.12em;text-transform:uppercase;display:block;margin-bottom:6px}
+.qcm .qcm-q{font-size:14.5px;font-weight:500;margin-bottom:10px}
+.qcm-opts{display:flex;flex-direction:column;gap:8px}
+.qcm-opts button{font-family:'Inter',sans-serif;font-size:14px;text-align:left;color:var(--ink);background:var(--card);border:1.5px solid var(--ink);padding:11px 14px;cursor:pointer;min-height:44px;transition:box-shadow .1s, transform .1s;display:flex;align-items:center;gap:10px;width:100%}
+.qcm-opts button::before{content:attr(data-letter);font-family:'JetBrains Mono',monospace;font-weight:600;font-size:12px;background:#EEF1F6;border:1px solid var(--grid);width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+.qcm-opts button:not(:disabled):hover{box-shadow:2px 2px 0 var(--ink);transform:translate(-1px,-1px)}
+.qcm-opts button:disabled{cursor:default}
+.qcm-opts button.correct{background:#E7F5EC;border-color:var(--green);color:var(--green);font-weight:600}
+.qcm-opts button.correct::before{background:var(--green);color:#fff;border-color:var(--green);content:'✓'}
+.qcm-opts button.wrong{background:#FCEBEA;border-color:var(--red);color:var(--red)}
+.qcm-opts button.wrong::before{background:var(--red);color:#fff;border-color:var(--red);content:'✕'}
+.qcm-fb{display:none;margin-top:11px;padding:11px 14px;background:#F3ECFF;border-left:3px solid var(--kid);font-size:13.5px}
+.qcm-fb.show{display:block}
+.qcm-fb b{color:var(--kid)}
+pre{background:var(--code-bg);color:var(--code-text);font-family:'JetBrains Mono',monospace;font-size:13px;padding:14px 16px;overflow-x:auto;margin:12px 0;border:1.5px solid var(--ink);line-height:1.55}
+pre .c{color:#7C8DB5}
+pre .k{color:#FFD479}
+pre .s{color:#9FE8A8}
+pre .o{color:#FF9E80}
+.check-title{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--green);font-weight:600;margin:18px 0 4px;border-top:1.5px solid var(--ink);padding-top:12px}
+.check{display:flex;align-items:flex-start;gap:11px;padding:11px 0;border-bottom:1px solid #F0F2F6;font-size:14.5px}
+.check:last-child{border-bottom:none}
+.check input{appearance:none;-webkit-appearance:none;width:24px;height:24px;flex-shrink:0;margin-top:1px;border:1.5px solid var(--ink);background:var(--card);cursor:pointer;display:inline-grid;place-content:center}
+.check input:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+.check input::after{content:'✕';font-size:15px;font-weight:700;color:var(--red);transform:scale(0);transition:transform .1s}
+.check input:checked::after{transform:scale(1)}
+.check input:checked + label{color:var(--ink-soft);text-decoration:line-through;text-decoration-color:var(--red);text-decoration-thickness:1.5px}
+.check label{cursor:pointer}
+.check label code{font-family:'JetBrains Mono',monospace;font-size:12.5px;background:#EEF1F6;padding:1px 5px;border:1px solid var(--grid)}
+.exam-box{border:2px solid var(--red);background:#FFF6F4;padding:22px 22px 18px;margin:22px 0;position:relative}
+.exam-box::before{content:'⚠ À RETENIR POUR L\'EXAMEN';font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.12em;color:#fff;background:var(--red);position:absolute;top:-12px;left:16px;padding:3px 10px}
+.exam-box ol,.exam-box ul{margin:8px 0 0 20px;font-size:14.5px}
+.exam-box li{margin:6px 0}
+footer{margin-top:80px;padding-top:24px;border-top:1.5px solid var(--ink);font-size:13px;color:var(--ink-soft)}
+footer .sig{font-family:'Fraunces',serif;font-style:italic;font-size:15px;color:var(--ink)}
+.toast{position:fixed;bottom:20px;right:20px;background:var(--ink);color:var(--paper);font-family:'JetBrains Mono',monospace;font-size:12px;padding:10px 16px;opacity:0;transform:translateY(8px);transition:opacity .25s, transform .25s;pointer-events:none;z-index:50}
+.toast.show{opacity:1;transform:translateY(0)}
+@media(max-width:760px){
+  .dash{grid-template-columns:1fr}
+  body::before{left:8px}
+  .wrap{padding:0 16px 90px}
+  header{padding:36px 0 8px}
+  .sub{font-size:16px}
+  section.module{margin-top:52px}
+  .fiche,.exo,.qcm,.idea,.eli5{padding-left:14px;padding-right:14px}
+  .eli5{padding-left:44px}
+}
+</style>
+<script src="firebase-sync.js"></script>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">Préparation Summer · Matière 05 / 05</div>
+  <h1>Python<br><span class="hl">pour la data</span></h1>
+  <p class="sub">Cours complet et autonome : idiomes Python, <b>NumPy</b> (qui rejoue ton algèbre), <b>Pandas</b> (avec le dictionnaire SQL↔Pandas), et un projet guidé de <b>régression from scratch</b> qui boucle les trois modules maths. Expliqué <b>comme à un enfant</b> 🧒, avec <b>QCM « prédis la sortie »</b>, section <b>Approfondissements niveau Master</b> et examen final 30 Q. Tout est sauvegardé dans ton navigateur.</p>
+</header>
+
+<div class="dash">
+  <div class="dash-card">
+    <div class="label">Progression du cours</div>
+    <div class="big"><span id="global-pct">0</span>%</div>
+    <div class="bar" id="global-bar"><span></span></div>
+    <div class="small" style="margin-top:6px">Cases « j'ai compris » cochées</div>
+  </div>
+  <div class="dash-card">
+    <div class="label">Score QCM</div>
+    <div class="big"><span id="qcm-correct">0</span><span style="font-size:18px;color:var(--ink-soft)">/<span id="qcm-total">0</span></span></div>
+    <div class="bar" id="qcm-bar"><span></span></div>
+    <div class="small" style="margin-top:6px">Bonnes réponses au 1ᵉʳ essai</div>
+  </div>
+  <div class="dash-card">
+    <div class="label">Contenu</div>
+    <div class="big">4<span style="font-size:18px;color:var(--ink-soft)"> ch.</span></div>
+    <div class="small">Idiomes · NumPy · Pandas · Projet régression · + Examen 30 Q</div>
+  </div>
+</div>
+
+<nav aria-label="Chapitres">
+  <a href="#ch1">Ch.1 Idiomes <span class="pct" data-nav="ch1"></span></a>
+  <a href="#ch2">Ch.2 NumPy <span class="pct" data-nav="ch2"></span></a>
+  <a href="#ch3">Ch.3 Pandas <span class="pct" data-nav="ch3"></span></a>
+  <a href="#ch4">Ch.4 Projet régression <span class="pct" data-nav="ch4"></span></a>
+  <a href="#final">★ Examen final</a>
+</nav>
+
+<div class="why"><b>Méthode :</b> tape <b>tout</b> le code toi-même dans un notebook (Jupyter / Google Colab) — lire ≠ savoir faire. Pour chaque QCM « prédis la sortie », calcule mentalement avant de cliquer, puis vérifie dans le notebook. La règle d'or data science : <b>« si tu écris une boucle Python sur des nombres, tu peux sûrement la remplacer par du NumPy vectorisé ».</b></div>
+
+<!-- ============================================================ -->
+<!-- CHAPITRE 1 -->
+<!-- ============================================================ -->
+<section class="module" id="ch1" data-module="ch1">
+  <div class="mod-head">
+    <span class="mod-num">1</span>
+    <div>
+      <h2>Idiomes Python</h2>
+      <div class="mod-meta">Types, listes/dicts, slicing, compréhensions, fonctions — et les pièges de mutabilité</div>
+    </div>
+  </div>
+  <div class="mod-bar"><div class="mod-fill"></div></div>
+
+  <div class="idea">
+    <span class="idea-tag">L'idée du chapitre</span>
+    Python est lisible mais a quelques <b>pièges</b> qui reviennent en examen : le <b>slicing</b>, les <b>compréhensions</b>, et surtout le fait que listes et dicts sont <b>mutables et partagés par référence</b> (copier ≠ pointer). Maîtrise ces idiomes et tu lis n'importe quel code data.
+  </div>
+
+  <div class="subhead">1.1 — Types &amp; structures</div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair</span>
+    Pense aux structures comme à des contenants. Une <b>liste</b> <code>[ ]</code> = une rangée de cases numérotées (ordonnée, modifiable). Un <b>dictionnaire</b> <code>{ }</code> = un répertoire « clé → valeur » (cherche par mot-clé, pas par numéro). Un <b>tuple</b> <code>( )</code> = une liste figée (non modifiable). Un <b>set</b> = un sac de valeurs uniques, sans ordre.
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag">Fiche · Les conteneurs</span>
+    <div class="table-scroll"><table class="mini-table">
+      <tr><th>Type</th><th>Syntaxe</th><th>Ordonné ?</th><th>Modifiable ?</th></tr>
+      <tr><td>list</td><td><code>[1,2,3]</code></td><td>oui</td><td>oui</td></tr>
+      <tr><td>tuple</td><td><code>(1,2,3)</code></td><td>oui</td><td><b>non</b></td></tr>
+      <tr><td>dict</td><td><code>{'a':1}</code></td><td>oui (insertion)</td><td>oui</td></tr>
+      <tr><td>set</td><td><code>{1,2,3}</code></td><td>non</td><td>oui (valeurs uniques)</td></tr>
+    </table></div>
+  </div>
+
+  <div class="subhead">1.2 — Slicing &amp; compréhensions</div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair</span>
+    Le <b>slicing</b> <code>liste[a:b]</code> découpe une tranche, de l'indice <code>a</code> <b>inclus</b> à <code>b</code> <b>exclu</b> (comme « de la borne 2 jusqu'à juste avant la 5 »). La <b>compréhension</b> <code>[f(x) for x in liste]</code> est une mini-recette pour fabriquer une nouvelle liste en une ligne, au lieu d'une boucle de 4 lignes.
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag red">Fiche clé · Slicing &amp; compréhensions</span>
+    <pre><span class="k">a</span> = [<span class="s">0</span>,<span class="s">1</span>,<span class="s">2</span>,<span class="s">3</span>,<span class="s">4</span>]
+a[<span class="s">1</span>:<span class="s">4</span>]    <span class="c"># [1, 2, 3]  (1 inclus, 4 exclu)</span>
+a[:<span class="s">2</span>]     <span class="c"># [0, 1]</span>
+a[-<span class="s">1</span>]     <span class="c"># 4  (dernier)</span>
+a[::-<span class="s">1</span>]   <span class="c"># [4, 3, 2, 1, 0]  (inversé)</span>
+
+<span class="c"># Compréhension : carrés des pairs</span>
+[x*x <span class="k">for</span> x <span class="k">in</span> a <span class="k">if</span> x % <span class="s">2</span> == <span class="s">0</span>]   <span class="c"># [0, 4, 16]</span></pre>
+  </div>
+
+  <div class="qcm" data-id="p1-q1" data-answer="2">
+    <span class="qcm-tag">QCM 1 · prédis la sortie</span>
+    <p class="qcm-q"><code>a = [10,20,30,40,50]</code> ; que vaut <code>a[1:3]</code> ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">[10, 20, 30]</button>
+      <button type="button" data-letter="B">[20, 30, 40]</button>
+      <button type="button" data-letter="C">[20, 30]</button>
+      <button type="button" data-letter="D">[10, 20]</button>
+    </div>
+    <div class="qcm-fb"><b>C.</b> Indice 1 inclus (20), indice 3 exclu (donc s'arrête à 30). → [20, 30].</div>
+  </div>
+
+  <div class="qcm" data-id="p1-q2" data-answer="0">
+    <span class="qcm-tag">QCM 2 · prédis la sortie</span>
+    <p class="qcm-q"><code>[x*2 for x in range(4)]</code> donne :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">[0, 2, 4, 6]</button>
+      <button type="button" data-letter="B">[2, 4, 6, 8]</button>
+      <button type="button" data-letter="C">[0, 1, 2, 3]</button>
+      <button type="button" data-letter="D">[1, 2, 3, 4]</button>
+    </div>
+    <div class="qcm-fb"><b>A.</b> <code>range(4)</code> = 0,1,2,3 ; ×2 → [0, 2, 4, 6]. (range commence à 0 et exclut 4.)</div>
+  </div>
+
+  <div class="subhead">1.3 — Le piège de la mutabilité (Approfondissements Master)</div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair</span>
+    Quand tu écris <code>b = a</code> avec une liste, tu ne crées <b>pas une copie</b> : <code>b</code> est juste un <b>second nom</b> pour la même liste (comme deux surnoms d'une même personne). Modifier <code>b</code> modifie <code>a</code> ! Pour une vraie copie indépendante : <code>a.copy()</code> ou <code>list(a)</code>.
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag red">Fiche clé · Référence vs copie</span>
+    <pre><span class="k">a</span> = [<span class="s">1</span>,<span class="s">2</span>,<span class="s">3</span>]
+b = a            <span class="c"># b pointe vers la MÊME liste</span>
+b.append(<span class="s">4</span>)
+<span class="k">print</span>(a)         <span class="c"># [1, 2, 3, 4]  ← a a changé aussi !</span>
+
+c = a.copy()     <span class="c"># vraie copie indépendante</span>
+c.append(<span class="s">9</span>)
+<span class="k">print</span>(a)         <span class="c"># [1, 2, 3, 4]  ← inchangé</span></pre>
+    <div class="warn"><b>Piège examen :</b> argument par défaut mutable. <code>def f(x, acc=[])</code> partage la même liste entre tous les appels ! Utilise <code>acc=None</code> puis <code>if acc is None: acc=[]</code>.</div>
+  </div>
+
+  <div class="qcm" data-id="p1-q3" data-answer="1">
+    <span class="qcm-tag">QCM 3 · prédis la sortie</span>
+    <p class="qcm-q"><code>a=[1,2]; b=a; b.append(3); print(a)</code></p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">[1, 2]</button>
+      <button type="button" data-letter="B">[1, 2, 3]</button>
+      <button type="button" data-letter="C">erreur</button>
+      <button type="button" data-letter="D">[3]</button>
+    </div>
+    <div class="qcm-fb"><b>B.</b> <code>b=a</code> ne copie pas : les deux noms désignent la même liste. <code>b.append(3)</code> modifie donc aussi <code>a</code> → [1, 2, 3].</div>
+  </div>
+
+  <div class="qcm" data-id="p1-q4" data-answer="3">
+    <span class="qcm-tag">QCM 4</span>
+    <p class="qcm-q">Quel type choisir pour stocker des paires « nom → note » ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">une liste</button>
+      <button type="button" data-letter="B">un tuple</button>
+      <button type="button" data-letter="C">un set</button>
+      <button type="button" data-letter="D">un dict</button>
+    </div>
+    <div class="qcm-fb"><b>D.</b> Un dictionnaire <code>{'Alice':15}</code> : accès direct par la clé (le nom). C'est l'équivalent d'une table de correspondance.</div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">Exercice corrigé — compréhension de dict</span>
+    <p>À partir de <code>noms=['Alice','Bob']</code> et <code>notes=[15,8]</code>, construis le dict <code>{'Alice':15,'Bob':8}</code>.</p>
+    <details><summary>Voir la solution</summary>
+      <div class="sol">
+        <pre style="margin:6px 0"><span class="k">d</span> = {n: g <span class="k">for</span> n, g <span class="k">in</span> <span class="k">zip</span>(noms, notes)}</pre>
+        <p><code>zip</code> apparie élément par élément ; la compréhension de dict construit les paires clé→valeur. Résultat : <code>{'Alice':15, 'Bob':8}</code>.</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="check-title">À valider — Chapitre 1</div>
+  <div class="check"><input type="checkbox" id="c1a"><label for="c1a">list / tuple / dict / set : usage et mutabilité</label></div>
+  <div class="check"><input type="checkbox" id="c1b"><label for="c1b">Slicing <code>[a:b:pas]</code>, indices négatifs, inversion</label></div>
+  <div class="check"><input type="checkbox" id="c1c"><label for="c1c">Compréhensions de liste et de dict (+ zip, enumerate)</label></div>
+  <div class="check"><input type="checkbox" id="c1d"><label for="c1d">Référence vs copie ; argument par défaut mutable</label></div>
+  <div class="check"><input type="checkbox" id="c1e"><label for="c1e">Fonctions, *args/**kwargs, lambda (lecture)</label></div>
+</section>
+
+<!-- ============================================================ -->
+<!-- CHAPITRE 2 -->
+<!-- ============================================================ -->
+<section class="module" id="ch2" data-module="ch2">
+  <div class="mod-head">
+    <span class="mod-num">2</span>
+    <div>
+      <h2>NumPy</h2>
+      <div class="mod-meta">Tableaux, vectorisation, broadcasting, et <code>np.linalg</code> qui <b>rejoue ton algèbre</b></div>
+    </div>
+  </div>
+  <div class="mod-bar"><div class="mod-fill"></div></div>
+
+  <div class="idea">
+    <span class="idea-tag">L'idée du chapitre</span>
+    NumPy remplace les boucles par des <b>opérations sur des tableaux entiers d'un coup</b> (vectorisation) — 10 à 100× plus rapide. Et c'est ici que ton module Algèbre devient du code : <code>np.linalg</code> calcule produits, inverses, valeurs propres, SVD.
+  </div>
+
+  <div class="subhead">2.1 — Le tableau ndarray &amp; la vectorisation</div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair</span>
+    Un <b>tableau NumPy</b> est une grille de nombres tous du même type, sur laquelle on agit <b>en bloc</b>. Au lieu de dire « pour chaque nombre, ajoute 1 » (boucle lente), tu dis <code>a + 1</code> et NumPy l'applique à tous d'un coup. C'est comme arroser toute la pelouse avec un tuyau au lieu d'un verre par brin d'herbe.
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag">Fiche · ndarray &amp; opérations vectorisées</span>
+    <pre><span class="k">import</span> numpy <span class="k">as</span> np
+a = np.array([<span class="s">1</span>,<span class="s">2</span>,<span class="s">3</span>])
+a + <span class="s">10</span>          <span class="c"># [11 12 13]  (élément par élément)</span>
+a * <span class="s">2</span>           <span class="c"># [2 4 6]</span>
+a.sum()         <span class="c"># 6</span>
+a.mean()        <span class="c"># 2.0</span>
+a.shape         <span class="c"># (3,)  ← la forme</span>
+M = np.array([[<span class="s">1</span>,<span class="s">2</span>],[<span class="s">3</span>,<span class="s">4</span>]])
+M.shape         <span class="c"># (2, 2)</span>
+M[<span class="s">0</span>, <span class="s">1</span>]        <span class="c"># 2  (ligne 0, colonne 1)</span></pre>
+    <div class="warn"><b>Différence-clé avec les listes :</b> sur une <i>liste</i>, <code>+</code> concatène et <code>*2</code> duplique ; sur un <i>array</i>, ils font de l'arithmétique élément par élément.</div>
+  </div>
+
+  <div class="qcm" data-id="p2-q1" data-answer="1">
+    <span class="qcm-tag">QCM 1 · prédis la sortie</span>
+    <p class="qcm-q"><code>np.array([1,2,3]) * 2</code> donne :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">[1,2,3,1,2,3]</button>
+      <button type="button" data-letter="B">[2, 4, 6]</button>
+      <button type="button" data-letter="C">erreur</button>
+      <button type="button" data-letter="D">[1, 2, 3, 2]</button>
+    </div>
+    <div class="qcm-fb"><b>B.</b> Array → arithmétique élément par élément : [2,4,6]. (Avec une <i>liste</i> Python, <code>*2</code> aurait dupliqué : [1,2,3,1,2,3].)</div>
+  </div>
+
+  <div class="subhead">2.2 — Broadcasting</div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair</span>
+    Le <b>broadcasting</b>, c'est NumPy qui « étire » automatiquement le plus petit tableau pour qu'il colle au grand. Ajouter un seul nombre à toute une grille, ou ajouter un vecteur-ligne à chaque ligne d'une matrice : NumPy duplique virtuellement sans que tu écrives de boucle. Règle : les dimensions doivent être <b>égales, ou l'une vaut 1</b>.
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag red">Fiche clé · Règles de broadcasting</span>
+    <p>On compare les formes <b>de droite à gauche</b>. Deux dimensions sont compatibles si elles sont <b>égales</b> ou si <b>l'une vaut 1</b> (étirée).</p>
+    <pre>M = np.ones((<span class="s">3</span>,<span class="s">4</span>))     <span class="c"># (3, 4)</span>
+v = np.array([<span class="s">1</span>,<span class="s">2</span>,<span class="s">3</span>,<span class="s">4</span>])  <span class="c"># (4,)</span>
+(M + v).shape          <span class="c"># (3, 4)  ← v ajouté à chaque ligne</span>
+
+c = np.array([[<span class="s">10</span>],[<span class="s">20</span>],[<span class="s">30</span>]])  <span class="c"># (3, 1)</span>
+(M + c).shape          <span class="c"># (3, 4)  ← c ajouté à chaque colonne</span></pre>
+  </div>
+
+  <div class="qcm" data-id="p2-q2" data-answer="2">
+    <span class="qcm-tag">QCM 2 · prédis la forme</span>
+    <p class="qcm-q">Forme du résultat : <code>np.ones((2,3)) + np.array([1,2,3])</code> ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">erreur</button>
+      <button type="button" data-letter="B">(3,)</button>
+      <button type="button" data-letter="C">(2, 3)</button>
+      <button type="button" data-letter="D">(2,)</button>
+    </div>
+    <div class="qcm-fb"><b>C.</b> Formes (2,3) et (3,) : alignées à droite, 3=3 ✓ et le 2 s'étire. Le vecteur est ajouté à chaque ligne → (2, 3).</div>
+  </div>
+
+  <div class="qcm" data-id="p2-q3" data-answer="0">
+    <span class="qcm-tag">QCM 3</span>
+    <p class="qcm-q"><code>np.ones((2,3)) + np.ones((4,))</code> donne :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">une erreur (3 ≠ 4)</button>
+      <button type="button" data-letter="B">(2, 4)</button>
+      <button type="button" data-letter="C">(2, 3)</button>
+      <button type="button" data-letter="D">(4, 3)</button>
+    </div>
+    <div class="qcm-fb"><b>A.</b> À droite : 3 vs 4, ni égaux ni l'un = 1 → incompatibles → ValueError. Le broadcasting échoue.</div>
+  </div>
+
+  <div class="subhead">2.3 — np.linalg : l'algèbre en code</div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair</span>
+    Tout ce que tu as fait à la main en Algèbre (produit matriciel, inverse, valeurs propres, SVD), NumPy le fait en une ligne. <code>@</code> = produit matriciel, <code>np.linalg.eig</code> = valeurs propres, <code>np.linalg.solve</code> = résoudre \(Ax=b\). Tu vérifies tes calculs papier en 2 secondes.
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag">Fiche · np.linalg (rejoue l'algèbre)</span>
+    <div class="table-scroll"><table class="mini-table">
+      <tr><th>Opération</th><th>Code</th></tr>
+      <tr><td>Produit matriciel \(AB\)</td><td><code>A @ B</code></td></tr>
+      <tr><td>Transposée \(A^{\mathsf T}\)</td><td><code>A.T</code></td></tr>
+      <tr><td>Inverse \(A^{-1}\)</td><td><code>np.linalg.inv(A)</code></td></tr>
+      <tr><td>Déterminant</td><td><code>np.linalg.det(A)</code></td></tr>
+      <tr><td>Résoudre \(Ax=b\)</td><td><code>np.linalg.solve(A, b)</code></td></tr>
+      <tr><td>Valeurs/vecteurs propres</td><td><code>np.linalg.eig(A)</code></td></tr>
+      <tr><td>SVD</td><td><code>np.linalg.svd(A)</code></td></tr>
+    </table></div>
+    <pre>A = np.array([[<span class="s">2</span>,<span class="s">1</span>],[<span class="s">1</span>,<span class="s">2</span>]])
+vals, vecs = np.linalg.eig(A)
+vals   <span class="c"># [3., 1.]  ← exactement la diagonalisation faite à la main</span></pre>
+  </div>
+
+  <div class="qcm" data-id="p2-q4" data-answer="3">
+    <span class="qcm-tag">QCM 4</span>
+    <p class="qcm-q">Quel opérateur fait le produit <b>matriciel</b> en NumPy ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A"><code>*</code></button>
+      <button type="button" data-letter="B"><code>x</code></button>
+      <button type="button" data-letter="C"><code>.dot</code> uniquement</button>
+      <button type="button" data-letter="D"><code>@</code></button>
+    </div>
+    <div class="qcm-fb"><b>D.</b> <code>@</code> (ou <code>np.dot</code>) = produit matriciel. ⚠️ <code>*</code> fait le produit <i>élément par élément</i>, pas le produit matriciel !</div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">Exercice corrigé — vérifier trace = somme des valeurs propres</span>
+    <p>Pour <code>A=[[4,1],[2,3]]</code>, vérifie en NumPy que la somme des valeurs propres = la trace.</p>
+    <details><summary>Voir la solution</summary>
+      <div class="sol">
+        <pre style="margin:6px 0">A = np.array([[<span class="s">4</span>,<span class="s">1</span>],[<span class="s">2</span>,<span class="s">3</span>]])
+vals = np.linalg.eigvals(A)
+vals.sum()        <span class="c"># 7.0</span>
+np.trace(A)       <span class="c"># 7</span></pre>
+        <p>Les deux valent 7 (valeurs propres 5 et 2). Le réflexe trace/det de l'Algèbre, confirmé en une ligne.</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="check-title">À valider — Chapitre 2</div>
+  <div class="check"><input type="checkbox" id="c2a"><label for="c2a">ndarray, shape, indexation 2D, opérations vectorisées</label></div>
+  <div class="check"><input type="checkbox" id="c2b"><label for="c2b">array vs list (+ et * se comportent différemment)</label></div>
+  <div class="check"><input type="checkbox" id="c2c"><label for="c2c">Broadcasting : la règle des formes (égales ou 1)</label></div>
+  <div class="check"><input type="checkbox" id="c2d"><label for="c2d"><code>@</code> vs <code>*</code> ; reduce (sum/mean) avec <code>axis</code></label></div>
+  <div class="check"><input type="checkbox" id="c2e"><label for="c2e"><code>np.linalg</code> : inv, solve, eig, svd — rejouer l'algèbre</label></div>
+</section>
+
+<!-- ============================================================ -->
+<!-- CHAPITRE 3 -->
+<!-- ============================================================ -->
+<section class="module" id="ch3" data-module="ch3">
+  <div class="mod-head">
+    <span class="mod-num">3</span>
+    <div>
+      <h2>Pandas</h2>
+      <div class="mod-meta">Series, DataFrame, et le <b>dictionnaire SQL ↔ Pandas</b></div>
+    </div>
+  </div>
+  <div class="mod-bar"><div class="mod-fill"></div></div>
+
+  <div class="idea">
+    <span class="idea-tag">L'idée du chapitre</span>
+    Pandas, c'est <b>Excel/SQL en Python</b>. Le <b>DataFrame</b> est une table avec colonnes nommées. Tout ce que tu sais faire en SQL (filtrer, grouper, joindre) a un équivalent direct en Pandas — d'où le dictionnaire de traduction, qui boucle ton module SQL.
+  </div>
+
+  <div class="subhead">3.1 — Series &amp; DataFrame</div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair</span>
+    Une <b>Series</b> = une seule colonne (une liste avec des étiquettes). Un <b>DataFrame</b> = un tableau entier (plusieurs colonnes nommées), exactement comme une table SQL ou un onglet Excel. On sélectionne une colonne par son nom : <code>df['age']</code>, et on filtre des lignes avec un masque booléen : <code>df[df['age'] > 21]</code>.
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag">Fiche · Bases du DataFrame</span>
+    <pre><span class="k">import</span> pandas <span class="k">as</span> pd
+df = pd.DataFrame({<span class="s">'name'</span>:[<span class="s">'Alice'</span>,<span class="s">'Bob'</span>,<span class="s">'Carol'</span>],
+                   <span class="s">'age'</span>:[<span class="s">22</span>,<span class="s">25</span>,<span class="s">20</span>]})
+df[<span class="s">'age'</span>]              <span class="c"># une colonne (Series)</span>
+df[df[<span class="s">'age'</span>] > <span class="s">21</span>]      <span class="c"># lignes où age>21 : Alice, Bob</span>
+df[<span class="s">'age'</span>].mean()       <span class="c"># 22.33</span>
+df.loc[<span class="s">0</span>, <span class="s">'name'</span>]      <span class="c"># 'Alice' (par étiquette)</span>
+df.iloc[<span class="s">0</span>]             <span class="c"># 1ère ligne (par position)</span></pre>
+    <p class="note"><code>.loc</code> = par <b>étiquette</b> (nom), <code>.iloc</code> = par <b>position</b> (numéro). Ne pas confondre.</p>
+  </div>
+
+  <div class="qcm" data-id="p3-q1" data-answer="1">
+    <span class="qcm-tag">QCM 1 · prédis la sortie</span>
+    <p class="qcm-q">Avec le df ci-dessus, combien de lignes renvoie <code>df[df['age'] > 21]</code> ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">3</button>
+      <button type="button" data-letter="B">2</button>
+      <button type="button" data-letter="C">1</button>
+      <button type="button" data-letter="D">0</button>
+    </div>
+    <div class="qcm-fb"><b>B.</b> Le masque booléen garde Alice (22) et Bob (25). Carol (20) est exclue. → 2 lignes.</div>
+  </div>
+
+  <div class="qcm" data-id="p3-q2" data-answer="2">
+    <span class="qcm-tag">QCM 2</span>
+    <p class="qcm-q">Pour sélectionner une ligne par sa <b>position</b> (0,1,2…), on utilise :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A"><code>df.loc</code></button>
+      <button type="button" data-letter="B"><code>df.at</code></button>
+      <button type="button" data-letter="C"><code>df.iloc</code></button>
+      <button type="button" data-letter="D"><code>df.get</code></button>
+    </div>
+    <div class="qcm-fb"><b>C.</b> <code>.iloc</code> = <i>integer location</i> (position). <code>.loc</code> = par étiquette/nom.</div>
+  </div>
+
+  <div class="subhead">3.2 — Le dictionnaire SQL ↔ Pandas</div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair</span>
+    Tu connais déjà SQL : chaque clause a son jumeau Pandas. <code>WHERE</code> → un masque booléen ; <code>GROUP BY</code> → <code>.groupby()</code> ; <code>JOIN</code> → <code>.merge()</code> ; <code>ORDER BY</code> → <code>.sort_values()</code>. Apprends la traduction et tu réutilises tout ton module SQL en Python.
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag red">Fiche clé · Traduction SQL → Pandas</span>
+    <div class="table-scroll"><table class="mini-table">
+      <tr><th>SQL</th><th>Pandas</th></tr>
+      <tr><td><code>SELECT col</code></td><td><code>df['col']</code></td></tr>
+      <tr><td><code>WHERE age &gt; 21</code></td><td><code>df[df['age'] &gt; 21]</code></td></tr>
+      <tr><td><code>ORDER BY age</code></td><td><code>df.sort_values('age')</code></td></tr>
+      <tr><td><code>GROUP BY k</code> + <code>COUNT(*)</code></td><td><code>df.groupby('k').size()</code></td></tr>
+      <tr><td><code>GROUP BY k</code> + <code>AVG(x)</code></td><td><code>df.groupby('k')['x'].mean()</code></td></tr>
+      <tr><td><code>JOIN ON id</code></td><td><code>a.merge(b, on='id')</code></td></tr>
+      <tr><td><code>LEFT JOIN</code></td><td><code>a.merge(b, on='id', how='left')</code></td></tr>
+      <tr><td><code>COUNT(DISTINCT x)</code></td><td><code>df['x'].nunique()</code></td></tr>
+      <tr><td><code>LIMIT 5</code></td><td><code>df.head(5)</code></td></tr>
+    </table></div>
+  </div>
+
+  <div class="qcm" data-id="p3-q3" data-answer="0">
+    <span class="qcm-tag">QCM 3</span>
+    <p class="qcm-q">L'équivalent Pandas de <code>GROUP BY classe</code> + <code>AVG(note)</code> est :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A"><code>df.groupby('classe')['note'].mean()</code></button>
+      <button type="button" data-letter="B"><code>df.mean('classe')</code></button>
+      <button type="button" data-letter="C"><code>df['classe'].avg()</code></button>
+      <button type="button" data-letter="D"><code>df.sort_values('classe')</code></button>
+    </div>
+    <div class="qcm-fb"><b>A.</b> <code>.groupby('classe')</code> fait les paquets, <code>['note'].mean()</code> applique la moyenne par paquet. Calque exact du SQL.</div>
+  </div>
+
+  <div class="qcm" data-id="p3-q4" data-answer="2">
+    <span class="qcm-tag">QCM 4</span>
+    <p class="qcm-q">Un <code>LEFT JOIN</code> SQL se traduit par :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A"><code>a.merge(b)</code></button>
+      <button type="button" data-letter="B"><code>a.concat(b)</code></button>
+      <button type="button" data-letter="C"><code>a.merge(b, on='id', how='left')</code></button>
+      <button type="button" data-letter="D"><code>a.join(b, how='inner')</code></button>
+    </div>
+    <div class="qcm-fb"><b>C.</b> <code>how='left'</code> garde toutes les lignes de gauche (NaN en face si pas de match) — exactement le LEFT JOIN, David inclus.</div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">Exercice corrigé — refaire une requête SQL en Pandas</span>
+    <p>Traduis : <code>SELECT classe, COUNT(*) FROM eleves GROUP BY classe HAVING COUNT(*) >= 2;</code></p>
+    <details><summary>Voir la solution</summary>
+      <div class="sol">
+        <pre style="margin:6px 0">g = df.groupby(<span class="s">'classe'</span>).size()   <span class="c"># COUNT(*) par classe</span>
+g[g >= <span class="s">2</span>]                          <span class="c"># HAVING COUNT(*) >= 2</span></pre>
+        <p>Le <code>HAVING</code> devient un filtre booléen sur le résultat agrégé. Même logique que SQL, autre syntaxe.</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="subhead">3.3 — Approfondissements (niveau Master)</div>
+
+  <div class="fiche">
+    <span class="fiche-tag">Fiche · Boîte à outils data</span>
+    <ul>
+      <li><b>Valeurs manquantes :</b> <code>df.isna().sum()</code> (compter), <code>df.fillna(0)</code>, <code>df.dropna()</code> — l'équivalent du NULL SQL.</li>
+      <li><b>Nouvelles colonnes :</b> <code>df['bmi'] = df['poids'] / df['taille']**2</code> (vectorisé).</li>
+      <li><b>pivot_table / crosstab :</b> tableaux croisés (comme un GROUP BY à deux dimensions).</li>
+      <li><b>apply / map :</b> appliquer une fonction ; mais <b>préfère le vectorisé</b> quand possible (plus rapide).</li>
+      <li><b>Chaînage :</b> <code>df.query('age &gt; 21').groupby('classe')['note'].mean()</code>.</li>
+    </ul>
+  </div>
+
+  <div class="qcm" data-id="p3-q5" data-answer="1">
+    <span class="qcm-tag">QCM 5</span>
+    <p class="qcm-q">En Pandas, une valeur manquante (l'équivalent du NULL SQL) s'appelle :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">None uniquement</button>
+      <button type="button" data-letter="B">NaN</button>
+      <button type="button" data-letter="C">0</button>
+      <button type="button" data-letter="D">une chaîne vide</button>
+    </div>
+    <div class="qcm-fb"><b>B.</b> <code>NaN</code> (Not a Number). Comme le NULL SQL, les agrégats (<code>mean</code>, <code>sum</code>) l'ignorent par défaut.</div>
+  </div>
+
+  <div class="check-title">À valider — Chapitre 3</div>
+  <div class="check"><input type="checkbox" id="c3a"><label for="c3a">Series vs DataFrame ; sélection colonne ; masque booléen</label></div>
+  <div class="check"><input type="checkbox" id="c3b"><label for="c3b"><code>.loc</code> (étiquette) vs <code>.iloc</code> (position)</label></div>
+  <div class="check"><input type="checkbox" id="c3c"><label for="c3c">Le dictionnaire SQL ↔ Pandas mémorisé</label></div>
+  <div class="check"><input type="checkbox" id="c3d"><label for="c3d">groupby, merge (how=), sort_values, nunique</label></div>
+  <div class="check"><input type="checkbox" id="c3e"><label for="c3e">NaN / fillna / dropna ; nouvelles colonnes vectorisées</label></div>
+</section>
+
+<!-- ============================================================ -->
+<!-- CHAPITRE 4 -->
+<!-- ============================================================ -->
+<section class="module" id="ch4" data-module="ch4">
+  <div class="mod-head">
+    <span class="mod-num">4</span>
+    <div>
+      <h2>Projet guidé — régression from scratch</h2>
+      <div class="mod-meta">Le projet qui <b>boucle les 3 modules maths</b> : Proba + Algèbre + Analyse</div>
+    </div>
+  </div>
+  <div class="mod-bar"><div class="mod-fill"></div></div>
+
+  <div class="idea">
+    <span class="idea-tag">L'idée du chapitre</span>
+    On code une régression linéaire <b>de zéro</b>, de deux façons : la formule fermée (Algèbre : projection) et la descente de gradient (Analyse : on suit \(-\nabla\)). On vérifie qu'elles donnent le même résultat. Les données viennent d'un modèle bruité (Proba). <b>Tout le carnet converge ici.</b>
+  </div>
+
+  <div class="subhead">4.1 — Générer des données (le pont Proba)</div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair</span>
+    On fabrique de fausses données « vérité + bruit » : une vraie droite \(y=2x+1\), plus un petit hasard gaussien (le bruit de mesure). On connaît la réponse (2 et 1), donc on pourra vérifier que notre algo la retrouve.
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag">Fiche · Données simulées</span>
+    <pre>np.random.seed(<span class="s">0</span>)
+n = <span class="s">100</span>
+x = np.random.uniform(<span class="s">0</span>, <span class="s">10</span>, n)
+bruit = np.random.normal(<span class="s">0</span>, <span class="s">1</span>, n)   <span class="c"># Normale(0,1) → module Proba</span>
+y = <span class="s">2</span>*x + <span class="s">1</span> + bruit              <span class="c"># vraie droite : pente 2, ordonnée 1</span>
+X = np.column_stack([np.ones(n), x])  <span class="c"># colonne de 1 (biais) + x → (100, 2)</span></pre>
+  </div>
+
+  <div class="subhead">4.2 — Solution fermée (le pont Algèbre)</div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair</span>
+    On applique directement la formule de l'Algèbre : \(\hat\beta=(X^{\mathsf T}X)^{-1}X^{\mathsf T}y\). C'est <b>la projection de \(y\) sur l'espace des droites</b>. Une ligne de NumPy, et on a les coefficients optimaux.
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag red">Fiche clé · Équations normales en NumPy</span>
+    <pre><span class="c"># beta = (X^T X)^{-1} X^T y</span>
+beta = np.linalg.inv(X.T @ X) @ X.T @ y
+beta   <span class="c"># ≈ [1.0, 2.0]  → ordonnée≈1, pente≈2 ✓</span>
+
+<span class="c"># Mieux (numériquement stable) : np.linalg.lstsq</span>
+beta2, *_ = np.linalg.lstsq(X, y, rcond=<span class="k">None</span>)</pre>
+    <p class="note">On retrouve la vraie droite (2 et 1) malgré le bruit. <code>lstsq</code> est préférable à l'inverse explicite (évite les soucis de conditionnement vus en Algèbre).</p>
+  </div>
+
+  <div class="subhead">4.3 — Descente de gradient (le pont Analyse)</div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair</span>
+    Au lieu de la formule, on <b>descend la colline du coût</b> pas à pas : on calcule la pente (le gradient) de l'erreur, et on avance dans le sens opposé. Après assez de pas, on arrive au creux — les mêmes coefficients. C'est exactement l'optimisation du module Analyse, et c'est comme ça qu'on entraîne les vrais modèles.
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag red">Fiche clé · Gradient descent</span>
+    <pre><span class="c"># Coût J = (1/n)||y - X beta||^2 ; gradient = -(2/n) X^T (y - X beta)</span>
+beta = np.zeros(<span class="s">2</span>)
+eta = <span class="s">0.01</span>            <span class="c"># learning rate</span>
+<span class="k">for</span> _ <span class="k">in</span> <span class="k">range</span>(<span class="s">5000</span>):
+    resid = y - X @ beta
+    grad = -(<span class="s">2</span>/n) * (X.T @ resid)
+    beta = beta - eta * grad   <span class="c"># pas dans le sens -gradient</span>
+beta   <span class="c"># ≈ [1.0, 2.0]  → identique à la solution fermée ✓</span></pre>
+    <div class="warn"><b>Le learning rate \(\eta\) :</b> trop grand → ça diverge (oscille/explose) ; trop petit → ça rampe. Le régler est le métier (cf. module Analyse).</div>
+  </div>
+
+  <div class="qcm" data-id="p4-q1" data-answer="2">
+    <span class="qcm-tag">QCM 1</span>
+    <p class="qcm-q">Dans <code>np.linalg.inv(X.T @ X) @ X.T @ y</code>, on calcule :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">la moyenne de y</button>
+      <button type="button" data-letter="B">les valeurs propres de X</button>
+      <button type="button" data-letter="C">les coefficients de régression (moindres carrés)</button>
+      <button type="button" data-letter="D">la matrice de covariance</button>
+    </div>
+    <div class="qcm-fb"><b>C.</b> C'est \(\hat\beta=(X^{\mathsf T}X)^{-1}X^{\mathsf T}y\) — les équations normales, donc la régression linéaire (= projection).</div>
+  </div>
+
+  <div class="qcm" data-id="p4-q2" data-answer="0">
+    <span class="qcm-tag">QCM 2</span>
+    <p class="qcm-q">Pourquoi la descente de gradient utilise <code>beta - eta*grad</code> (et pas <code>+</code>) ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">on va dans le sens opposé au gradient pour descendre (minimiser)</button>
+      <button type="button" data-letter="B">par convention</button>
+      <button type="button" data-letter="C">pour aller plus vite</button>
+      <button type="button" data-letter="D">car eta est négatif</button>
+    </div>
+    <div class="qcm-fb"><b>A.</b> Le gradient pointe vers la montée ; pour minimiser le coût on suit \(-\nabla\), d'où le « − ». Pont direct avec l'Analyse.</div>
+  </div>
+
+  <div class="qcm" data-id="p4-q3" data-answer="3">
+    <span class="qcm-tag">QCM 3</span>
+    <p class="qcm-q">Pourquoi préférer <code>np.linalg.lstsq</code> à <code>inv(X.T@X)</code> ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">c'est plus court à écrire</button>
+      <button type="button" data-letter="B">ça donne un résultat différent</button>
+      <button type="button" data-letter="C">ça calcule les valeurs propres</button>
+      <button type="button" data-letter="D">c'est numériquement plus stable (conditionnement)</button>
+    </div>
+    <div class="qcm-fb"><b>D.</b> Inverser explicitement amplifie les erreurs quand \(X^{\mathsf T}X\) est mal conditionnée (colinéarité). <code>lstsq</code> (basé SVD/QR) est plus robuste.</div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">Exercice corrigé — évaluer le modèle (R²)</span>
+    <p>Après avoir trouvé <code>beta</code>, calcule le R² (part de variance expliquée).</p>
+    <details><summary>Voir la solution</summary>
+      <div class="sol">
+        <pre style="margin:6px 0">y_pred = X @ beta
+ss_res = ((y - y_pred)**<span class="s">2</span>).sum()
+ss_tot = ((y - y.mean())**<span class="s">2</span>).sum()
+r2 = <span class="s">1</span> - ss_res/ss_tot     <span class="c"># ≈ 0.97</span></pre>
+        <p>R² proche de 1 = le modèle explique presque toute la variance. Le résidu \(y-\hat y\) est ce qui reste après la projection (Algèbre) ; sa variance relative donne le R² (Proba).</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="exam-box">
+    <ul>
+      <li><b>Vectorise</b> : pas de boucle Python sur des nombres si NumPy peut le faire.</li>
+      <li><b>Régression = projection</b> : <code>inv(X.T@X)@X.T@y</code>, ou mieux <code>lstsq</code>.</li>
+      <li><b>Descente de gradient</b> : <code>beta -= eta*grad</code> ; même résultat, base de l'entraînement ML.</li>
+      <li><b>Le carnet boucle ici :</b> données (Proba) → projection (Algèbre) → gradient (Analyse) → code (Python).</li>
+    </ul>
+  </div>
+
+  <div class="check-title">À valider — Chapitre 4</div>
+  <div class="check"><input type="checkbox" id="c4a"><label for="c4a">Générer des données bruitées (np.random, seed)</label></div>
+  <div class="check"><input type="checkbox" id="c4b"><label for="c4b">Construire X avec la colonne de biais (column_stack)</label></div>
+  <div class="check"><input type="checkbox" id="c4c"><label for="c4c">Solution fermée : <code>inv(X.T@X)@X.T@y</code> et <code>lstsq</code></label></div>
+  <div class="check"><input type="checkbox" id="c4d"><label for="c4d">Descente de gradient codée à la main (boucle, eta)</label></div>
+  <div class="check"><input type="checkbox" id="c4e"><label for="c4e">Évaluer (R²) ; retrouver la même solution des deux façons</label></div>
+  <div class="check"><input type="checkbox" id="c4f"><label for="c4f">matplotlib : nuage de points + droite ajustée</label></div>
+</section>
+
+<!-- ============================================================ -->
+<!-- EXAMEN FINAL -->
+<!-- ============================================================ -->
+<section class="module" id="final" data-module="final">
+  <div class="mod-head">
+    <span class="mod-num">★</span>
+    <div>
+      <h2>Examen final — 30 questions</h2>
+      <div class="mod-meta">QCM « prédis la sortie » + tâches à coder · les 4 chapitres mélangés</div>
+    </div>
+  </div>
+  <div class="mod-bar"><div class="mod-fill"></div></div>
+
+  <div class="why"><b>Règle du jeu :</b> calcule la sortie mentalement avant de cliquer, puis vérifie dans un notebook. Pour les tâches à coder, écris la cellule avant d'ouvrir la solution, puis coche « réussi sans aide ».</div>
+
+  <div class="subhead">Partie A — 15 QCM « prédis la sortie »</div>
+
+  <div class="qcm" data-id="f-q1" data-answer="2">
+    <span class="qcm-tag">QCM 1 · Ch.1</span>
+    <p class="qcm-q"><code>[0,1,2,3,4][::2]</code> ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">[1, 3]</button><button type="button" data-letter="B">[0,1,2,3,4]</button>
+      <button type="button" data-letter="C">[0, 2, 4]</button><button type="button" data-letter="D">[4, 2, 0]</button>
+    </div>
+    <div class="qcm-fb"><b>C.</b> Pas de 2 depuis le début : indices 0,2,4 → [0, 2, 4].</div>
+  </div>
+
+  <div class="qcm" data-id="f-q2" data-answer="1">
+    <span class="qcm-tag">QCM 2 · Ch.1</span>
+    <p class="qcm-q"><code>len({1,2,2,3,3,3})</code> ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">6</button><button type="button" data-letter="B">3</button>
+      <button type="button" data-letter="C">1</button><button type="button" data-letter="D">erreur</button>
+    </div>
+    <div class="qcm-fb"><b>B.</b> Un set ne garde que les valeurs uniques : {1,2,3} → longueur 3.</div>
+  </div>
+
+  <div class="qcm" data-id="f-q3" data-answer="0">
+    <span class="qcm-tag">QCM 3 · Ch.1</span>
+    <p class="qcm-q"><code>a=[1,2]; b=a; b+=[3]; print(a)</code></p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">[1, 2, 3]</button><button type="button" data-letter="B">[1, 2]</button>
+      <button type="button" data-letter="C">[3]</button><button type="button" data-letter="D">erreur</button>
+    </div>
+    <div class="qcm-fb"><b>A.</b> <code>+=</code> modifie la liste en place ; <code>b</code> et <code>a</code> sont le même objet → [1, 2, 3].</div>
+  </div>
+
+  <div class="qcm" data-id="f-q4" data-answer="3">
+    <span class="qcm-tag">QCM 4 · Ch.1</span>
+    <p class="qcm-q"><code>{x: x**2 for x in range(3)}</code> ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">[0,1,4]</button><button type="button" data-letter="B">{1,4,9}</button>
+      <button type="button" data-letter="C">{1:1, 2:4, 3:9}</button><button type="button" data-letter="D">{0:0, 1:1, 2:4}</button>
+    </div>
+    <div class="qcm-fb"><b>D.</b> range(3)=0,1,2 → clés 0,1,2, valeurs carrés → {0:0, 1:1, 2:4}.</div>
+  </div>
+
+  <div class="qcm" data-id="f-q5" data-answer="1">
+    <span class="qcm-tag">QCM 5 · Ch.2</span>
+    <p class="qcm-q"><code>np.array([1,2,3]) + np.array([10,20,30])</code> ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">[1,2,3,10,20,30]</button><button type="button" data-letter="B">[11, 22, 33]</button>
+      <button type="button" data-letter="C">66</button><button type="button" data-letter="D">erreur</button>
+    </div>
+    <div class="qcm-fb"><b>B.</b> Addition élément par élément → [11, 22, 33].</div>
+  </div>
+
+  <div class="qcm" data-id="f-q6" data-answer="2">
+    <span class="qcm-tag">QCM 6 · Ch.2</span>
+    <p class="qcm-q">Forme de <code>np.zeros((3,4)).sum(axis=0)</code> ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">(3,)</button><button type="button" data-letter="B">scalaire</button>
+      <button type="button" data-letter="C">(4,)</button><button type="button" data-letter="D">(3,4)</button>
+    </div>
+    <div class="qcm-fb"><b>C.</b> <code>axis=0</code> = on somme le long des lignes (on écrase la dimension 0) → il reste les 4 colonnes → (4,).</div>
+  </div>
+
+  <div class="qcm" data-id="f-q7" data-answer="0">
+    <span class="qcm-tag">QCM 7 · Ch.2</span>
+    <p class="qcm-q"><code>np.ones((2,3)) + np.array([[1],[2]])</code> → forme ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">(2, 3)</button><button type="button" data-letter="B">erreur</button>
+      <button type="button" data-letter="C">(2, 1)</button><button type="button" data-letter="D">(3, 2)</button>
+    </div>
+    <div class="qcm-fb"><b>A.</b> (2,3) et (2,1) : à droite 3 vs 1 → le 1 s'étire ; à gauche 2=2 ✓ → (2,3). Le vecteur colonne est ajouté à chaque colonne.</div>
+  </div>
+
+  <div class="qcm" data-id="f-q8" data-answer="3">
+    <span class="qcm-tag">QCM 8 · Ch.2</span>
+    <p class="qcm-q"><code>A*A</code> (A matrice) fait :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">le produit matriciel</button><button type="button" data-letter="B">la transposée</button>
+      <button type="button" data-letter="C">l'inverse</button><button type="button" data-letter="D">le produit élément par élément</button>
+    </div>
+    <div class="qcm-fb"><b>D.</b> <code>*</code> = élément par élément. Le produit matriciel, c'est <code>A @ A</code>.</div>
+  </div>
+
+  <div class="qcm" data-id="f-q9" data-answer="1">
+    <span class="qcm-tag">QCM 9 · Ch.2</span>
+    <p class="qcm-q"><code>np.arange(1,5)</code> donne :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">[1,2,3,4,5]</button><button type="button" data-letter="B">[1, 2, 3, 4]</button>
+      <button type="button" data-letter="C">[0,1,2,3,4]</button><button type="button" data-letter="D">[1, 5]</button>
+    </div>
+    <div class="qcm-fb"><b>B.</b> <code>arange(1,5)</code> : de 1 inclus à 5 exclu → [1, 2, 3, 4].</div>
+  </div>
+
+  <div class="qcm" data-id="f-q10" data-answer="2">
+    <span class="qcm-tag">QCM 10 · Ch.3</span>
+    <p class="qcm-q">L'équivalent Pandas de <code>SELECT * FROM df WHERE x &gt; 0</code> :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A"><code>df.where(x&gt;0)</code></button><button type="button" data-letter="B"><code>df.filter('x&gt;0')</code></button>
+      <button type="button" data-letter="C"><code>df[df['x'] &gt; 0]</code></button><button type="button" data-letter="D"><code>df.select('x')</code></button>
+    </div>
+    <div class="qcm-fb"><b>C.</b> Masque booléen <code>df[df['x'] &gt; 0]</code>. (<code>df.query('x &gt; 0')</code> marche aussi.)</div>
+  </div>
+
+  <div class="qcm" data-id="f-q11" data-answer="0">
+    <span class="qcm-tag">QCM 11 · Ch.3</span>
+    <p class="qcm-q"><code>COUNT(DISTINCT col)</code> en Pandas :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A"><code>df['col'].nunique()</code></button><button type="button" data-letter="B"><code>df['col'].count()</code></button>
+      <button type="button" data-letter="C"><code>len(df)</code></button><button type="button" data-letter="D"><code>df['col'].unique()</code></button>
+    </div>
+    <div class="qcm-fb"><b>A.</b> <code>nunique()</code> = nombre de valeurs distinctes (NaN exclu). <code>unique()</code> renvoie les valeurs, pas leur nombre.</div>
+  </div>
+
+  <div class="qcm" data-id="f-q12" data-answer="1">
+    <span class="qcm-tag">QCM 12 · Ch.3</span>
+    <p class="qcm-q"><code>.loc</code> sélectionne par :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">position entière</button><button type="button" data-letter="B">étiquette (nom)</button>
+      <button type="button" data-letter="C">valeur</button><button type="button" data-letter="D">type</button>
+    </div>
+    <div class="qcm-fb"><b>B.</b> <code>.loc</code> = par étiquette/nom ; <code>.iloc</code> = par position entière.</div>
+  </div>
+
+  <div class="qcm" data-id="f-q13" data-answer="2">
+    <span class="qcm-tag">QCM 13 · Ch.3</span>
+    <p class="qcm-q">Une valeur manquante dans un DataFrame est représentée par :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">-1</button><button type="button" data-letter="B">"null"</button>
+      <button type="button" data-letter="C">NaN</button><button type="button" data-letter="D">False</button>
+    </div>
+    <div class="qcm-fb"><b>C.</b> NaN, l'équivalent du NULL SQL (ignoré par les agrégats).</div>
+  </div>
+
+  <div class="qcm" data-id="f-q14" data-answer="3">
+    <span class="qcm-tag">QCM 14 · Ch.4</span>
+    <p class="qcm-q"><code>inv(X.T@X)@X.T@y</code> calcule :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">la moyenne</button><button type="button" data-letter="B">la SVD</button>
+      <button type="button" data-letter="C">la covariance</button><button type="button" data-letter="D">les coefficients de régression</button>
+    </div>
+    <div class="qcm-fb"><b>D.</b> Équations normales \(\hat\beta=(X^{\mathsf T}X)^{-1}X^{\mathsf T}y\) = régression linéaire = projection.</div>
+  </div>
+
+  <div class="qcm" data-id="f-q15" data-answer="0">
+    <span class="qcm-tag">QCM 15 · Ch.4</span>
+    <p class="qcm-q">En descente de gradient, un <code>eta</code> trop grand :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">peut faire diverger</button><button type="button" data-letter="B">accélère sans risque</button>
+      <button type="button" data-letter="C">annule le gradient</button><button type="button" data-letter="D">n'a aucun effet</button>
+    </div>
+    <div class="qcm-fb"><b>A.</b> Pas trop grand → on saute par-dessus le creux → oscillations/divergence. Pont avec le module Analyse.</div>
+  </div>
+
+  <div class="subhead">Partie B — 15 tâches à coder</div>
+
+  <div class="exo">
+    <span class="exo-tag">P1 · Ch.1</span>
+    <p>Liste des carrés des nombres impairs de 1 à 9 (compréhension).</p>
+    <details><summary>Solution</summary><div class="sol">
+      <pre style="margin:6px 0">[x*x <span class="k">for</span> x <span class="k">in</span> <span class="k">range</span>(<span class="s">1</span>,<span class="s">10</span>) <span class="k">if</span> x%<span class="s">2</span>==<span class="s">1</span>]   <span class="c"># [1, 9, 25, 49, 81]</span></pre>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp1"><label for="fp1">Réussi sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P2 · Ch.1</span>
+    <p>Inverse une liste sans <code>.reverse()</code>.</p>
+    <details><summary>Solution</summary><div class="sol">
+      <pre style="margin:6px 0">a[::-<span class="s">1</span>]</pre><p>Le slicing à pas −1 renvoie une copie inversée.</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp2"><label for="fp2">Réussi sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P3 · Ch.1</span>
+    <p>Compte les occurrences de chaque mot d'une liste, dans un dict.</p>
+    <details><summary>Solution</summary><div class="sol">
+      <pre style="margin:6px 0"><span class="k">from</span> collections <span class="k">import</span> Counter
+Counter(mots)   <span class="c"># {'a':2, 'b':1, ...}</span></pre>
+      <p>(Ou une boucle <code>d[m]=d.get(m,0)+1</code>.)</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp3"><label for="fp3">Réussi sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P4 · Ch.2</span>
+    <p>Crée un array des entiers de 0 à 9, garde les pairs.</p>
+    <details><summary>Solution</summary><div class="sol">
+      <pre style="margin:6px 0">a = np.arange(<span class="s">10</span>)
+a[a % <span class="s">2</span> == <span class="s">0</span>]   <span class="c"># [0 2 4 6 8] (masque booléen)</span></pre>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp4"><label for="fp4">Réussi sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P5 · Ch.2</span>
+    <p>Normalise un array : soustrais la moyenne, divise par l'écart-type.</p>
+    <details><summary>Solution</summary><div class="sol">
+      <pre style="margin:6px 0">(a - a.mean()) / a.std()</pre>
+      <p>Broadcasting : le scalaire moyenne est soustrait à tout l'array (standardisation, cf. Proba Z=(X−μ)/σ).</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp5"><label for="fp5">Réussi sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P6 · Ch.2</span>
+    <p>Diagonalise <code>A=[[2,1],[1,2]]</code> et affiche les valeurs propres.</p>
+    <details><summary>Solution</summary><div class="sol">
+      <pre style="margin:6px 0">vals, vecs = np.linalg.eig(np.array([[<span class="s">2</span>,<span class="s">1</span>],[<span class="s">1</span>,<span class="s">2</span>]]))
+vals   <span class="c"># [3., 1.]</span></pre>
+      <p>Identique au calcul papier de l'Algèbre.</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp6"><label for="fp6">Réussi sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P7 · Ch.3</span>
+    <p>Crée un DataFrame de 3 étudiants et filtre ceux de plus de 21 ans.</p>
+    <details><summary>Solution</summary><div class="sol">
+      <pre style="margin:6px 0">df = pd.DataFrame({<span class="s">'name'</span>:[<span class="s">'A'</span>,<span class="s">'B'</span>,<span class="s">'C'</span>], <span class="s">'age'</span>:[<span class="s">22</span>,<span class="s">25</span>,<span class="s">20</span>]})
+df[df[<span class="s">'age'</span>] > <span class="s">21</span>]</pre>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp7"><label for="fp7">Réussi sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P8 · Ch.3</span>
+    <p>Moyenne d'une colonne <code>note</code> par <code>classe</code>.</p>
+    <details><summary>Solution</summary><div class="sol">
+      <pre style="margin:6px 0">df.groupby(<span class="s">'classe'</span>)[<span class="s">'note'</span>].mean()</pre>
+      <p>Calque du <code>GROUP BY classe</code> + <code>AVG(note)</code>.</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp8"><label for="fp8">Réussi sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P9 · Ch.3</span>
+    <p>Joins deux DataFrames <code>a</code> et <code>b</code> sur <code>id</code> en gardant toutes les lignes de <code>a</code>.</p>
+    <details><summary>Solution</summary><div class="sol">
+      <pre style="margin:6px 0">a.merge(b, on=<span class="s">'id'</span>, how=<span class="s">'left'</span>)</pre>
+      <p>LEFT JOIN : les lignes de <code>a</code> sans match auront des NaN.</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp9"><label for="fp9">Réussi sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P10 · Ch.3</span>
+    <p>Remplace les NaN d'une colonne par sa moyenne.</p>
+    <details><summary>Solution</summary><div class="sol">
+      <pre style="margin:6px 0">df[<span class="s">'x'</span>] = df[<span class="s">'x'</span>].fillna(df[<span class="s">'x'</span>].mean())</pre>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp10"><label for="fp10">Réussi sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P11 · Ch.4</span>
+    <p>Construis la matrice de design <code>X</code> (colonne de 1 + une variable <code>x</code>).</p>
+    <details><summary>Solution</summary><div class="sol">
+      <pre style="margin:6px 0">X = np.column_stack([np.ones(<span class="k">len</span>(x)), x])</pre>
+      <p>La colonne de 1 capture l'ordonnée à l'origine (le biais).</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp11"><label for="fp11">Réussi sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P12 · Ch.4</span>
+    <p>Calcule les coefficients de régression par la formule fermée.</p>
+    <details><summary>Solution</summary><div class="sol">
+      <pre style="margin:6px 0">beta = np.linalg.inv(X.T @ X) @ X.T @ y
+<span class="c"># ou, plus stable :</span>
+beta, *_ = np.linalg.lstsq(X, y, rcond=<span class="k">None</span>)</pre>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp12"><label for="fp12">Réussi sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P13 · Ch.4</span>
+    <p>Écris une itération de descente de gradient pour la régression.</p>
+    <details><summary>Solution</summary><div class="sol">
+      <pre style="margin:6px 0">resid = y - X @ beta
+grad = -(<span class="s">2</span>/n) * (X.T @ resid)
+beta = beta - eta * grad</pre>
+      <p>On suit \(-\nabla\) du coût \(\|y-X\beta\|^2\).</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp13"><label for="fp13">Réussi sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P14 · Ch.4</span>
+    <p>Calcule le R² du modèle.</p>
+    <details><summary>Solution</summary><div class="sol">
+      <pre style="margin:6px 0">y_pred = X @ beta
+r2 = <span class="s">1</span> - ((y-y_pred)**<span class="s">2</span>).sum() / ((y-y.mean())**<span class="s">2</span>).sum()</pre>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp14"><label for="fp14">Réussi sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P15 · Synthèse</span>
+    <p>Trace le nuage de points et la droite ajustée (matplotlib).</p>
+    <details><summary>Solution</summary><div class="sol">
+      <pre style="margin:6px 0"><span class="k">import</span> matplotlib.pyplot <span class="k">as</span> plt
+plt.scatter(x, y)
+xs = np.linspace(x.min(), x.max(), <span class="s">100</span>)
+plt.plot(xs, beta[<span class="s">0</span>] + beta[<span class="s">1</span>]*xs, <span class="s">'r-'</span>)
+plt.show()</pre>
+      <p>Le nuage (Proba : données bruitées) + la droite (Algèbre/Analyse : ajustement). <b>Le carnet entier converge dans ce graphe.</b></p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp15"><label for="fp15">Réussi sans aide</label></div>
+  </div>
+</section>
+
+<footer>
+  <p class="sig">Python pour la data — Préparation Summer.</p>
+  <p style="margin-top:8px">Entraîne-toi sur <b>Kaggle Learn</b> (Python, Pandas), la doc <b>NumPy / Pandas</b>, et <b>« Python Data Science Handbook »</b> (VanderPlas, gratuit en ligne). Dernière matière du carnet ✓ — tu as bouclé les 5.</p>
+  <p style="margin-top:8px;font-size:12px">Progression et scores QCM sauvegardés localement dans ce navigateur.</p>
+</footer>
+
+</div>
+
+<div class="toast" id="toast">Sauvegardé ✓</div>
+
+<script>
+(function(){
+  var CK='dsba-py-checks-v1', QK='dsba-py-qcm-v1';
+  var checks={}, qcm={};
+  try{ checks=JSON.parse(localStorage.getItem(CK)||'{}'); }catch(e){ checks={}; }
+  try{ qcm=JSON.parse(localStorage.getItem(QK)||'{}'); }catch(e){ qcm={}; }
+  var toast=document.getElementById('toast'), tT;
+  function ping(){ toast.classList.add('show'); clearTimeout(tT); tT=setTimeout(function(){toast.classList.remove('show');},1100); }
+  function pct(arr){ if(!arr.length)return 0; var n=arr.filter(function(b){return b.checked;}).length; return Math.round(100*n/arr.length); }
+  var boxes=[].slice.call(document.querySelectorAll('input[type=checkbox]'));
+  function updModule(mod){
+    var sec=document.querySelector('section[data-module="'+mod+'"]'); if(!sec)return;
+    var arr=[].slice.call(sec.querySelectorAll('input[type=checkbox]'));
+    var p=pct(arr);
+    var fill=sec.querySelector('.mod-fill'); if(fill)fill.style.width=p+'%';
+    var nav=document.querySelector('[data-nav="'+mod+'"]'); if(nav)nav.textContent=p+'%';
+  }
+  function updGlobal(){
+    var p=pct(boxes);
+    document.getElementById('global-pct').textContent=p;
+    document.querySelector('#global-bar > span').style.width=p+'%';
+  }
+  boxes.forEach(function(b){
+    if(checks[b.id]) b.checked=true;
+    b.addEventListener('change',function(){
+      checks[b.id]=b.checked;
+      try{ localStorage.setItem(CK,JSON.stringify(checks)); }catch(e){}
+      var sec=b.closest('section[data-module]');
+      if(sec) updModule(sec.getAttribute('data-module'));
+      updGlobal(); ping();
+    });
+  });
+  var qcms=[].slice.call(document.querySelectorAll('.qcm'));
+  document.getElementById('qcm-total').textContent=qcms.length;
+  function updQcmScore(){
+    var correct=0;
+    qcms.forEach(function(q){ var id=q.getAttribute('data-id'); if(qcm[id]&&qcm[id].correct) correct++; });
+    document.getElementById('qcm-correct').textContent=correct;
+    document.querySelector('#qcm-bar > span').style.width=Math.round(100*correct/qcms.length)+'%';
+  }
+  qcms.forEach(function(q){
+    var ans=parseInt(q.getAttribute('data-answer'),10);
+    var id=q.getAttribute('data-id');
+    var opts=[].slice.call(q.querySelectorAll('.qcm-opts button'));
+    var fb=q.querySelector('.qcm-fb');
+    function lock(chosen){
+      opts.forEach(function(b){ b.disabled=true; });
+      opts[ans].classList.add('correct');
+      if(chosen!=null && chosen!==ans) opts[chosen].classList.add('wrong');
+      if(fb) fb.classList.add('show');
+      q.dataset.done='1';
+    }
+    if(qcm[id]){ lock(qcm[id].chosen); }
+    opts.forEach(function(b,i){
+      b.addEventListener('click',function(){
+        if(q.dataset.done) return;
+        lock(i);
+        qcm[id]={chosen:i, correct:(i===ans)};
+        try{ localStorage.setItem(QK,JSON.stringify(qcm)); }catch(e){}
+        updQcmScore(); ping();
+      });
+    });
+  });
+  ['ch1','ch2','ch3','ch4','final'].forEach(updModule);
+  updGlobal(); updQcmScore();
+})();
+</script>
+</body>
+</html>

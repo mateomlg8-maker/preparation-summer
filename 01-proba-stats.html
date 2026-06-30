@@ -1,0 +1,1942 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Proba &amp; Stats — Cours Complet (All of Statistics ch. 1–4)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script>
+window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] }, options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] } };
+</script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script>
+<style>
+:root{
+  --paper:#FBFAF5;
+  --grid:#DCE6F2;
+  --ink:#1C2B4A;
+  --ink-soft:#5A6685;
+  --red:#C0392B;
+  --green:#2F7D4F;
+  --stabilo:#FFE873;
+  --card:#FFFFFF;
+  --kid:#7B4BC4;
+  --kid-bg:#F3ECFF;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+body{
+  font-family:'Inter',sans-serif;
+  color:var(--ink);
+  background-color:var(--paper);
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size:32px 32px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+body::before{
+  content:'';
+  position:fixed;top:0;bottom:0;
+  left:max(16px, calc(50% - 560px));
+  width:2px;background:var(--red);opacity:.45;z-index:0;pointer-events:none;
+}
+.wrap{max-width:1020px;margin:0 auto;padding:0 24px 120px;position:relative;z-index:1}
+
+header{padding:52px 0 8px}
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--red);font-weight:600}
+h1{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(38px,7vw,72px);line-height:1.02;letter-spacing:-.01em;margin:10px 0 14px}
+h1 .hl{background:linear-gradient(transparent 55%, var(--stabilo) 55%);padding:0 4px}
+.sub{max-width:680px;color:var(--ink-soft);font-size:17px}
+
+/* dashboard */
+.dash{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin:32px 0 12px}
+.dash-card{background:var(--card);border:1.5px solid var(--ink);padding:16px 18px;box-shadow:4px 4px 0 var(--ink)}
+.dash-card .label{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft)}
+.dash-card .big{font-family:'Fraunces',serif;font-weight:900;font-size:36px;line-height:1.1}
+.dash-card .small{font-size:13px;color:var(--ink-soft)}
+.bar{height:10px;background:#EEF1F6;border:1px solid var(--ink);margin-top:10px;overflow:hidden}
+.bar > span{display:block;height:100%;width:0%;background:var(--green);transition:width .4s ease}
+#qcm-bar > span{background:var(--kid)}
+
+/* nav */
+nav{display:flex;flex-wrap:nowrap;overflow-x:auto;gap:10px;margin:24px 0 8px;position:sticky;top:0;background:var(--paper);padding:12px 0;z-index:5;border-bottom:1.5px solid var(--ink);-webkit-overflow-scrolling:touch;scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
+nav a{font-family:'JetBrains Mono',monospace;font-size:12.5px;font-weight:600;text-decoration:none;color:var(--ink);border:1.5px solid var(--ink);background:var(--card);padding:8px 13px;white-space:nowrap;transition:transform .1s ease, box-shadow .1s ease}
+nav a:hover,nav a:focus-visible{box-shadow:3px 3px 0 var(--ink);transform:translate(-1px,-1px)}
+nav a:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+nav a .pct{color:var(--red)}
+
+/* modules */
+section.module{margin-top:64px;scroll-margin-top:70px}
+.mod-head{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap}
+.mod-num{font-family:'Fraunces',serif;font-weight:900;font-size:18px;background:var(--ink);color:var(--paper);width:38px;height:38px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;align-self:center}
+h2{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(26px,4vw,38px);line-height:1.1}
+.mod-meta{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-soft);margin-top:4px}
+.mod-meta b{color:var(--red);font-weight:600}
+.mod-bar{height:7px;background:#EEF1F6;border:1px solid var(--ink);margin:16px 0 22px;overflow:hidden}
+.mod-fill{height:100%;width:0%;background:var(--green);transition:width .4s ease}
+
+.why{border-left:4px solid var(--stabilo);background:#FFFDF2;padding:12px 16px;margin-bottom:22px;font-size:14.5px}
+.why b{font-weight:700}
+
+.idea{border:1.5px solid var(--ink);background:#EEF4FF;padding:14px 18px;margin:18px 0;font-size:14.5px}
+.idea .idea-tag{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);font-weight:600;display:block;margin-bottom:6px}
+
+.subhead{font-family:'Fraunces',serif;font-weight:900;font-size:21px;margin:34px 0 6px;padding-bottom:6px;border-bottom:2px solid var(--ink)}
+
+/* ELI5 box */
+.eli5{border:1.5px solid var(--kid);background:var(--kid-bg);padding:13px 16px 13px 46px;margin:14px 0;font-size:14.5px;position:relative;border-radius:2px}
+.eli5::before{content:'🧒';position:absolute;left:13px;top:11px;font-size:20px}
+.eli5 .eli5-tag{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--kid);font-weight:600;display:block;margin-bottom:3px}
+.eli5 b{color:var(--kid)}
+
+/* fiches */
+.fiche{border:1.5px solid var(--ink);background:#FDFDFB;padding:16px 18px;margin:16px 0;box-shadow:3px 3px 0 rgba(28,43,74,.10)}
+.fiche-tag{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#fff;background:var(--ink);display:inline-block;padding:3px 9px;margin-bottom:10px;font-weight:600}
+.fiche-tag.red{background:var(--red)}
+.fiche-tag.green{background:var(--green)}
+.fiche h4{font-family:'Fraunces',serif;font-weight:900;font-size:18px;margin-bottom:6px}
+.fiche p{font-size:14.5px;margin:7px 0}
+.fiche ul,.fiche ol{margin:6px 0 6px 20px;font-size:14.5px}
+.fiche li{margin:4px 0}
+.formula{background:#F4F7FB;border:1px solid var(--grid);padding:10px 14px;margin:10px 0;font-size:15px;overflow-x:auto}
+.note{font-size:13px;color:var(--ink-soft);font-style:italic}
+.warn{border-left:3px solid var(--red);background:#FFF6F4;padding:8px 12px;margin:10px 0;font-size:14px}
+.warn b{color:var(--red)}
+
+/* tables */
+.table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:10px 0}
+.mini-table{width:100%;border-collapse:collapse;font-size:13.5px;background:var(--card);min-width:380px}
+.mini-table th{background:var(--ink);color:var(--paper);font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;padding:8px 10px;text-align:left;font-weight:600}
+.mini-table td{padding:8px 10px;border-bottom:1px solid var(--grid);vertical-align:top}
+.mini-table tr:last-child td{border-bottom:none}
+.mini-table code{font-family:'JetBrains Mono',monospace;font-size:12px;background:#EEF1F6;padding:1px 5px;border:1px solid var(--grid)}
+
+/* worked exercises */
+.exo{border:1.5px dashed var(--ink);background:#FFFEF6;padding:14px 16px;margin:14px 0}
+.exo-tag{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--red);font-weight:600;letter-spacing:.14em;text-transform:uppercase;display:block;margin-bottom:6px}
+.exo p{font-size:14.5px}
+.exo details{margin-top:10px}
+.exo details summary{cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:var(--ink);user-select:none;list-style:none;display:inline-block;border:1.5px solid var(--ink);padding:8px 14px;background:var(--card);min-height:38px}
+.exo details summary::-webkit-details-marker{display:none}
+.exo details summary:hover{box-shadow:2px 2px 0 var(--ink)}
+.exo details summary:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+.exo .sol{padding:12px 14px;background:#F2F7F2;border-left:3px solid var(--green);margin-top:10px;font-size:14px}
+.exo .sol p{margin:5px 0}
+
+/* QCM interactive */
+.qcm{border:1.5px solid var(--kid);background:#FCFAFF;padding:14px 16px;margin:16px 0;border-radius:2px}
+.qcm .qcm-tag{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--kid);font-weight:600;letter-spacing:.12em;text-transform:uppercase;display:block;margin-bottom:6px}
+.qcm .qcm-q{font-size:14.5px;font-weight:500;margin-bottom:10px}
+.qcm-opts{display:flex;flex-direction:column;gap:8px}
+.qcm-opts button{font-family:'Inter',sans-serif;font-size:14px;text-align:left;color:var(--ink);background:var(--card);border:1.5px solid var(--ink);padding:11px 14px;cursor:pointer;min-height:44px;transition:box-shadow .1s, transform .1s;display:flex;align-items:center;gap:10px;width:100%}
+.qcm-opts button::before{content:attr(data-letter);font-family:'JetBrains Mono',monospace;font-weight:600;font-size:12px;background:#EEF1F6;border:1px solid var(--grid);width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+.qcm-opts button:not(:disabled):hover{box-shadow:2px 2px 0 var(--ink);transform:translate(-1px,-1px)}
+.qcm-opts button:disabled{cursor:default}
+.qcm-opts button.correct{background:#E7F5EC;border-color:var(--green);color:var(--green);font-weight:600}
+.qcm-opts button.correct::before{background:var(--green);color:#fff;border-color:var(--green);content:'✓'}
+.qcm-opts button.wrong{background:#FCEBEA;border-color:var(--red);color:var(--red)}
+.qcm-opts button.wrong::before{background:var(--red);color:#fff;border-color:var(--red);content:'✕'}
+.qcm-fb{display:none;margin-top:11px;padding:11px 14px;background:#F3ECFF;border-left:3px solid var(--kid);font-size:13.5px}
+.qcm-fb.show{display:block}
+.qcm-fb b{color:var(--kid)}
+
+/* checklist */
+.check-title{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--green);font-weight:600;margin:18px 0 4px;border-top:1.5px solid var(--ink);padding-top:12px}
+.check{display:flex;align-items:flex-start;gap:11px;padding:11px 0;border-bottom:1px solid #F0F2F6;font-size:14.5px}
+.check:last-child{border-bottom:none}
+.check input{appearance:none;-webkit-appearance:none;width:24px;height:24px;flex-shrink:0;margin-top:1px;border:1.5px solid var(--ink);background:var(--card);cursor:pointer;display:inline-grid;place-content:center}
+.check input:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+.check input::after{content:'✕';font-size:15px;font-weight:700;color:var(--red);transform:scale(0);transition:transform .1s}
+.check input:checked::after{transform:scale(1)}
+.check input:checked + label{color:var(--ink-soft);text-decoration:line-through;text-decoration-color:var(--red);text-decoration-thickness:1.5px}
+.check label{cursor:pointer}
+.check label code{font-family:'JetBrains Mono',monospace;font-size:12.5px;background:#EEF1F6;padding:1px 5px;border:1px solid var(--grid)}
+
+/* exam callout */
+.exam-box{border:2px solid var(--red);background:#FFF6F4;padding:22px 22px 18px;margin:22px 0;position:relative}
+.exam-box::before{content:'⚠ À RETENIR POUR L\'EXAMEN';font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.12em;color:#fff;background:var(--red);position:absolute;top:-12px;left:16px;padding:3px 10px}
+.exam-box ol,.exam-box ul{margin:8px 0 0 20px;font-size:14.5px}
+.exam-box li{margin:6px 0}
+
+footer{margin-top:80px;padding-top:24px;border-top:1.5px solid var(--ink);font-size:13px;color:var(--ink-soft)}
+footer .sig{font-family:'Fraunces',serif;font-style:italic;font-size:15px;color:var(--ink)}
+
+.toast{position:fixed;bottom:20px;right:20px;background:var(--ink);color:var(--paper);font-family:'JetBrains Mono',monospace;font-size:12px;padding:10px 16px;opacity:0;transform:translateY(8px);transition:opacity .25s, transform .25s;pointer-events:none;z-index:50}
+.toast.show{opacity:1;transform:translateY(0)}
+
+@media(max-width:760px){
+  .dash{grid-template-columns:1fr}
+  body::before{left:8px}
+  .wrap{padding:0 16px 90px}
+  header{padding:36px 0 8px}
+  .sub{font-size:16px}
+  section.module{margin-top:52px}
+  .fiche,.exo,.qcm,.idea,.eli5{padding-left:14px;padding-right:14px}
+  .eli5{padding-left:44px}
+}
+</style>
+<script src="firebase-sync.js"></script>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">Préparation Summer · Matière 01 / 05</div>
+  <h1>Proba &amp;<br><span class="hl">Stats</span></h1>
+  <p class="sub">Cours complet et autonome — <b>All of Statistics</b> (Wasserman), chapitres 1 à 4. Chaque idée est d'abord expliquée <b>comme à un enfant</b> 🧒, puis proprement, avec des exemples corrigés, des <b>QCM cliquables</b> (réponse immédiate) et de vrais exercices. À la fin : un examen blanc de 30 questions. Tout est sauvegardé dans ton navigateur.</p>
+</header>
+
+<div class="dash">
+  <div class="dash-card">
+    <div class="label">Progression du cours</div>
+    <div class="big"><span id="global-pct">0</span>%</div>
+    <div class="bar" id="global-bar"><span></span></div>
+    <div class="small" style="margin-top:6px">Cases « j'ai compris » cochées</div>
+  </div>
+  <div class="dash-card">
+    <div class="label">Score QCM</div>
+    <div class="big"><span id="qcm-correct">0</span><span style="font-size:18px;color:var(--ink-soft)">/<span id="qcm-total">0</span></span></div>
+    <div class="bar" id="qcm-bar"><span></span></div>
+    <div class="small" style="margin-top:6px">Bonnes réponses au 1ᵉʳ essai</div>
+  </div>
+  <div class="dash-card">
+    <div class="label">Contenu</div>
+    <div class="big">4<span style="font-size:18px;color:var(--ink-soft)"> ch.</span></div>
+    <div class="small">Chaque chapitre + une section <b>Approfondissements niveau Master</b> · Examen final 30 Q</div>
+  </div>
+</div>
+
+<nav aria-label="Chapitres">
+  <a href="#ch1">Ch.1 Probability <span class="pct" data-nav="ch1"></span></a>
+  <a href="#ch2">Ch.2 Random Var. <span class="pct" data-nav="ch2"></span></a>
+  <a href="#ch3">Ch.3 Expectation <span class="pct" data-nav="ch3"></span></a>
+  <a href="#ch4">Ch.4 Inequalities <span class="pct" data-nav="ch4"></span></a>
+  <a href="#final">★ Examen final</a>
+</nav>
+
+<div class="why"><b>Mode d'emploi.</b> Pour chaque idée : lis le 🧒 <b>En clair</b>, puis la fiche, fais le QCM (clique une réponse → correction immédiate), puis l'exercice corrigé. Coche « j'ai compris » seulement quand tu saurais l'expliquer à quelqu'un, sans tes notes. Cette page condense la théorie ; les exercices de fin de chapitre du vrai Wasserman restent ton entraînement de fond.</div>
+
+<!-- ============================================================ -->
+<!-- CHAPITRE 1 -->
+<!-- ============================================================ -->
+<section class="module" id="ch1" data-module="ch1">
+  <div class="mod-head">
+    <span class="mod-num">1</span>
+    <div>
+      <h2>Probability</h2>
+      <div class="mod-meta">Le langage des événements : ensembles, axiomes, indépendance, <b>Bayes</b></div>
+    </div>
+  </div>
+  <div class="mod-bar"><div class="mod-fill"></div></div>
+
+  <div class="idea">
+    <span class="idea-tag">L'idée du chapitre</span>
+    Une probabilité, c'est une façon de répartir une <b>« masse » totale de 1</b> sur toutes les issues possibles. Le chapitre pose les règles qui gardent cette répartition cohérente, et culmine sur <b>Bayes</b> : la machine à mettre à jour une croyance quand une info tombe.
+  </div>
+
+  <!-- 1.1 -->
+  <div class="subhead">1.1 — Espace, issues, événements</div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair</span>
+    Imagine une <b>boîte qui contient tous les résultats possibles</b> d'un jeu. Tu lances un dé : la boîte contient les jetons 1,2,3,4,5,6. La boîte entière, c'est <b>Ω (oméga)</b>. Un seul jeton, c'est une <b>issue</b>. Un <b>événement</b>, c'est un sac dans lequel tu mets certains jetons : le sac « pair » contient 2, 4, 6. « L'événement se réalise » = le jeton tiré est dans ton sac.
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag">Fiche · Vocabulaire fondateur</span>
+    <h4>Ω, ω, événements</h4>
+    <ul>
+      <li><b>Espace des issues</b> \(\Omega\) : tous les résultats possibles. Dé : \(\Omega=\{1,2,3,4,5,6\}\).</li>
+      <li><b>Issue</b> \(\omega\) : un élément de \(\Omega\) (un résultat élémentaire).</li>
+      <li><b>Événement</b> \(A\) : un <i>sous-ensemble</i> de \(\Omega\). « Pair » \(=\{2,4,6\}\).</li>
+      <li>« \(A\) se réalise » ⟺ l'issue tirée \(\omega\in A\).</li>
+    </ul>
+    <p class="note">Tout l'art : traduire une phrase (« au moins un six ») en opération ensembliste. C'est la moitié du travail aux examens.</p>
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag">Fiche · Algèbre des ensembles</span>
+    <h4>Les opérations et leur sens « logique »</h4>
+    <div class="table-scroll"><table class="mini-table">
+      <tr><th>Notation</th><th>Nom</th><th>Sens logique</th></tr>
+      <tr><td>\(A \cup B\)</td><td>Union</td><td>A <b>ou</b> B (inclusif)</td></tr>
+      <tr><td>\(A \cap B\)</td><td>Intersection</td><td>A <b>et</b> B</td></tr>
+      <tr><td>\(A^c\)</td><td>Complément</td><td><b>non</b> A</td></tr>
+      <tr><td>\(A \setminus B\)</td><td>Différence</td><td>A mais pas B \(=A\cap B^c\)</td></tr>
+      <tr><td>\(A \subseteq B\)</td><td>Inclusion</td><td>A entraîne B</td></tr>
+      <tr><td>\(A\cap B=\varnothing\)</td><td>Disjoints</td><td>jamais ensemble</td></tr>
+    </table></div>
+    <div class="formula"><b>Lois de De Morgan</b> :
+      \[ (A \cup B)^c = A^c \cap B^c \qquad (A \cap B)^c = A^c \cup B^c \]
+    </div>
+  </div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair · De Morgan</span>
+    « Il ne pleut pas <b>ET</b> il ne vente pas » veut exactement dire « il n'y a <b>PAS</b> (de la pluie <b>OU</b> du vent) ». Quand tu mets un « pas » devant une parenthèse, tu le distribues à l'intérieur <b>et tu retournes le ET en OU</b> (et inversement). C'est tout De Morgan.
+  </div>
+
+  <div class="qcm" data-id="c1-q1" data-answer="2">
+    <span class="qcm-tag">QCM 1</span>
+    <p class="qcm-q">Avec un dé, \(A=\{2,4,6\}\) (pair) et \(B=\{4,5,6\}\) (≥ 4). Que vaut \(A\cap B\) ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">\(\{2,4,5,6\}\)</button>
+      <button type="button" data-letter="B">\(\{2\}\)</button>
+      <button type="button" data-letter="C">\(\{4,6\}\)</button>
+      <button type="button" data-letter="D">\(\varnothing\)</button>
+    </div>
+    <div class="qcm-fb"><b>C.</b> L'intersection = les jetons qui sont dans les <i>deux</i> sacs : pairs ET ≥ 4 → 4 et 6. (L'union, elle, serait \(\{2,4,5,6\}\).)</div>
+  </div>
+
+  <div class="qcm" data-id="c1-q2" data-answer="1">
+    <span class="qcm-tag">QCM 2</span>
+    <p class="qcm-q">« Aucune des trois lampes n'est allumée » s'écrit (avec \(A,B,C\) = lampe allumée) :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">\((A\cup B\cup C)\)</button>
+      <button type="button" data-letter="B">\(A^c\cap B^c\cap C^c\)</button>
+      <button type="button" data-letter="C">\(A^c\cup B^c\cup C^c\)</button>
+      <button type="button" data-letter="D">\(A\cap B\cap C\)</button>
+    </div>
+    <div class="qcm-fb"><b>B.</b> « Aucune allumée » = lampe 1 éteinte ET lampe 2 éteinte ET lampe 3 éteinte. Par De Morgan c'est aussi \((A\cup B\cup C)^c\) — le contraire de « au moins une allumée ».</div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">Exercice corrigé — traduire en ensembles</span>
+    <p>Trois pièces \(A,B,C\) (= « la pièce i fait pile »). Écris : (a) « les trois pile », (b) « au moins une pile », (c) « exactement une pile ».</p>
+    <details><summary>Voir la solution</summary>
+      <div class="sol">
+        <p>(a) \(A\cap B\cap C\).</p>
+        <p>(b) \(A\cup B\cup C\). Astuce : le complément « aucune pile » \(=A^c\cap B^c\cap C^c\) est souvent plus simple, puis \(1-\).</p>
+        <p>(c) \((A\cap B^c\cap C^c)\cup(A^c\cap B\cap C^c)\cup(A^c\cap B^c\cap C)\) : les 3 cas s'excluent, on additionnera leurs probas.</p>
+      </div>
+    </details>
+  </div>
+
+  <!-- 1.2 -->
+  <div class="subhead">1.2 — Les axiomes et leurs conséquences</div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair</span>
+    Une probabilité, c'est comme partager <b>un gâteau entier (=1)</b> entre les résultats. Trois règles de bon sens : (1) aucune part n'est négative, (2) le gâteau entier fait 1, (3) si tu réunis des parts <b>qui ne se chevauchent pas</b>, tu additionnes simplement leurs tailles. Tout le reste se déduit de ça.
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag red">Fiche clé · Axiomes de Kolmogorov</span>
+    <h4>Trois règles, et tout en découle</h4>
+    <ol>
+      <li><b>Positivité :</b> \(\mathbb{P}(A)\ge 0\).</li>
+      <li><b>Normalisation :</b> \(\mathbb{P}(\Omega)=1\).</li>
+      <li><b>σ-additivité :</b> si les \(A_i\) sont <b>disjoints deux à deux</b>, \(\mathbb{P}\!\big(\bigcup_i A_i\big)=\sum_i \mathbb{P}(A_i)\).</li>
+    </ol>
+    <div class="formula">
+      \[ \mathbb{P}(\varnothing)=0,\quad \mathbb{P}(A^c)=1-\mathbb{P}(A),\quad A\subseteq B\Rightarrow \mathbb{P}(A)\le \mathbb{P}(B) \]
+      \[ \mathbb{P}(A\cup B)=\mathbb{P}(A)+\mathbb{P}(B)-\mathbb{P}(A\cap B)\quad\text{(inclusion–exclusion)} \]
+    </div>
+    <p>L'inclusion–exclusion : on additionne, mais le chevauchement a été compté deux fois, donc on le retire une fois.</p>
+  </div>
+
+  <div class="qcm" data-id="c1-q3" data-answer="2">
+    <span class="qcm-tag">QCM 3</span>
+    <p class="qcm-q">\(\mathbb{P}(A)=0{,}6\), \(\mathbb{P}(B)=0{,}5\), \(\mathbb{P}(A\cap B)=0{,}2\). Que vaut \(\mathbb{P}(A\cup B)\) ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">1,1</button>
+      <button type="button" data-letter="B">0,3</button>
+      <button type="button" data-letter="C">0,9</button>
+      <button type="button" data-letter="D">0,7</button>
+    </div>
+    <div class="qcm-fb"><b>C.</b> \(0{,}6+0{,}5-0{,}2=0{,}9\). Si tu avais répondu 1,1, tu as oublié de retirer le chevauchement (et une proba ne peut pas dépasser 1 — signal d'alarme).</div>
+  </div>
+
+  <div class="qcm" data-id="c1-q4" data-answer="0">
+    <span class="qcm-tag">QCM 4</span>
+    <p class="qcm-q">Si \(\mathbb{P}(A)=0{,}3\), que vaut \(\mathbb{P}(A^c)\) ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">0,7</button>
+      <button type="button" data-letter="B">0,3</button>
+      <button type="button" data-letter="C">1,3</button>
+      <button type="button" data-letter="D">On ne peut pas savoir</button>
+    </div>
+    <div class="qcm-fb"><b>A.</b> Le complément, c'est « tout le reste du gâteau » : \(1-0{,}3=0{,}7\).</div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">Exercice corrigé — démontrer P(A∪B)</span>
+    <p>À partir des axiomes seuls, démontre \(\mathbb{P}(A\cup B)=\mathbb{P}(A)+\mathbb{P}(B)-\mathbb{P}(A\cap B)\).</p>
+    <details><summary>Voir la solution</summary>
+      <div class="sol">
+        <p>On découpe \(A\cup B\) en 3 morceaux disjoints : \(A\cap B^c\), \(A\cap B\), \(A^c\cap B\). Par additivité :</p>
+        <p>\(\mathbb{P}(A\cup B)=\mathbb{P}(A\cap B^c)+\mathbb{P}(A\cap B)+\mathbb{P}(A^c\cap B)\).</p>
+        <p>Or \(\mathbb{P}(A)=\mathbb{P}(A\cap B^c)+\mathbb{P}(A\cap B)\) et \(\mathbb{P}(B)=\mathbb{P}(A^c\cap B)+\mathbb{P}(A\cap B)\). En additionnant et en retirant le \(\mathbb{P}(A\cap B)\) compté deux fois, on obtient la formule. \(\blacksquare\)</p>
+      </div>
+    </details>
+  </div>
+
+  <!-- counting -->
+  <div class="subhead">1.3 — Compter (combinatoire)</div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair</span>
+    Quand tous les résultats ont la même chance, une probabilité devient un simple <b>« cas qui m'arrangent ÷ cas possibles »</b>. Donc il faut savoir <b>compter</b>. Question clé à chaque fois : <b>l'ordre compte-t-il ?</b> Tirer « Alice puis Bob » est-il différent de « Bob puis Alice » ? Si oui → arrangements. Si non (juste « qui est dans l'équipe ») → combinaisons \(\binom{n}{k}\).
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag">Fiche · Dénombrement</span>
+    <h4>La boîte à outils du comptage</h4>
+    <div class="table-scroll"><table class="mini-table">
+      <tr><th>Situation</th><th>Formule</th><th>Exemple</th></tr>
+      <tr><td>Avec ordre, avec remise</td><td>\(n^k\)</td><td>codes PIN à 4 chiffres : \(10^4\)</td></tr>
+      <tr><td>Avec ordre, sans remise</td><td>\(\dfrac{n!}{(n-k)!}\)</td><td>podium 3 parmi 8</td></tr>
+      <tr><td>Sans ordre (combinaison)</td><td>\(\binom{n}{k}=\dfrac{n!}{k!(n-k)!}\)</td><td>équipe de 3 parmi 8</td></tr>
+    </table></div>
+    <p>Symétrie : \(\binom{n}{k}=\binom{n}{n-k}\). Pascal : \(\binom{n}{k}=\binom{n-1}{k-1}+\binom{n-1}{k}\).</p>
+  </div>
+
+  <div class="qcm" data-id="c1-q5" data-answer="1">
+    <span class="qcm-tag">QCM 5</span>
+    <p class="qcm-q">Combien d'équipes de 2 peut-on former parmi 5 personnes ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">25</button>
+      <button type="button" data-letter="B">10</button>
+      <button type="button" data-letter="C">20</button>
+      <button type="button" data-letter="D">120</button>
+    </div>
+    <div class="qcm-fb"><b>B.</b> L'ordre ne compte pas (« Alice-Bob » = « Bob-Alice ») → \(\binom{5}{2}=\frac{5\cdot4}{2}=10\). La réponse 20, c'est avec ordre (arrangements).</div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">Exercice corrigé — anniversaires</span>
+    <p>Dans un groupe de 23 personnes (365 jours équiprobables), proba qu'au moins deux partagent un anniversaire ?</p>
+    <details><summary>Voir la solution</summary>
+      <div class="sol">
+        <p>Réflexe « au moins » → complément « tous différents ». Cas possibles \(365^{23}\) ; tous différents \(365\cdot364\cdots343\).</p>
+        <p>\(\mathbb{P}=1-\dfrac{365\cdot364\cdots343}{365^{23}}\approx \mathbf{0{,}507}\). Contre-intuitif : avec seulement 23 personnes, c'est déjà plus d'une chance sur deux.</p>
+      </div>
+    </details>
+  </div>
+
+  <!-- 1.4 independence -->
+  <div class="subhead">1.4 — Indépendance</div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair</span>
+    Deux choses sont <b>indépendantes</b> si savoir l'une <b>ne t'apprend rien</b> sur l'autre. La météo à Tokyo et ton résultat au dé : indépendants. Pour deux événements indépendants, on <b>multiplie</b> leurs probas. ⚠️ Ne confonds pas avec « disjoints » : disjoints = ils ne peuvent pas arriver ensemble (donc si l'un arrive, tu sais que l'autre n'arrive pas → très dépendants !).
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag red">Fiche clé · Indépendance</span>
+    <div class="formula">
+      \[ A \perp B \iff \mathbb{P}(A\cap B)=\mathbb{P}(A)\,\mathbb{P}(B) \]
+    </div>
+    <div class="warn"><b>Piège n°1 :</b> disjoints ≠ indépendants. Si \(A,B\) disjoints avec \(\mathbb{P}(A),\mathbb{P}(B)>0\) : \(\mathbb{P}(A\cap B)=0\neq\mathbb{P}(A)\mathbb{P}(B)>0\) → <b>dépendants</b>.</div>
+  </div>
+
+  <div class="qcm" data-id="c1-q6" data-answer="3">
+    <span class="qcm-tag">QCM 6</span>
+    <p class="qcm-q">\(A\) et \(B\) sont disjoints, avec \(\mathbb{P}(A)=0{,}3\) et \(\mathbb{P}(B)=0{,}4\). Sont-ils indépendants ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">Oui, toujours</button>
+      <button type="button" data-letter="B">Oui car 0,3 ≠ 0,4</button>
+      <button type="button" data-letter="C">Impossible à dire</button>
+      <button type="button" data-letter="D">Non, ils sont dépendants</button>
+    </div>
+    <div class="qcm-fb"><b>D.</b> Disjoints ⇒ \(\mathbb{P}(A\cap B)=0\), mais \(\mathbb{P}(A)\mathbb{P}(B)=0{,}12\neq0\). Donc dépendants. Disjoints ≠ indépendants !</div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">Exercice corrigé — indépendant ou pas ?</span>
+    <p>Dé équilibré. \(A=\){pair}, \(B=\){\(\le 4\)}. Indépendants ?</p>
+    <details><summary>Voir la solution</summary>
+      <div class="sol">
+        <p>\(\mathbb{P}(A)=\tfrac12\), \(\mathbb{P}(B)=\tfrac46=\tfrac23\), \(A\cap B=\{2,4\}\Rightarrow\mathbb{P}=\tfrac26=\tfrac13\).</p>
+        <p>Produit \(\tfrac12\cdot\tfrac23=\tfrac13\) = égal ⇒ <b>indépendants</b>. Ici c'est un « hasard » du découpage : ça se vérifie par le calcul, pas à l'œil.</p>
+      </div>
+    </details>
+  </div>
+
+  <!-- 1.5 Bayes -->
+  <div class="subhead">1.5 — Conditionnement, probabilités totales, Bayes</div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair · conditionnelle</span>
+    « Conditionner sur \(B\) », c'est <b>changer de monde</b> : on oublie tout ce qui n'est pas \(B\), et \(B\) devient le nouveau « tout ». \(\mathbb{P}(A\mid B)\) = « parmi les cas où \(B\) arrive, quelle fraction a aussi \(A\) ? ». On recoupe, puis on remet à l'échelle (on divise par \(\mathbb{P}(B)\)).
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag red">Fiche clé · Probabilité conditionnelle</span>
+    <div class="formula">
+      \[ \mathbb{P}(A\mid B)=\frac{\mathbb{P}(A\cap B)}{\mathbb{P}(B)}\quad(\mathbb{P}(B)>0) \]
+      Règle de multiplication : \(\mathbb{P}(A\cap B)=\mathbb{P}(A\mid B)\,\mathbb{P}(B)=\mathbb{P}(B\mid A)\,\mathbb{P}(A)\).
+    </div>
+    <p>Lien indépendance : \(A\perp B \iff \mathbb{P}(A\mid B)=\mathbb{P}(A)\) (conditionner ne change rien).</p>
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag">Fiche · Probabilités totales</span>
+    <p>Si \(\{A_1,\dots,A_k\}\) partitionne \(\Omega\) :</p>
+    <div class="formula">
+      \[ \mathbb{P}(B)=\sum_{i=1}^{k}\mathbb{P}(B\mid A_i)\,\mathbb{P}(A_i) \]
+    </div>
+    <p>On calcule \(B\) « scénario par scénario », puis on moyenne, pondéré par la proba de chaque scénario.</p>
+  </div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair · Bayes</span>
+    Bayes, c'est <b>mettre à jour ce que tu crois quand une info arrive</b>. Tu pars d'une croyance de départ (le <b>prior</b>), tu regardes à quel point l'info colle à chaque hypothèse (la <b>vraisemblance</b>), et tu obtiens ta croyance corrigée (le <b>postérieur</b>). Formule magique : <b>postérieur ∝ vraisemblance × prior</b>. Le piège favori : une info « fiable à 99 % » sur un truc <b>très rare</b> reste souvent un faux positif.
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag red">Fiche clé · Théorème de Bayes</span>
+    <div class="formula">
+      \[ \mathbb{P}(A_i\mid B)=\frac{\mathbb{P}(B\mid A_i)\,\mathbb{P}(A_i)}{\sum_j \mathbb{P}(B\mid A_j)\,\mathbb{P}(A_j)} \]
+    </div>
+    <ul>
+      <li><b>Prior</b> \(\mathbb{P}(A_i)\) : croyance avant.</li>
+      <li><b>Vraisemblance</b> \(\mathbb{P}(B\mid A_i)\) : la donnée colle-t-elle à l'hypothèse ?</li>
+      <li><b>Postérieur</b> \(\mathbb{P}(A_i\mid B)\) : croyance après.</li>
+      <li>Le dénominateur = probas totales = constante de normalisation.</li>
+    </ul>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">Exemple corrigé — le test médical (LE classique)</span>
+    <p>Maladie : 1 % de la population. Test : détecte 99 % des malades, 5 % de faux positifs chez les sains. <b>Tu es positif : proba d'être malade ?</b> Devine d'abord.</p>
+    <details><summary>Voir la solution</summary>
+      <div class="sol">
+        <p>\(D\)=malade, \(+\)=positif. \(\mathbb{P}(D)=0{,}01\), \(\mathbb{P}(+\mid D)=0{,}99\), \(\mathbb{P}(+\mid D^c)=0{,}05\).</p>
+        <p>Probas totales : \(\mathbb{P}(+)=0{,}99\cdot0{,}01+0{,}05\cdot0{,}99=0{,}0099+0{,}0495=0{,}0594\).</p>
+        <p>Bayes : \(\mathbb{P}(D\mid +)=\dfrac{0{,}0099}{0{,}0594}\approx\mathbf{16{,}7\,\%}\).</p>
+        <p>Un test « à 99 % » et pourtant 1 chance sur 6 d'être malade : la maladie étant rare, les faux positifs (venant de l'immense population saine) écrasent les vrais positifs.</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="qcm" data-id="c1-q7" data-answer="0">
+    <span class="qcm-tag">QCM 7</span>
+    <p class="qcm-q">Dans le test médical ci-dessus, pourquoi la proba d'être malade reste faible malgré un test « à 99 % » ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">Parce que la maladie est très rare (prior faible)</button>
+      <button type="button" data-letter="B">Parce que le test est mal calibré</button>
+      <button type="button" data-letter="C">Parce que 99 % &lt; 100 %</button>
+      <button type="button" data-letter="D">Parce qu'on a oublié le complément</button>
+    </div>
+    <div class="qcm-fb"><b>A.</b> Le prior \(\mathbb{P}(D)=1\%\) est minuscule. Comme les sains sont 99 fois plus nombreux, leurs 5 % de faux positifs représentent beaucoup plus de monde que les vrais malades détectés.</div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">Exercice corrigé — les deux urnes</span>
+    <p>Urne 1 : 2 rouges, 3 bleues. Urne 2 : 4 rouges, 1 bleue. On choisit une urne (50/50), puis une boule : rouge. Proba que ce soit l'urne 2 ?</p>
+    <details><summary>Voir la solution</summary>
+      <div class="sol">
+        <p>\(\mathbb{P}(R\mid U_1)=\tfrac25\), \(\mathbb{P}(R\mid U_2)=\tfrac45\), priors \(\tfrac12\).</p>
+        <p>\(\mathbb{P}(R)=\tfrac12\cdot\tfrac25+\tfrac12\cdot\tfrac45=\tfrac15+\tfrac25=\tfrac35\).</p>
+        <p>\(\mathbb{P}(U_2\mid R)=\dfrac{\tfrac12\cdot\tfrac45}{\tfrac35}=\dfrac{2/5}{3/5}=\mathbf{2/3}\).</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="subhead">1.6 — Approfondissements (niveau Master)</div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair</span>
+    Trois outils que tu reverras sans cesse en stats avancées et en ML. (1) Une proba se comporte bien « à la limite » : si des événements grandissent petit à petit pour remplir un grand événement, leurs probas suivent. (2) Si tu veux majorer « la proba qu'au moins un truc rate », tu peux simplement <b>additionner</b> les probas de chaque ratage (même si tu ignores les liens). (3) Bayes se calcule très vite « en cotes » (comme aux paris).
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag">Fiche · Continuité de la probabilité</span>
+    <h4>Passer à la limite sur des suites d'événements</h4>
+    <p>Une probabilité est <b>continue</b> le long des suites monotones — c'est ce qui justifie tous les passages à la limite du cours :</p>
+    <div class="formula">
+      <b>Suite croissante</b> \(A_1\subseteq A_2\subseteq\cdots\) vers \(A=\bigcup_n A_n\) : \(\;\mathbb{P}(A_n)\uparrow\mathbb{P}(A)\).<br>
+      <b>Suite décroissante</b> \(A_1\supseteq A_2\supseteq\cdots\) vers \(A=\bigcap_n A_n\) : \(\;\mathbb{P}(A_n)\downarrow\mathbb{P}(A)\).
+    </div>
+    <p class="note">Découle de la σ-additivité (axiome 3) en découpant la suite en « anneaux » disjoints \(B_n=A_n\setminus A_{n-1}\). C'est le pont vers la théorie de la mesure que ton Master suppose acquise.</p>
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag red">Fiche clé · Borne de l'union (sous-additivité)</span>
+    <h4>L'inégalité la plus utilisée du ML</h4>
+    <div class="formula">
+      \[ \mathbb{P}\Big(\bigcup_{i=1}^{n} A_i\Big)\le\sum_{i=1}^{n}\mathbb{P}(A_i) \]
+    </div>
+    <p>Intuition : en additionnant, on compte les chevauchements <b>plusieurs fois</b>, donc on majore. Égalité ssi les \(A_i\) sont disjoints. C'est l'outil pour borner « la proba qu'<i>au moins une</i> des \(n\) erreurs arrive » — au cœur des bornes de généralisation, des tests multiples (correction de Bonferroni) et de l'analyse des algorithmes.</p>
+    <p class="note">« Union bound » en anglais. Retiens le nom : tu le croiseras dans presque tous les cours théoriques.</p>
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag">Fiche · Indépendance — mutuelle vs deux-à-deux</span>
+    <h4>Un piège subtil mais classique en examen</h4>
+    <p>Pour 3 événements ou plus, l'indépendance <b>mutuelle</b> est plus forte que l'indépendance <b>deux à deux</b> : elle exige que la règle du produit tienne pour <i>tous</i> les sous-paquets.</p>
+    <div class="formula">
+      Mutuelle : \(\mathbb{P}(A\cap B\cap C)=\mathbb{P}(A)\mathbb{P}(B)\mathbb{P}(C)\) <b>ET</b> les trois paires.
+    </div>
+    <div class="warn"><b>Contre-exemple :</b> deux pièces équilibrées ; \(A=\){1ʳᵉ = pile}, \(B=\){2ᵉ = pile}, \(C=\){même résultat}. Les trois sont indépendants <i>deux à deux</i> (chaque paire donne \(1/4\)), mais pas mutuellement : si \(A\) et \(B\) sont connus, \(C\) est <b>déterminé</b>. Donc « deux à deux » ⇏ « mutuelle ».</div>
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag red">Fiche clé · Bayes en cotes (odds)</span>
+    <h4>Faire du Bayes de tête</h4>
+    <p>La cote (odds) d'un événement : \(O(A)=\dfrac{\mathbb{P}(A)}{\mathbb{P}(A^c)}\). Bayes devient une simple multiplication :</p>
+    <div class="formula">
+      \[ \underbrace{\frac{\mathbb{P}(A\mid B)}{\mathbb{P}(A^c\mid B)}}_{\text{cote postérieure}}=\underbrace{\frac{\mathbb{P}(B\mid A)}{\mathbb{P}(B\mid A^c)}}_{\text{rapport de vraisemblance}}\times\underbrace{\frac{\mathbb{P}(A)}{\mathbb{P}(A^c)}}_{\text{cote a priori}} \]
+    </div>
+    <p>Plus besoin de calculer le dénominateur de Bayes : on multiplie la cote de départ par « à quel point la donnée colle mieux à \(A\) qu'à \(A^c\) ». Repasse le test médical ainsi : cote a priori \(=\tfrac{0{,}01}{0{,}99}\), rapport de vraisemblance \(=\tfrac{0{,}99}{0{,}05}\approx19{,}8\), cote postérieure \(\approx0{,}2\) ⇒ proba \(\approx\tfrac{0{,}2}{1{,}2}\approx16{,}7\%\). Même résultat, plus vite.</p>
+  </div>
+
+  <div class="qcm" data-id="c1-q8" data-answer="1">
+    <span class="qcm-tag">QCM 8</span>
+    <p class="qcm-q">Trois événements ont chacun proba 0,1. Que peut-on dire de \(\mathbb{P}(A_1\cup A_2\cup A_3)\) sans info sur leurs liens ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">= 0,3 exactement</button>
+      <button type="button" data-letter="B">≤ 0,3</button>
+      <button type="button" data-letter="C">≥ 0,3</button>
+      <button type="button" data-letter="D">= 0,001</button>
+    </div>
+    <div class="qcm-fb"><b>B.</b> Borne de l'union : \(\mathbb{P}(\bigcup A_i)\le\sum\mathbb{P}(A_i)=0{,}3\). Égalité seulement s'ils sont disjoints.</div>
+  </div>
+
+  <div class="qcm" data-id="c1-q9" data-answer="3">
+    <span class="qcm-tag">QCM 9</span>
+    <p class="qcm-q">Des événements indépendants <b>deux à deux</b> sont-ils forcément indépendants <b>mutuellement</b> ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">Oui, c'est équivalent</button>
+      <button type="button" data-letter="B">Oui si tous ont la même proba</button>
+      <button type="button" data-letter="C">Seulement pour 2 événements</button>
+      <button type="button" data-letter="D">Non — l'indépendance mutuelle est plus forte</button>
+    </div>
+    <div class="qcm-fb"><b>D.</b> « Deux à deux » ⇏ « mutuelle » (contre-exemple des deux pièces + « même résultat »). La mutuelle exige aussi le produit sur le triplet entier.</div>
+  </div>
+
+  <div class="qcm" data-id="c1-q10" data-answer="0">
+    <span class="qcm-tag">QCM 10</span>
+    <p class="qcm-q">En forme « cotes », le postérieur s'obtient en multipliant la cote a priori par :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">le rapport de vraisemblance \(\frac{\mathbb{P}(B\mid A)}{\mathbb{P}(B\mid A^c)}\)</button>
+      <button type="button" data-letter="B">\(\mathbb{P}(B)\)</button>
+      <button type="button" data-letter="C">\(1-\mathbb{P}(A)\)</button>
+      <button type="button" data-letter="D">le complément</button>
+    </div>
+    <div class="qcm-fb"><b>A.</b> Cote postérieure = rapport de vraisemblance × cote a priori. C'est Bayes sans le dénominateur.</div>
+  </div>
+
+  <div class="exam-box">
+    <ul>
+      <li><b>« Au moins un… »</b> → passe par le complément.</li>
+      <li>Disjoints : on <b>additionne</b>. Indépendants : on <b>multiplie</b>. Ne pas confondre.</li>
+      <li><b>Bayes</b> = vraisemblance × prior, normalisé. Le dénominateur = probas totales.</li>
+      <li>Sache <b>redémontrer</b> : De Morgan, inclusion–exclusion, \(\mathbb{P}(A^c)=1-\mathbb{P}(A)\).</li>
+    </ul>
+  </div>
+
+  <div class="check-title">À valider — Chapitre 1</div>
+  <div class="check"><input type="checkbox" id="c1a"><label for="c1a">Traduire des phrases en événements ; opérations &amp; partitions ; De Morgan (avec démo)</label></div>
+  <div class="check"><input type="checkbox" id="c1b"><label for="c1b">Les 3 axiomes + redémontrer inclusion–exclusion et \(\mathbb{P}(A^c)\)</label></div>
+  <div class="check"><input type="checkbox" id="c1c"><label for="c1c">Dénombrement : \(n^k\), arrangements, \(\binom{n}{k}\) ; cas équiprobable</label></div>
+  <div class="check"><input type="checkbox" id="c1d"><label for="c1d">Indépendance + le piège disjoint ≠ indépendant</label></div>
+  <div class="check"><input type="checkbox" id="c1e"><label for="c1e">Conditionnelle, règle de multiplication</label></div>
+  <div class="check"><input type="checkbox" id="c1f"><label for="c1f">Probabilités totales + Bayes — refaire le test médical de tête</label></div>
+  <div class="check"><input type="checkbox" id="c1h"><label for="c1h">Continuité de la proba ; borne de l'union (union bound)</label></div>
+  <div class="check"><input type="checkbox" id="c1i"><label for="c1i">Indépendance mutuelle vs deux-à-deux ; Bayes en cotes</label></div>
+  <div class="check"><input type="checkbox" id="c1g"><label for="c1g">≥ 10 exercices du chapitre 1 de Wasserman</label></div>
+</section>
+
+<!-- ============================================================ -->
+<!-- CHAPITRE 2 -->
+<!-- ============================================================ -->
+<section class="module" id="ch2" data-module="ch2">
+  <div class="mod-head">
+    <span class="mod-num">2</span>
+    <div>
+      <h2>Random Variables</h2>
+      <div class="mod-meta">CDF, PMF, PDF, le <b>tableau des lois</b>, jointes &amp; transformations</div>
+    </div>
+  </div>
+  <div class="mod-bar"><div class="mod-fill"></div></div>
+
+  <div class="idea">
+    <span class="idea-tag">L'idée du chapitre</span>
+    Une variable aléatoire <b>colle un chiffre sur le hasard</b>. Au lieu d'événements abstraits, on manipule des nombres et leur « profil de répartition ». Trois objets le décrivent — <b>CDF</b> (universelle), <b>PMF</b> (discret), <b>PDF</b> (continu) — et une poignée de lois usuelles couvre presque tout.
+  </div>
+
+  <div class="subhead">2.1 — Variable aléatoire et CDF</div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair</span>
+    Une <b>variable aléatoire</b>, c'est une <b>machine qui transforme un résultat de hasard en nombre</b>. Tu lances 2 dés → la machine « somme » sort un nombre entre 2 et 12. La <b>CDF</b> \(F(x)\) répond à une seule question : « quelle est la proba d'obtenir <b>au plus</b> \(x\) ? ». Elle part de 0 (tout à gauche) et monte jusqu'à 1 (tout à droite), comme un escalier ou une pente qui se remplit.
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag">Fiche · Définition</span>
+    <p>Une <b>v.a.</b> \(X\) est une fonction \(X:\Omega\to\mathbb{R}\). On note \(\{X\le x\}\) l'événement \(\{\omega:X(\omega)\le x\}\) : c'est le pont entre événements (ch.1) et nombres.</p>
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag red">Fiche clé · CDF</span>
+    <h4>L'objet qui marche pour TOUTES les v.a.</h4>
+    <div class="formula">\[ F_X(x)=\mathbb{P}(X\le x) \]</div>
+    <p>Caractérisation (une fonction est une CDF ssi) : <b>croissante</b>, <b>continue à droite</b>, limites <b>0 en \(-\infty\)</b> et <b>1 en \(+\infty\)</b>.</p>
+    <div class="formula">
+      \(\mathbb{P}(a<X\le b)=F(b)-F(a)\), &nbsp; \(\mathbb{P}(X>x)=1-F(x)\), &nbsp; \(\mathbb{P}(X=x)=F(x)-F(x^-)\) (taille du saut).
+    </div>
+  </div>
+
+  <div class="qcm" data-id="c2-q1" data-answer="2">
+    <span class="qcm-tag">QCM 1</span>
+    <p class="qcm-q">Pour une v.a. <b>continue</b>, que vaut \(\mathbb{P}(X=3)\) exactement ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">\(f(3)\)</button>
+      <button type="button" data-letter="B">Ça dépend de la loi</button>
+      <button type="button" data-letter="C">0</button>
+      <button type="button" data-letter="D">1</button>
+    </div>
+    <div class="qcm-fb"><b>C.</b> En continu, un point unique a une probabilité nulle (sa CDF n'a pas de saut). Seuls les intervalles (= des aires) ont une proba &gt; 0.</div>
+  </div>
+
+  <div class="subhead">2.2 — Discret (PMF) vs continu (PDF)</div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair</span>
+    Deux types de hasard. <b>Discret</b> : des valeurs séparées (0,1,2,…), chacune a une « hauteur » = sa proba → c'est la <b>PMF</b>, et la somme des hauteurs fait 1. <b>Continu</b> : un curseur qui peut tomber n'importe où sur une ligne → on n'a plus de hauteurs mais une <b>courbe de densité (PDF)</b>, et la probabilité = l'<b>aire sous la courbe</b>. Une densité peut monter au-dessus de 1 : c'est l'aire totale (=1) qui compte, pas la hauteur.
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag">Fiche · PMF et PDF</span>
+    <div class="table-scroll"><table class="mini-table">
+      <tr><th></th><th>Discret — PMF</th><th>Continu — PDF</th></tr>
+      <tr><td>Objet</td><td>\(f(x)=\mathbb{P}(X=x)\)</td><td>densité \(f(x)\), \(\mathbb{P}(X=x)=0\)</td></tr>
+      <tr><td>Total = 1</td><td>\(\sum_x f(x)=1\)</td><td>\(\int_{-\infty}^{\infty} f=1\)</td></tr>
+      <tr><td>Proba intervalle</td><td>\(\sum_{x\in[a,b]} f(x)\)</td><td>\(\int_a^b f\,dx\)</td></tr>
+      <tr><td>Lien CDF</td><td>\(F=\sum_{t\le x}f\)</td><td>\(F=\int_{-\infty}^x f\), \(f=F'\)</td></tr>
+    </table></div>
+    <div class="warn"><b>Piège n°2 :</b> une densité <b>n'est pas une probabilité</b> (elle peut dépasser 1). Seules les <i>aires</i> sont des probas. C'est ici que les intégrales (module Analyse) servent.</div>
+  </div>
+
+  <div class="qcm" data-id="c2-q2" data-answer="1">
+    <span class="qcm-tag">QCM 2</span>
+    <p class="qcm-q">Une densité \(f(x)\) vaut 2 sur \([0,\tfrac12]\) et 0 ailleurs. Est-ce possible ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">Non, une proba ne dépasse jamais 1</button>
+      <button type="button" data-letter="B">Oui : l'aire vaut \(2\times\tfrac12=1\)</button>
+      <button type="button" data-letter="C">Non, il faut \(f\le1\)</button>
+      <button type="button" data-letter="D">Oui mais seulement si discret</button>
+    </div>
+    <div class="qcm-fb"><b>B.</b> C'est l'Uniforme sur \([0,\tfrac12]\). La hauteur 2 est permise ; ce qui compte c'est l'aire totale = 1.</div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">Exercice corrigé — trouver la constante</span>
+    <p>\(f(x)=c\,x^2\) sur \([0,1]\). Trouve \(c\), puis \(\mathbb{P}(X>\tfrac12)\).</p>
+    <details><summary>Voir la solution</summary>
+      <div class="sol">
+        <p>Normalisation : \(\int_0^1 cx^2dx=\tfrac{c}{3}=1\Rightarrow c=3\).</p>
+        <p>\(\mathbb{P}(X>\tfrac12)=\int_{1/2}^1 3x^2dx=[x^3]_{1/2}^1=1-\tfrac18=\mathbf{7/8}\).</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="subhead">2.3 — Le tableau des lois usuelles</div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair</span>
+    Il n'y a qu'une poignée de « formes » de hasard qui reviennent tout le temps. Au lieu de tout recalculer, tu les <b>reconnais</b> : « je compte des succès sur des essais » → Binomiale ; « je compte des trucs rares par unité de temps » → Poisson ; « j'attends un temps continu » → Exponentielle ; « plein de petits effets additionnés » → Normale. Apprends leur \(\mathbb{E}\) et \(\mathbb{V}\) par cœur, comme des tables de multiplication.
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag red">Fiche clé · Lois discrètes — PAR CŒUR</span>
+    <div class="table-scroll"><table class="mini-table">
+      <tr><th>Loi</th><th>PMF</th><th>\(\mathbb{E}[X]\)</th><th>\(\mathbb{V}(X)\)</th><th>Modélise…</th></tr>
+      <tr><td>Bernoulli\((p)\)</td><td>\(p^x(1-p)^{1-x}\)</td><td>\(p\)</td><td>\(p(1-p)\)</td><td>un pile/face</td></tr>
+      <tr><td>Binomiale\((n,p)\)</td><td>\(\binom{n}{x}p^x(1-p)^{n-x}\)</td><td>\(np\)</td><td>\(np(1-p)\)</td><td>nb succès / \(n\) essais</td></tr>
+      <tr><td>Géométrique\((p)\)</td><td>\(p(1-p)^{x-1}\)</td><td>\(1/p\)</td><td>\(\frac{1-p}{p^2}\)</td><td>essai du 1ᵉʳ succès</td></tr>
+      <tr><td>Poisson\((\lambda)\)</td><td>\(e^{-\lambda}\frac{\lambda^x}{x!}\)</td><td>\(\lambda\)</td><td>\(\lambda\)</td><td>événements rares</td></tr>
+    </table></div>
+    <p class="note">Binomiale = somme de \(n\) Bernoulli indép. Poisson = limite Binomiale (\(n\to\infty,p\to0,np\to\lambda\)). Poisson : moyenne = variance = \(\lambda\) (signature).</p>
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag red">Fiche clé · Lois continues — PAR CŒUR</span>
+    <div class="table-scroll"><table class="mini-table">
+      <tr><th>Loi</th><th>PDF</th><th>\(\mathbb{E}[X]\)</th><th>\(\mathbb{V}(X)\)</th><th>Modélise…</th></tr>
+      <tr><td>Uniforme\((a,b)\)</td><td>\(\frac{1}{b-a}\)</td><td>\(\frac{a+b}{2}\)</td><td>\(\frac{(b-a)^2}{12}\)</td><td>hasard « plat »</td></tr>
+      <tr><td>Normale\((\mu,\sigma^2)\)</td><td>\(\frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(x-\mu)^2}{2\sigma^2}}\)</td><td>\(\mu\)</td><td>\(\sigma^2\)</td><td>tout (TCL)</td></tr>
+      <tr><td>Exponentielle\((\beta)\)</td><td>\(\frac{1}{\beta}e^{-x/\beta}\)</td><td>\(\beta\)</td><td>\(\beta^2\)</td><td>temps d'attente</td></tr>
+    </table></div>
+    <div class="formula"><b>Standardiser :</b> \(Z=\frac{X-\mu}{\sigma}\sim\mathcal{N}(0,1)\), donc \(\mathbb{P}(X\le x)=\Phi\!\big(\frac{x-\mu}{\sigma}\big)\).</div>
+    <p class="warn"><b>Sans mémoire</b> (Exponentielle) : \(\mathbb{P}(X>s+t\mid X>s)=\mathbb{P}(X>t)\). Avoir déjà attendu ne rapproche pas.</p>
+  </div>
+
+  <div class="qcm" data-id="c2-q3" data-answer="2">
+    <span class="qcm-tag">QCM 3</span>
+    <p class="qcm-q">Sur 20 lancers de pièce équilibrée, le nombre de « pile » suit quelle loi ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">Poisson(20)</button>
+      <button type="button" data-letter="B">Géométrique(0,5)</button>
+      <button type="button" data-letter="C">Binomiale(20, 0,5)</button>
+      <button type="button" data-letter="D">Normale(10, 5)</button>
+    </div>
+    <div class="qcm-fb"><b>C.</b> « Nombre de succès sur \(n\) essais indépendants » = Binomiale. Ici \(n=20,p=0{,}5\), donc \(\mathbb{E}=np=10\).</div>
+  </div>
+
+  <div class="qcm" data-id="c2-q4" data-answer="0">
+    <span class="qcm-tag">QCM 4</span>
+    <p class="qcm-q">Un guichet voit en moyenne 5 clients/heure, au hasard. Le nombre de clients sur une heure suit :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">Poisson(5)</button>
+      <button type="button" data-letter="B">Binomiale(5, 1)</button>
+      <button type="button" data-letter="C">Exponentielle(5)</button>
+      <button type="button" data-letter="D">Uniforme(0, 5)</button>
+    </div>
+    <div class="qcm-fb"><b>A.</b> Comptage d'événements rares sur une durée → Poisson(λ=5). (Le <i>temps d'attente</i> entre deux clients, lui, serait Exponentiel.)</div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">Exercice corrigé — reconnaître la loi</span>
+    <p>(a) E-mails reçus en 1 h, moyenne 12. (b) Temps jusqu'au prochain e-mail. (c) Sur 10 e-mails, combien sont du spam si 30 % le sont ?</p>
+    <details><summary>Voir la solution</summary>
+      <div class="sol">
+        <p>(a) <b>Poisson(12)</b> — comptage sur durée. (b) <b>Exponentielle</b> de moyenne \(1/12\) h — attente continue. (c) <b>Binomiale(10 ; 0,3)</b> — succès/essais.</p>
+        <p>Reconnaître la loi depuis l'énoncé est l'épreuve n°1 du chapitre.</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="subhead">2.4 — Couples de variables (jointes, marginales, conditionnelles)</div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair</span>
+    Avec deux variables, imagine un <b>tableau (ou une nappe) de probas</b> sur \((x,y)\) : c'est la <b>jointe</b>. Si tu veux ignorer \(Y\) et ne regarder que \(X\), tu <b>écrases</b> la nappe en sommant/intégrant sur \(y\) → c'est la <b>marginale</b> (comme regarder l'ombre projetée). Et \(X,Y\) sont indépendantes si la nappe se découpe en un simple produit \(f_X(x)\times f_Y(y)\).
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag">Fiche · Lois bivariées</span>
+    <ul>
+      <li><b>Jointe :</b> \(f(x,y)\). Continu : \(\mathbb{P}((X,Y)\in A)=\iint_A f\,dx\,dy\).</li>
+      <li><b>Marginale :</b> \(f_X(x)=\int f(x,y)\,dy\) (on « écrase » \(Y\)).</li>
+      <li><b>Conditionnelle :</b> \(f_{X\mid Y}(x\mid y)=\dfrac{f(x,y)}{f_Y(y)}\).</li>
+      <li><b>Indépendance :</b> \(f(x,y)=f_X(x)f_Y(y)\) pour tous \(x,y\).</li>
+    </ul>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">Exercice corrigé — marginale d'une jointe</span>
+    <p>\(f(x,y)=x+y\) sur \([0,1]^2\). Vérifie que c'est une densité, calcule \(f_X(x)\), dis si \(X\perp Y\).</p>
+    <details><summary>Voir la solution</summary>
+      <div class="sol">
+        <p>Densité ? \(\int_0^1\!\!\int_0^1(x+y)dxdy=\int_0^1(\tfrac12+y)dy=\tfrac12+\tfrac12=1\) ✓.</p>
+        <p>Marginale : \(f_X(x)=\int_0^1(x+y)dy=x+\tfrac12\) ; par symétrie \(f_Y(y)=y+\tfrac12\).</p>
+        <p>\(f_X f_Y=(x+\tfrac12)(y+\tfrac12)\neq x+y\) ⇒ <b>non indépendantes</b>.</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag">Fiche · i.i.d.</span>
+    <p><b>i.i.d.</b> = indépendantes et de même loi. C'est le modèle d'un échantillon (\(n\) tirages dans la même population, sans s'influencer). Toute l'inférence (ch. 5+) repose dessus.</p>
+  </div>
+
+  <div class="subhead">2.5 — Transformations : la loi de Y = g(X)</div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair</span>
+    Tu connais le hasard de \(X\) et tu veux celui de \(Y=g(X)\) (par ex. \(Y=X^2\)). Mauvaise idée : « remplacer » dans la densité. Bonne méthode : passe par la <b>CDF</b>. Demande « quelle est la proba que \(Y\) soit ≤ \(y\) ? », traduis-la en une condition sur \(X\), calcule, <b>puis dérive</b> pour récupérer la densité. C'est mécanique et ça marche toujours.
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag red">Fiche clé · Méthode de la CDF</span>
+    <ol>
+      <li>\(F_Y(y)=\mathbb{P}(Y\le y)=\mathbb{P}(g(X)\le y)\).</li>
+      <li>Résous en \(X\) (attention au sens si \(g\) décroît ; deux branches si \(g\) non monotone, ex. \(X^2\)).</li>
+      <li>Exprime via \(F_X\), puis dérive : \(f_Y(y)=F_Y'(y)\).</li>
+    </ol>
+    <div class="formula"><b>Cas monotone :</b> \(f_Y(y)=f_X(g^{-1}(y))\,\big|\tfrac{d}{dy}g^{-1}(y)\big|\) (le \(|\cdot|\) = jacobien, garde la densité positive).</div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">Exercice corrigé — Y = X²</span>
+    <p>\(X\sim\mathcal{U}(0,1)\). Densité de \(Y=X^2\) ?</p>
+    <details><summary>Voir la solution</summary>
+      <div class="sol">
+        <p>Pour \(y\in(0,1)\) : \(F_Y(y)=\mathbb{P}(X\le\sqrt y)=\sqrt y\) (car \(F_X(x)=x\)).</p>
+        <p>Dérive : \(f_Y(y)=\dfrac{1}{2\sqrt y}\) sur \((0,1)\). (Dépasse 1 près de 0 : normal, ce n'est pas une proba.)</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="qcm" data-id="c2-q5" data-answer="1">
+    <span class="qcm-tag">QCM 5</span>
+    <p class="qcm-q">Pour trouver la loi de \(Y=g(X)\), la méthode universelle consiste à :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">Remplacer \(x\) par \(g(x)\) dans la densité de \(X\)</button>
+      <button type="button" data-letter="B">Calculer \(F_Y(y)=\mathbb{P}(g(X)\le y)\) puis dériver</button>
+      <button type="button" data-letter="C">Faire \(\mathbb{E}[g(X)]\)</button>
+      <button type="button" data-letter="D">Standardiser \(X\)</button>
+    </div>
+    <div class="qcm-fb"><b>B.</b> Toujours passer par la CDF, puis dériver. Remplacer naïvement dans la densité oublie le jacobien et donne un résultat faux.</div>
+  </div>
+
+  <div class="subhead">2.6 — Approfondissements (niveau Master)</div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair</span>
+    Trois idées qui reviennent tout le temps. (1) La CDF répond « quelle proba d'être <b>sous</b> \(x\) ? » ; la <b>fonction quantile</b> fait l'inverse : « quelle valeur laisse \(p\%\) en dessous ? » (c'est la médiane, les quartiles, les seuils de test). (2) Avec cette inverse, on peut <b>fabriquer n'importe quel hasard à partir d'un simple Uniforme</b> — c'est comme ça que l'ordinateur simule. (3) Quand on <b>additionne</b> des variables indépendantes, certaines lois « restent dans la famille » (Normale + Normale = Normale).
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag red">Fiche clé · Quantiles &amp; transformation inverse</span>
+    <h4>La CDF à l'envers</h4>
+    <div class="formula">
+      <b>Fonction quantile :</b> \(F^{-1}(p)=\inf\{x:\,F(x)\ge p\}\), \(p\in(0,1)\).
+      Médiane \(=F^{-1}(0{,}5)\) ; quartiles \(F^{-1}(0{,}25),F^{-1}(0{,}75)\).
+    </div>
+    <div class="formula">
+      <b>Transformation intégrale de probabilité (PIT) :</b> si \(X\) est continue de CDF \(F\), alors
+      \[ U=F(X)\sim\mathcal{U}(0,1)\qquad\text{et inversement}\qquad F^{-1}(U)\sim X. \]
+    </div>
+    <p>Conséquence pratique : pour <b>simuler</b> une loi, on tire \(U\sim\mathcal{U}(0,1)\) et on applique \(F^{-1}\). Ex. Exponentielle : \(F(x)=1-e^{-x/\beta}\Rightarrow F^{-1}(u)=-\beta\ln(1-u)\). C'est la base des générateurs aléatoires et des p-values (sous \(H_0\), une p-value est \(\mathcal{U}(0,1)\)).</p>
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag">Fiche · Le bestiaire complet des lois</span>
+    <h4>Les lois en plus, et à quoi elles servent</h4>
+    <div class="table-scroll"><table class="mini-table">
+      <tr><th>Loi</th><th>Type</th><th>Modélise / rôle</th></tr>
+      <tr><td>Hypergéométrique</td><td>discret</td><td>tirages <b>sans remise</b> (Binomiale = avec remise)</td></tr>
+      <tr><td>Binomiale négative</td><td>discret</td><td>nb d'essais jusqu'au \(r\)-ième succès (généralise Géométrique)</td></tr>
+      <tr><td>Multinomiale</td><td>discret</td><td>Binomiale à plus de 2 catégories</td></tr>
+      <tr><td>Gamma\((\alpha,\beta)\)</td><td>continu</td><td>somme de \(\alpha\) Exponentielles ; temps d'attente cumulé</td></tr>
+      <tr><td>Beta\((\alpha,\beta)\)</td><td>continu</td><td>v.a. sur \([0,1]\) ; <b>loi des proportions</b>, prior bayésien</td></tr>
+      <tr><td>Chi²\((k)\)</td><td>continu</td><td>somme de \(k\) carrés de \(\mathcal{N}(0,1)\) ; tests</td></tr>
+      <tr><td>Student \(t_k\)</td><td>continu</td><td>moyenne à variance inconnue ; queues épaisses</td></tr>
+      <tr><td>Cauchy</td><td>continu</td><td>queues si lourdes que \(\mathbb{E}[X]\) <b>n'existe pas</b> !</td></tr>
+    </table></div>
+    <p class="note">À retenir surtout : Gamma/Beta/Chi²/Student structurent toute l'inférence (ch. 6+). La Cauchy est le contre-exemple culte « une loi peut ne pas avoir d'espérance ».</p>
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag red">Fiche clé · Somme de variables indépendantes</span>
+    <h4>Convolution &amp; lois stables</h4>
+    <p>Si \(X\perp Y\), la densité de \(Z=X+Y\) est la <b>convolution</b> : \(f_Z(z)=\int f_X(x)\,f_Y(z-x)\,dx\). Heureusement, certaines familles sont <b>stables par addition</b> (résultat à connaître par cœur) :</p>
+    <div class="table-scroll"><table class="mini-table">
+      <tr><th>Si indépendantes…</th><th>… la somme est</th></tr>
+      <tr><td>\(n\times\) Bernoulli\((p)\)</td><td>Binomiale\((n,p)\)</td></tr>
+      <tr><td>Binomiale\((n,p)+\)Binomiale\((m,p)\)</td><td>Binomiale\((n+m,p)\)</td></tr>
+      <tr><td>Poisson\((\lambda_1)+\)Poisson\((\lambda_2)\)</td><td>Poisson\((\lambda_1+\lambda_2)\)</td></tr>
+      <tr><td>\(\mathcal{N}(\mu_1,\sigma_1^2)+\mathcal{N}(\mu_2,\sigma_2^2)\)</td><td>\(\mathcal{N}(\mu_1+\mu_2,\;\sigma_1^2+\sigma_2^2)\)</td></tr>
+      <tr><td>\(n\times\)Exponentielle\((\beta)\)</td><td>Gamma\((n,\beta)\)</td></tr>
+    </table></div>
+    <p>Le moyen le plus rapide de le prouver : les <b>MGF se multiplient</b> (ch. 3). Pour les Normales, moyennes et variances s'additionnent — d'où \(\mathbb{V}(\bar X_n)=\sigma^2/n\).</p>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">Exercice corrigé — simuler par l'inverse</span>
+    <p>Comment générer une Exponentielle de moyenne \(\beta=2\) à partir d'un \(U\sim\mathcal{U}(0,1)\) ?</p>
+    <details><summary>Voir la solution</summary>
+      <div class="sol">
+        <p>CDF : \(F(x)=1-e^{-x/2}\). On résout \(F(X)=U\) : \(1-e^{-X/2}=U\Rightarrow X=-2\ln(1-U)\).</p>
+        <p>Comme \(1-U\) est aussi \(\mathcal{U}(0,1)\), on écrit souvent \(X=-2\ln U\). Tirer \(U\), appliquer la formule : on obtient une Exponentielle.</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="qcm" data-id="c2-q6" data-answer="2">
+    <span class="qcm-tag">QCM 6</span>
+    <p class="qcm-q">\(X\sim\)Poisson(3) et \(Y\sim\)Poisson(5), indépendantes. Loi de \(X+Y\) ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">Poisson(15)</button>
+      <button type="button" data-letter="B">Normale(8, 8)</button>
+      <button type="button" data-letter="C">Poisson(8)</button>
+      <button type="button" data-letter="D">Binomiale(8, 0,5)</button>
+    </div>
+    <div class="qcm-fb"><b>C.</b> Les Poisson indépendantes s'additionnent en Poisson : les \(\lambda\) s'ajoutent, \(3+5=8\).</div>
+  </div>
+
+  <div class="qcm" data-id="c2-q7" data-answer="0">
+    <span class="qcm-tag">QCM 7</span>
+    <p class="qcm-q">\(X\) continue de CDF \(F\). Quelle est la loi de \(U=F(X)\) ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">Uniforme(0,1)</button>
+      <button type="button" data-letter="B">Normale(0,1)</button>
+      <button type="button" data-letter="C">Exponentielle(1)</button>
+      <button type="button" data-letter="D">La même que \(X\)</button>
+    </div>
+    <div class="qcm-fb"><b>A.</b> Transformation intégrale de probabilité : appliquer sa propre CDF « aplatit » toute loi continue en \(\mathcal{U}(0,1)\).</div>
+  </div>
+
+  <div class="qcm" data-id="c2-q8" data-answer="3">
+    <span class="qcm-tag">QCM 8</span>
+    <p class="qcm-q">Quelle loi sert à modéliser un tirage <b>sans remise</b> (vs Binomiale = avec remise) ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">Géométrique</button>
+      <button type="button" data-letter="B">Poisson</button>
+      <button type="button" data-letter="C">Beta</button>
+      <button type="button" data-letter="D">Hypergéométrique</button>
+    </div>
+    <div class="qcm-fb"><b>D.</b> Hypergéométrique = tirages sans remise (ex. cartes, contrôle qualité sur un lot fini).</div>
+  </div>
+
+  <div class="qcm" data-id="c2-q9" data-answer="1">
+    <span class="qcm-tag">QCM 9</span>
+    <p class="qcm-q">Quelle loi célèbre n'a <b>pas d'espérance</b> (l'intégrale diverge) ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">Normale</button>
+      <button type="button" data-letter="B">Cauchy</button>
+      <button type="button" data-letter="C">Exponentielle</button>
+      <button type="button" data-letter="D">Uniforme</button>
+    </div>
+    <div class="qcm-fb"><b>B.</b> La Cauchy a des queues si lourdes que \(\int x f(x)dx\) ne converge pas : \(\mathbb{E}[X]\) n'existe pas. Contre-exemple à garder en tête.</div>
+  </div>
+
+  <div class="exam-box">
+    <ul>
+      <li>Une <b>densité n'est pas une probabilité</b> — seules les aires comptent.</li>
+      <li><b>Reconnaître la loi</b> : comptage→Poisson, succès/essais→Binomiale, attente continue→Exponentielle.</li>
+      <li>Le <b>tableau des lois</b> (E et V) doit sortir de tête. Refais-le chaque semaine sur feuille blanche.</li>
+      <li>Loi de \(g(X)\) → <b>méthode de la CDF</b>. Normale → standardiser \(Z=(X-\mu)/\sigma\).</li>
+    </ul>
+  </div>
+
+  <div class="check-title">À valider — Chapitre 2</div>
+  <div class="check"><input type="checkbox" id="c2a"><label for="c2a">v.a., CDF : définition + 3 propriétés ; sauts ⇒ \(\mathbb{P}(X=x)\)</label></div>
+  <div class="check"><input type="checkbox" id="c2b"><label for="c2b">PMF vs PDF ; pourquoi une densité peut dépasser 1</label></div>
+  <div class="check"><input type="checkbox" id="c2c"><label for="c2c">Lois discrètes : Bernoulli, Binomiale, Géométrique, Poisson (E, V de tête)</label></div>
+  <div class="check"><input type="checkbox" id="c2d"><label for="c2d">Lois continues : Uniforme, Normale (+ standardisation), Exponentielle</label></div>
+  <div class="check"><input type="checkbox" id="c2e"><label for="c2e">Jointes, marginales, conditionnelles ; intégrer une jointe</label></div>
+  <div class="check"><input type="checkbox" id="c2f"><label for="c2f">Indépendance de v.a. (factorisation) ; notion i.i.d.</label></div>
+  <div class="check"><input type="checkbox" id="c2g"><label for="c2g">Transformations \(Y=g(X)\) par la méthode de la CDF</label></div>
+  <div class="check"><input type="checkbox" id="c2j"><label for="c2j">Fonction quantile, médiane ; transformation inverse (PIT) pour simuler</label></div>
+  <div class="check"><input type="checkbox" id="c2k"><label for="c2k">Bestiaire (Gamma, Beta, Chi², Student, Cauchy) ; sommes &amp; lois stables</label></div>
+  <div class="check"><input type="checkbox" id="c2h"><label for="c2h">Le tableau des lois refait de tête, 3 semaines de suite</label></div>
+  <div class="check"><input type="checkbox" id="c2i"><label for="c2i">≥ 10 exercices du chapitre 2 de Wasserman</label></div>
+</section>
+
+<!-- ============================================================ -->
+<!-- CHAPITRE 3 -->
+<!-- ============================================================ -->
+<section class="module" id="ch3" data-module="ch3">
+  <div class="mod-head">
+    <span class="mod-num">3</span>
+    <div>
+      <h2>Expectation</h2>
+      <div class="mod-meta">Espérance, variance, covariance, <b>espérance conditionnelle</b>, MGF</div>
+    </div>
+  </div>
+  <div class="mod-bar"><div class="mod-fill"></div></div>
+
+  <div class="idea">
+    <span class="idea-tag">L'idée du chapitre</span>
+    On ne garde plus toute la loi, juste des <b>résumés</b> : le centre (<b>espérance</b>), la dispersion (<b>variance</b>), le lien entre deux variables (<b>covariance</b>). La star : la <b>linéarité de l'espérance</b>, qui marche toujours, même sans indépendance.
+  </div>
+
+  <div class="subhead">3.1 — Espérance</div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair</span>
+    L'<b>espérance</b>, c'est la <b>moyenne que tu obtiendrais en répétant le jeu un million de fois</b>. C'est le point d'équilibre de la loi (si tu posais les probas comme des poids sur une règle, l'espérance est l'endroit où elle tient en équilibre). Super-pouvoir : pour une <b>somme</b>, l'espérance du total = somme des espérances, <b>toujours</b>, même si les variables sont liées.
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag red">Fiche clé · Espérance</span>
+    <div class="formula">
+      \[ \mathbb{E}[X]=\sum_x x\,f(x)\ \ (\text{discret})\qquad =\int x\,f(x)\,dx\ \ (\text{continu}) \]
+    </div>
+    <div class="formula"><b>LOTUS</b> (pas besoin de la loi de \(g(X)\)) : \(\mathbb{E}[g(X)]=\sum_x g(x)f(x)\) ou \(\int g(x)f(x)dx\).</div>
+    <div class="formula"><b>Linéarité</b> (SANS indépendance requise) : \(\mathbb{E}\big[\sum_i a_iX_i+b\big]=\sum_i a_i\mathbb{E}[X_i]+b\).</div>
+  </div>
+
+  <div class="qcm" data-id="c3-q1" data-answer="1">
+    <span class="qcm-tag">QCM 1</span>
+    <p class="qcm-q">\(\mathbb{E}[X]=2\), \(\mathbb{E}[Y]=5\). Que vaut \(\mathbb{E}[3X+2Y]\) ? (X et Y peuvent être liées)</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">On ne peut pas savoir sans l'indépendance</button>
+      <button type="button" data-letter="B">16</button>
+      <button type="button" data-letter="C">7</button>
+      <button type="button" data-letter="D">10</button>
+    </div>
+    <div class="qcm-fb"><b>B.</b> \(3\cdot2+2\cdot5=16\). La linéarité de l'espérance <i>ne demande jamais</i> l'indépendance — c'est sa force.</div>
+  </div>
+
+  <div class="subhead">3.2 — Variance et écart-type</div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair</span>
+    La <b>variance</b> mesure à quel point les résultats <b>s'éparpillent</b> autour de la moyenne. Petite variance = tout est serré près du centre ; grande variance = ça part dans tous les sens. L'écart-type \(\sigma\), c'est la variance « remise à l'échelle » (sa racine) pour parler dans la même unité que \(X\). Deux réflexes : déplacer tout le monde (\(+b\)) ne change pas l'éparpillement ; multiplier par \(a\) multiplie la variance par \(a^2\).
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag red">Fiche clé · Variance</span>
+    <div class="formula">\[ \mathbb{V}(X)=\mathbb{E}[(X-\mu)^2]=\underbrace{\mathbb{E}[X^2]-(\mathbb{E}[X])^2}_{\text{formule de calcul}}\qquad \sigma=\sqrt{\mathbb{V}(X)} \]</div>
+    <div class="formula"><b>Règles :</b> \(\mathbb{V}(aX+b)=a^2\mathbb{V}(X)\) ; si \(X\perp Y\) : \(\mathbb{V}(X+Y)=\mathbb{V}(X)+\mathbb{V}(Y)\).</div>
+    <div class="warn"><b>Attention :</b> le \(b\) <b>disparaît</b>, le \(a\) sort <b>au carré</b>. L'additivité des variances exige l'indépendance (ou Cov nulle) — contrairement à l'espérance.</div>
+  </div>
+
+  <div class="qcm" data-id="c3-q2" data-answer="2">
+    <span class="qcm-tag">QCM 2</span>
+    <p class="qcm-q">\(\mathbb{V}(X)=4\). Que vaut \(\mathbb{V}(3X+10)\) ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">22</button>
+      <button type="button" data-letter="B">12</button>
+      <button type="button" data-letter="C">36</button>
+      <button type="button" data-letter="D">46</button>
+    </div>
+    <div class="qcm-fb"><b>C.</b> \(3^2\cdot4=36\). Le \(+10\) translate sans disperser → il disparaît ; le 3 sort au carré.</div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">Exemple corrigé — somme de deux dés (linéarité)</span>
+    <p>Deux dés équilibrés, \(S\)=somme. Calcule \(\mathbb{E}[S]\) et \(\mathbb{V}(S)\) <i>sans</i> écrire la loi de \(S\).</p>
+    <details><summary>Voir la solution</summary>
+      <div class="sol">
+        <p>Un dé : \(\mathbb{E}[X]=3{,}5\), \(\mathbb{E}[X^2]=\tfrac{91}{6}\), \(\mathbb{V}(X)=\tfrac{91}{6}-3{,}5^2=\tfrac{35}{12}\).</p>
+        <p>\(\mathbb{E}[S]=3{,}5+3{,}5=\mathbf{7}\). Dés indépendants : \(\mathbb{V}(S)=\tfrac{35}{12}+\tfrac{35}{12}=\tfrac{35}{6}\approx\mathbf{5{,}83}\).</p>
+        <p>Zéro énumération des 36 cas.</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="subhead">3.3 — Covariance et corrélation</div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair</span>
+    La <b>covariance</b> dit si deux variables <b>montent ensemble</b> (taille et poids : +) ou en sens inverse (altitude et température : −). La <b>corrélation</b>, c'est la covariance « normalisée » entre −1 et +1, plus facile à lire. Piège mortel : une covariance nulle veut juste dire « pas de lien <b>droit</b> (linéaire) » — il peut très bien y avoir un lien en courbe.
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag">Fiche · Co-variation</span>
+    <div class="formula">\[ \text{Cov}(X,Y)=\mathbb{E}[XY]-\mathbb{E}[X]\mathbb{E}[Y]\qquad \rho=\frac{\text{Cov}(X,Y)}{\sigma_X\sigma_Y}\in[-1,1] \]</div>
+    <ul>
+      <li>\(X\perp Y\Rightarrow\text{Cov}=0\), <b>mais la réciproque est fausse</b>.</li>
+      <li>\(\mathbb{V}(X+Y)=\mathbb{V}(X)+\mathbb{V}(Y)+2\,\text{Cov}(X,Y)\).</li>
+      <li>Bilinéarité : \(\text{Cov}(aX+b,cY+d)=ac\,\text{Cov}(X,Y)\).</li>
+    </ul>
+    <div class="warn"><b>Contre-exemple culte :</b> \(X\) symétrique, \(Y=X^2\). \(\text{Cov}=0\) mais \(Y\) est entièrement déterminée par \(X\). Dépendance totale, covariance nulle.</div>
+  </div>
+
+  <div class="qcm" data-id="c3-q3" data-answer="3">
+    <span class="qcm-tag">QCM 3</span>
+    <p class="qcm-q">\(\text{Cov}(X,Y)=0\). Que peut-on conclure ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">\(X\) et \(Y\) sont indépendantes</button>
+      <button type="button" data-letter="B">\(X=Y\)</button>
+      <button type="button" data-letter="C">\(\mathbb{V}(X+Y)=0\)</button>
+      <button type="button" data-letter="D">Pas de lien linéaire, mais peut-être un lien non linéaire</button>
+    </div>
+    <div class="qcm-fb"><b>D.</b> Cov = 0 n'implique <i>pas</i> l'indépendance. La covariance ne voit que le linéaire (cf. \(Y=X^2\)).</div>
+  </div>
+
+  <div class="subhead">3.4 — Espérance conditionnelle</div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair</span>
+    \(\mathbb{E}[X\mid Y=y]\), c'est <b>la moyenne de \(X\) seulement parmi les cas où \(Y=y\)</b>. Comme « la taille moyenne, mais seulement chez les 10 ans ». La <b>loi de la tour</b> dit un truc rassurant : si tu fais la moyenne de toutes ces moyennes-par-groupe (pondérée par la taille des groupes), tu retombes sur la moyenne globale. Moyenner par paquets puis moyenner les paquets = moyenne tout court.
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag red">Fiche clé · Espérance conditionnelle &amp; tour</span>
+    <p>\(\mathbb{E}[X\mid Y]\) est une <b>variable aléatoire</b> (fonction de \(Y\)).</p>
+    <div class="formula"><b>Loi de la tour :</b> \(\mathbb{E}\big[\mathbb{E}[X\mid Y]\big]=\mathbb{E}[X]\).</div>
+    <div class="formula"><b>Variance totale :</b> \(\mathbb{V}(X)=\mathbb{E}\big[\mathbb{V}(X\mid Y)\big]+\mathbb{V}\big(\mathbb{E}[X\mid Y]\big)\) — « variabilité intra + variabilité inter ».</div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">Exercice corrigé — espérance itérée (Wald)</span>
+    <p>\(N\sim\)Poisson\((\lambda)\) clients ; chacun dépense en moyenne \(\mu\) (indép.). Espérance du total \(S=\sum_{i=1}^N X_i\) ?</p>
+    <details><summary>Voir la solution</summary>
+      <div class="sol">
+        <p>\(\mathbb{E}[S\mid N=n]=n\mu\) ⇒ \(\mathbb{E}[S\mid N]=\mu N\).</p>
+        <p>Tour : \(\mathbb{E}[S]=\mathbb{E}[\mu N]=\mu\lambda\). (Identité de Wald : \(\mathbb{E}[S]=\mathbb{E}[N]\mathbb{E}[X]\).)</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="qcm" data-id="c3-q4" data-answer="0">
+    <span class="qcm-tag">QCM 4</span>
+    <p class="qcm-q">Que vaut \(\mathbb{E}\big[\mathbb{E}[X\mid Y]\big]\) ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">\(\mathbb{E}[X]\)</button>
+      <button type="button" data-letter="B">\(\mathbb{E}[Y]\)</button>
+      <button type="button" data-letter="C">\(\mathbb{E}[XY]\)</button>
+      <button type="button" data-letter="D">0</button>
+    </div>
+    <div class="qcm-fb"><b>A.</b> Loi de la tour : moyenner les moyennes-par-groupe redonne la moyenne globale \(\mathbb{E}[X]\).</div>
+  </div>
+
+  <div class="subhead">3.5 — Fonctions génératrices des moments (MGF)</div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair</span>
+    La <b>MGF</b> est une « machine à fabriquer les moments » (\(\mathbb{E}[X]\), \(\mathbb{E}[X^2]\)…). Tu la dérives \(k\) fois, tu évalues en 0, et hop, tu obtiens le \(k\)-ième moment. Bonus : deux lois avec la même MGF sont <b>la même loi</b> (c'est une empreinte digitale), et pour une <b>somme de variables indépendantes</b>, les MGF se <b>multiplient</b>.
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag">Fiche · MGF</span>
+    <div class="formula">\[ M_X(t)=\mathbb{E}[e^{tX}] \]</div>
+    <ul>
+      <li>\(M_X^{(k)}(0)=\mathbb{E}[X^k]\).</li>
+      <li>Même MGF ⇒ même loi (empreinte).</li>
+      <li>\(X\perp Y\Rightarrow M_{X+Y}(t)=M_X(t)M_Y(t)\).</li>
+    </ul>
+  </div>
+
+  <div class="subhead">3.6 — Approfondissements (niveau Master)</div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair</span>
+    Quatre choses pour passer du « calcul de moyenne » à la vraie boîte à outils du data scientist. (1) Pour des variables <b>indépendantes</b>, la moyenne d'un produit = produit des moyennes. (2) Au-delà du centre et de l'éparpillement, on regarde si la loi <b>penche</b> (asymétrie) ou a des <b>queues épaisses</b> (aplatissement). (3) Avec plusieurs variables, on range toutes les covariances dans une <b>matrice</b> — c'est elle qui relie proba et algèbre linéaire (PCA !). (4) La <b>moyenne d'un échantillon</b> a elle-même une moyenne et une variance : c'est le germe de toute l'inférence.
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag">Fiche · Produit sous indépendance</span>
+    <h4>Pourquoi indépendance ⇒ Cov = 0</h4>
+    <div class="formula">
+      \[ X\perp Y\;\Longrightarrow\;\mathbb{E}[XY]=\mathbb{E}[X]\,\mathbb{E}[Y]\;\Longrightarrow\;\text{Cov}(X,Y)=0 \]
+    </div>
+    <p><b>Démo (continu) :</b> si \(f(x,y)=f_X(x)f_Y(y)\), alors \(\mathbb{E}[XY]=\iint xy\,f_X(x)f_Y(y)\,dx\,dy=\big(\int x f_X\big)\big(\int y f_Y\big)=\mathbb{E}[X]\mathbb{E}[Y]\). L'intégrale double se <b>sépare</b> en produit. La réciproque est fausse (cf. \(Y=X^2\)).</p>
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag">Fiche · Moments supérieurs</span>
+    <h4>Asymétrie (skewness) &amp; aplatissement (kurtosis)</h4>
+    <p>Le \(k\)-ième moment centré est \(\mu_k=\mathbb{E}[(X-\mu)^k]\). Les deux qui comptent en pratique :</p>
+    <div class="formula">
+      <b>Asymétrie :</b> \(\;\gamma_1=\dfrac{\mathbb{E}[(X-\mu)^3]}{\sigma^3}\) &nbsp;— signe = côté de la « traîne ».<br>
+      <b>Aplatissement :</b> \(\;\gamma_2=\dfrac{\mathbb{E}[(X-\mu)^4]}{\sigma^4}\) &nbsp;— vaut 3 pour la Normale ; \(>3\) = queues épaisses.
+    </div>
+    <p class="note">\(\gamma_1>0\) : traîne à droite (revenus, durées). Queues épaisses (\(\gamma_2>3\)) = risque d'événements extrêmes sous-estimé si on suppose la Normale — leçon-clé en finance et en gestion du risque.</p>
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag red">Fiche clé · Vecteurs aléatoires &amp; matrice de covariance</span>
+    <h4>Le pont avec l'algèbre linéaire</h4>
+    <p>Pour un vecteur \(\mathbf{X}=(X_1,\dots,X_d)\), on range toutes les covariances dans la matrice \(\Sigma\) :</p>
+    <div class="formula">
+      \[ \Sigma_{ij}=\text{Cov}(X_i,X_j),\qquad \Sigma=\mathbb{E}\big[(\mathbf{X}-\boldsymbol\mu)(\mathbf{X}-\boldsymbol\mu)^{\mathsf T}\big]. \]
+    </div>
+    <ul>
+      <li>\(\Sigma\) est <b>symétrique</b> et <b>semi-définie positive</b> (diagonale = variances).</li>
+      <li>Combinaison linéaire \(a^{\mathsf T}\mathbf{X}\) : \(\;\mathbb{V}(a^{\mathsf T}\mathbf{X})=a^{\mathsf T}\Sigma\,a\ge0\).</li>
+      <li>Ses <b>vecteurs propres</b> = axes principaux ⇒ c'est exactement la <b>PCA</b> (module Algèbre linéaire).</li>
+    </ul>
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag red">Fiche clé · Moyenne &amp; variance empiriques</span>
+    <h4>Le germe de l'inférence (ch. 5+)</h4>
+    <p>Pour \(X_1,\dots,X_n\) i.i.d. de moyenne \(\mu\), variance \(\sigma^2\) :</p>
+    <div class="formula">
+      \[ \bar X_n=\frac1n\sum_i X_i,\qquad \mathbb{E}[\bar X_n]=\mu,\qquad \mathbb{V}(\bar X_n)=\frac{\sigma^2}{n}. \]
+    </div>
+    <p>La moyenne empirique est <b>sans biais</b> (\(\mathbb{E}[\bar X_n]=\mu\)) et de plus en plus précise (\(\sigma^2/n\to0\)). Pour estimer \(\sigma^2\), on divise par \(n-1\) et non \(n\) :</p>
+    <div class="formula">
+      \[ S^2=\frac{1}{n-1}\sum_i (X_i-\bar X_n)^2,\qquad \mathbb{E}[S^2]=\sigma^2. \]
+    </div>
+    <p class="note">Le « \(n-1\) » (correction de Bessel) compense le fait qu'on a déjà « dépensé » une information en estimant \(\mu\) par \(\bar X_n\). Sans lui, on sous-estime \(\sigma^2\).</p>
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag">Fiche · MGF des lois usuelles</span>
+    <h4>À reconnaître, et à dériver pour retrouver E et V</h4>
+    <div class="table-scroll"><table class="mini-table">
+      <tr><th>Loi</th><th>\(M_X(t)=\mathbb{E}[e^{tX}]\)</th></tr>
+      <tr><td>Bernoulli\((p)\)</td><td>\(1-p+pe^{t}\)</td></tr>
+      <tr><td>Binomiale\((n,p)\)</td><td>\((1-p+pe^{t})^{n}\)</td></tr>
+      <tr><td>Poisson\((\lambda)\)</td><td>\(\exp\!\big(\lambda(e^{t}-1)\big)\)</td></tr>
+      <tr><td>Normale\((\mu,\sigma^2)\)</td><td>\(\exp\!\big(\mu t+\tfrac12\sigma^2t^2\big)\)</td></tr>
+      <tr><td>Exponentielle\((\beta)\)</td><td>\((1-\beta t)^{-1}\), \(t<1/\beta\)</td></tr>
+    </table></div>
+    <p>Vérifie que la Binomiale = (MGF Bernoulli)\(^n\) : c'est la preuve « somme de \(n\) Bernoulli » en une ligne. Et \(M'(0)=\mathbb{E}[X]\) : pour la Poisson, \(M'(t)=\lambda e^t M(t)\Rightarrow M'(0)=\lambda\). ✓</p>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">Exercice corrigé — variance d'une moyenne</span>
+    <p>On mesure 100 fois (i.i.d.) une grandeur d'écart-type \(\sigma=20\). Quel est l'écart-type de la moyenne \(\bar X_{100}\) ?</p>
+    <details><summary>Voir la solution</summary>
+      <div class="sol">
+        <p>\(\mathbb{V}(\bar X_n)=\sigma^2/n=400/100=4\Rightarrow\) écart-type \(=\sqrt4=\mathbf{2}\).</p>
+        <p>Moyenner divise l'écart-type par \(\sqrt n\) (ici \(\sqrt{100}=10\) : de 20 à 2). C'est la « racine de \(n\) » omniprésente en stats.</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="qcm" data-id="c3-q5" data-answer="1">
+    <span class="qcm-tag">QCM 5</span>
+    <p class="qcm-q">\(X\perp Y\), \(\mathbb{E}[X]=3\), \(\mathbb{E}[Y]=4\). Que vaut \(\mathbb{E}[XY]\) ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">7</button>
+      <button type="button" data-letter="B">12</button>
+      <button type="button" data-letter="C">On ne peut pas savoir</button>
+      <button type="button" data-letter="D">0</button>
+    </div>
+    <div class="qcm-fb"><b>B.</b> Indépendance ⇒ \(\mathbb{E}[XY]=\mathbb{E}[X]\mathbb{E}[Y]=12\). (Sans indépendance, on ne pourrait pas conclure.)</div>
+  </div>
+
+  <div class="qcm" data-id="c3-q6" data-answer="2">
+    <span class="qcm-tag">QCM 6</span>
+    <p class="qcm-q">\(\sigma=30\), on prend la moyenne de \(n=9\) mesures i.i.d. Écart-type de \(\bar X\) ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">30</button>
+      <button type="button" data-letter="B">3,33</button>
+      <button type="button" data-letter="C">10</button>
+      <button type="button" data-letter="D">900</button>
+    </div>
+    <div class="qcm-fb"><b>C.</b> Écart-type de la moyenne \(=\sigma/\sqrt n=30/3=10\). On divise par \(\sqrt n\), pas par \(n\).</div>
+  </div>
+
+  <div class="qcm" data-id="c3-q7" data-answer="0">
+    <span class="qcm-tag">QCM 7</span>
+    <p class="qcm-q">Pourquoi la variance empirique \(S^2\) divise-t-elle par \(n-1\) plutôt que \(n\) ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">Pour être sans biais (corriger l'estimation de \(\mu\) par \(\bar X\))</button>
+      <button type="button" data-letter="B">Pour que \(S^2\) soit toujours entier</button>
+      <button type="button" data-letter="C">Par convention historique sans raison</button>
+      <button type="button" data-letter="D">Pour que \(S^2\le\sigma^2\)</button>
+    </div>
+    <div class="qcm-fb"><b>A.</b> Correction de Bessel : on a déjà « consommé » un degré de liberté en estimant la moyenne, donc on divise par \(n-1\) pour que \(\mathbb{E}[S^2]=\sigma^2\).</div>
+  </div>
+
+  <div class="qcm" data-id="c3-q8" data-answer="3">
+    <span class="qcm-tag">QCM 8</span>
+    <p class="qcm-q">La matrice de covariance \(\Sigma\) est toujours :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">Diagonale</button>
+      <button type="button" data-letter="B">Inversible</button>
+      <button type="button" data-letter="C">À coefficients positifs</button>
+      <button type="button" data-letter="D">Symétrique et semi-définie positive</button>
+    </div>
+    <div class="qcm-fb"><b>D.</b> \(\Sigma\) est symétrique (Cov\((X_i,X_j)=\)Cov\((X_j,X_i)\)) et SDP (\(a^{\mathsf T}\Sigma a=\mathbb{V}(a^{\mathsf T}X)\ge0\)). Ses covariances peuvent être négatives, et elle n'est pas toujours inversible.</div>
+  </div>
+
+  <div class="exam-box">
+    <ul>
+      <li><b>Linéarité de \(\mathbb{E}\)</b> : toujours. <b>Additivité de \(\mathbb{V}\)</b> : seulement si indépendance/Cov nulle.</li>
+      <li>\(\mathbb{V}(aX+b)=a^2\mathbb{V}(X)\) — le \(b\) saute, le \(a\) au carré.</li>
+      <li><b>Cov = 0 ⇏ indépendance</b> (contre-exemple \(Y=X^2\)).</li>
+      <li>« Moyenner par paquets » → loi de la tour \(\mathbb{E}[\mathbb{E}[X\mid Y]]=\mathbb{E}[X]\).</li>
+    </ul>
+  </div>
+
+  <div class="check-title">À valider — Chapitre 3</div>
+  <div class="check"><input type="checkbox" id="c3a"><label for="c3a">Espérance, LOTUS, linéarité (sans indépendance)</label></div>
+  <div class="check"><input type="checkbox" id="c3b"><label for="c3b">Variance : les deux formules, règles \(aX+b\)</label></div>
+  <div class="check"><input type="checkbox" id="c3c"><label for="c3c">Covariance, corrélation, piège Cov=0 ⇏ indépendance</label></div>
+  <div class="check"><input type="checkbox" id="c3d"><label for="c3d">Espérance conditionnelle + tour + variance totale</label></div>
+  <div class="check"><input type="checkbox" id="c3e"><label for="c3e">MGF : définition, génération des moments, produit pour les sommes (+ MGF usuelles)</label></div>
+  <div class="check"><input type="checkbox" id="c3g"><label for="c3g">Indépendance ⇒ \(\mathbb{E}[XY]=\mathbb{E}[X]\mathbb{E}[Y]\) ; asymétrie &amp; aplatissement</label></div>
+  <div class="check"><input type="checkbox" id="c3h"><label for="c3h">Matrice de covariance (SDP) ; \(\bar X_n\), \(\mathbb{V}=\sigma^2/n\), variance empirique en \(n-1\)</label></div>
+  <div class="check"><input type="checkbox" id="c3f"><label for="c3f">≥ 8 exercices du chapitre 3 de Wasserman</label></div>
+</section>
+
+<!-- ============================================================ -->
+<!-- CHAPITRE 4 -->
+<!-- ============================================================ -->
+<section class="module" id="ch4" data-module="ch4">
+  <div class="mod-head">
+    <span class="mod-num">4</span>
+    <div>
+      <h2>Inequalities</h2>
+      <div class="mod-meta">Borner ce qu'on ne sait pas calculer : Markov, Chebyshev, Hoeffding, Jensen</div>
+    </div>
+  </div>
+  <div class="mod-bar"><div class="mod-fill"></div></div>
+
+  <div class="idea">
+    <span class="idea-tag">L'idée du chapitre</span>
+    Souvent on ne connaît pas la loi exacte, juste la moyenne ou la variance. Les inégalités donnent des <b>garanties valables pour toutes les lois</b> : « la proba de s'éloigner de la moyenne est au plus… ». C'est le socle de la loi des grands nombres et du ML.
+  </div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair</span>
+    Tu ne connais pas tout d'une variable, mais tu veux quand même dire « ça ne peut pas trop déborder ». Ces inégalités sont des <b>garde-fous universels</b>. <b>Markov</b> : avec juste la moyenne, je majore la proba d'être très grand. <b>Chebyshev</b> : avec moyenne + variance, je majore la proba de s'écarter du centre. <b>Hoeffding</b> : pour des moyennes de plein de données, l'écart devient <b>quasi impossible</b> (décroissance exponentielle). C'est pour ça qu'avec assez de données, « la moyenne mesurée ≈ la vraie moyenne ».
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag red">Fiche clé · Les cinq inégalités</span>
+    <div class="table-scroll"><table class="mini-table">
+      <tr><th>Inégalité</th><th>Énoncé</th><th>Sert à…</th></tr>
+      <tr><td><b>Markov</b></td><td>\(X\ge0\Rightarrow\mathbb{P}(X\ge t)\le\dfrac{\mathbb{E}[X]}{t}\)</td><td>borne brute (juste la moyenne)</td></tr>
+      <tr><td><b>Chebyshev</b></td><td>\(\mathbb{P}(|X-\mu|\ge t)\le\dfrac{\sigma^2}{t^2}\)</td><td>écart à la moyenne</td></tr>
+      <tr><td><b>Hoeffding</b></td><td>\(X_i\in[a,b]\) ind. : \(\mathbb{P}(|\bar X_n-\mu|\ge\varepsilon)\le 2e^{-2n\varepsilon^2/(b-a)^2}\)</td><td>borne exponentielle (ML)</td></tr>
+      <tr><td><b>Cauchy–Schwarz</b></td><td>\(\mathbb{E}|XY|\le\sqrt{\mathbb{E}[X^2]\mathbb{E}[Y^2]}\)</td><td>prouve \(|\rho|\le1\)</td></tr>
+      <tr><td><b>Jensen</b></td><td>\(g\) convexe \(\Rightarrow\mathbb{E}[g(X)]\ge g(\mathbb{E}[X])\)</td><td>convexité (Analyse)</td></tr>
+    </table></div>
+    <div class="formula"><b>Démo Chebyshev (1 ligne) :</b> Markov sur \((X-\mu)^2\) au seuil \(t^2\) :
+      \(\mathbb{P}(|X-\mu|\ge t)=\mathbb{P}((X-\mu)^2\ge t^2)\le\dfrac{\sigma^2}{t^2}\).</div>
+  </div>
+
+  <div class="qcm" data-id="c4-q1" data-answer="1">
+    <span class="qcm-tag">QCM 1</span>
+    <p class="qcm-q">Quelle inégalité utilise la <b>variance</b> pour borner l'écart à la moyenne ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">Markov</button>
+      <button type="button" data-letter="B">Chebyshev</button>
+      <button type="button" data-letter="C">Jensen</button>
+      <button type="button" data-letter="D">Cauchy–Schwarz</button>
+    </div>
+    <div class="qcm-fb"><b>B.</b> Chebyshev : \(\mathbb{P}(|X-\mu|\ge t)\le\sigma^2/t^2\). Markov n'utilise que la moyenne et exige \(X\ge0\).</div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">Exemple corrigé — Chebyshev concret</span>
+    <p>Moyenne 100, écart-type 10. Borne \(\mathbb{P}(X\notin[80,120])\).</p>
+    <details><summary>Voir la solution</summary>
+      <div class="sol">
+        <p>Sortir de \([80,120]\) ⟺ \(|X-100|\ge20\). \(t=20\), \(\sigma^2=100\) :</p>
+        <p>\(\mathbb{P}(|X-100|\ge20)\le\dfrac{100}{400}=\mathbf{25\,\%}\). Sans rien savoir de la loi ! (Si Normale, vraie valeur ≈ 4,6 %.)</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">Exercice corrigé — Markov vs Chebyshev</span>
+    <p>\(X\ge0\), \(\mathbb{E}[X]=4\), \(\mathbb{V}(X)=9\). Compare les bornes pour \(\mathbb{P}(X\ge10)\).</p>
+    <details><summary>Voir la solution</summary>
+      <div class="sol">
+        <p><b>Markov :</b> \(\le\frac{4}{10}=0{,}4\).</p>
+        <p><b>Chebyshev :</b> \(X\ge10\Rightarrow|X-4|\ge6\Rightarrow\le\frac{9}{36}=0{,}25\).</p>
+        <p>Chebyshev (qui exploite la variance) est plus fin.</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="qcm" data-id="c4-q2" data-answer="0">
+    <span class="qcm-tag">QCM 2</span>
+    <p class="qcm-q">\(X\ge0\), \(\mathbb{E}[X]=2\). Borne de Markov pour \(\mathbb{P}(X\ge8)\) ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">≤ 0,25</button>
+      <button type="button" data-letter="B">≤ 0,5</button>
+      <button type="button" data-letter="C">= 0,25</button>
+      <button type="button" data-letter="D">≤ 4</button>
+    </div>
+    <div class="qcm-fb"><b>A.</b> Markov : \(\mathbb{P}(X\ge8)\le\frac{\mathbb{E}[X]}{8}=\frac{2}{8}=0{,}25\). C'est une <i>borne</i> (≤), pas une égalité.</div>
+  </div>
+
+  <div class="qcm" data-id="c4-q3" data-answer="2">
+    <span class="qcm-tag">QCM 3</span>
+    <p class="qcm-q">\(g\) convexe. Jensen donne :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">\(\mathbb{E}[g(X)]\le g(\mathbb{E}[X])\)</button>
+      <button type="button" data-letter="B">\(\mathbb{E}[g(X)]=g(\mathbb{E}[X])\)</button>
+      <button type="button" data-letter="C">\(\mathbb{E}[g(X)]\ge g(\mathbb{E}[X])\)</button>
+      <button type="button" data-letter="D">Aucune relation</button>
+    </div>
+    <div class="qcm-fb"><b>C.</b> Convexe ⇒ \(\mathbb{E}[g(X)]\ge g(\mathbb{E}[X])\). Ex : \(\mathbb{E}[X^2]\ge(\mathbb{E}[X])^2\), ce qui redonne \(\mathbb{V}\ge0\).</div>
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag">Fiche · Lire la hiérarchie</span>
+    <ul>
+      <li><b>Markov</b> : minimum vital (moyenne seule), borne grossière.</li>
+      <li><b>Chebyshev</b> : + variance ⇒ plus fin, en \(1/t^2\). Donne la <b>loi (faible) des grands nombres</b> : \(\mathbb{V}(\bar X_n)=\sigma^2/n\to0\).</li>
+      <li><b>Hoeffding</b> : variables bornées ⇒ borne <b>exponentielle</b> en \(n\). Pourquoi le ML « marche ».</li>
+      <li><b>Jensen</b> : relie moyenne et convexité.</li>
+    </ul>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">Exercice corrigé — Chebyshev ⇒ loi des grands nombres</span>
+    <p>\(X_1,\dots,X_n\) i.i.d., moyenne \(\mu\), variance \(\sigma^2\). Montre \(\mathbb{P}(|\bar X_n-\mu|\ge\varepsilon)\to0\).</p>
+    <details><summary>Voir la solution</summary>
+      <div class="sol">
+        <p>\(\mathbb{E}[\bar X_n]=\mu\), \(\mathbb{V}(\bar X_n)=\sigma^2/n\) (indépendance).</p>
+        <p>Chebyshev : \(\mathbb{P}(|\bar X_n-\mu|\ge\varepsilon)\le\dfrac{\sigma^2}{n\varepsilon^2}\to0\). C'est la loi faible des grands nombres.</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="subhead">4.2 — Approfondissements (niveau Master)</div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair</span>
+    On va du « garde-fou grossier » au « garantie chiffrée ». L'idée la plus utile : <b>Hoeffding répond à « combien de données me faut-il ? »</b>. Tu veux que ta moyenne mesurée soit à moins de \(\varepsilon\) de la vraie, avec 95 % de confiance ? Hoeffding te donne directement le nombre \(n\) nécessaire. C'est exactement le calcul derrière la taille d'un sondage ou la garantie d'un modèle de ML.
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag">Fiche · Démonstration de Cauchy–Schwarz</span>
+    <h4>L'astuce du discriminant</h4>
+    <p>Pour tout réel \(\lambda\), \(\;\mathbb{E}[(X-\lambda Y)^2]\ge0\) (un carré est positif). En développant :</p>
+    <div class="formula">
+      \[ \mathbb{E}[X^2]-2\lambda\,\mathbb{E}[XY]+\lambda^2\,\mathbb{E}[Y^2]\ge0\quad\forall\lambda. \]
+    </div>
+    <p>Ce trinôme en \(\lambda\) reste \(\ge0\), donc son <b>discriminant est \(\le0\)</b> : \(\;4(\mathbb{E}[XY])^2-4\,\mathbb{E}[X^2]\mathbb{E}[Y^2]\le0\), d'où \((\mathbb{E}[XY])^2\le\mathbb{E}[X^2]\mathbb{E}[Y^2]\). Appliqué à \(X-\mu_X\) et \(Y-\mu_Y\), on obtient \(|\text{Cov}(X,Y)|\le\sigma_X\sigma_Y\), c.-à-d. \(\;|\rho|\le1\). \(\blacksquare\)</p>
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag">Fiche · Inégalité de Mill (queue de la Normale)</span>
+    <h4>Borner la traîne d'une gaussienne</h4>
+    <div class="formula">
+      Pour \(Z\sim\mathcal{N}(0,1)\) et \(t>0\) : \(\;\mathbb{P}(|Z|>t)\le\sqrt{\dfrac{2}{\pi}}\,\dfrac{e^{-t^2/2}}{t}\).
+    </div>
+    <p class="note">Plus fine que Chebyshev <i>quand on sait que la loi est Normale</i> : la décroissance est en \(e^{-t^2/2}\) (ultra-rapide) au lieu de \(1/t^2\). Illustre l'idée générale : plus on en sait sur la loi, plus la borne est serrée.</p>
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag red">Fiche clé · Hoeffding ⇒ taille d'échantillon</span>
+    <h4>« Combien de données pour une garantie (ε, δ) ? »</h4>
+    <p>On veut \(\mathbb{P}(|\bar X_n-\mu|\ge\varepsilon)\le\delta\). Avec \(X_i\in[a,b]\), Hoeffding donne \(2e^{-2n\varepsilon^2/(b-a)^2}\le\delta\), d'où :</p>
+    <div class="formula">
+      \[ n\;\ge\;\frac{(b-a)^2}{2\varepsilon^2}\,\ln\!\frac{2}{\delta}. \]
+    </div>
+    <p>Lecture : la précision \(\varepsilon\) coûte cher (\(n\sim1/\varepsilon^2\)), mais la confiance est <b>bon marché</b> (\(n\sim\ln(1/\delta)\)) — passer de 95 % à 99 % de confiance ne demande qu'un peu plus de données. C'est la logique PAC (« Probably Approximately Correct ») de l'apprentissage statistique.</p>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">Exercice corrigé — taille d'un sondage</span>
+    <p>On sonde des oui/non (\(X_i\in[0,1]\)). On veut estimer la proportion à \(\varepsilon=0{,}03\) près avec une confiance de 95 % (\(\delta=0{,}05\)). Combien de personnes ?</p>
+    <details><summary>Voir la solution</summary>
+      <div class="sol">
+        <p>\(n\ge\dfrac{(1-0)^2}{2(0{,}03)^2}\ln\dfrac{2}{0{,}05}=\dfrac{1}{0{,}0018}\cdot\ln(40)\approx555{,}6\cdot3{,}69\approx\mathbf{2050}\).</p>
+        <p>Hoeffding est conservateur ; les sondeurs, en supposant la Normale, trouvent ≈ 1067 pour les mêmes cibles. Mais l'ordre de grandeur « quelques milliers » et la dépendance en \(1/\varepsilon^2\) sont les bons réflexes.</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="qcm" data-id="c4-q4" data-answer="2">
+    <span class="qcm-tag">QCM 4</span>
+    <p class="qcm-q">Pour halver l'erreur \(\varepsilon\) (2× plus précis) via Hoeffding, il faut multiplier \(n\) par environ :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">2</button>
+      <button type="button" data-letter="B">√2</button>
+      <button type="button" data-letter="C">4</button>
+      <button type="button" data-letter="D">ln 2</button>
+    </div>
+    <div class="qcm-fb"><b>C.</b> \(n\propto1/\varepsilon^2\) : diviser \(\varepsilon\) par 2 multiplie \(n\) par \(2^2=4\). La précision coûte cher.</div>
+  </div>
+
+  <div class="qcm" data-id="c4-q5" data-answer="0">
+    <span class="qcm-tag">QCM 5</span>
+    <p class="qcm-q">La démonstration de Cauchy–Schwarz repose sur :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">le discriminant \(\le0\) du trinôme \(\mathbb{E}[(X-\lambda Y)^2]\)</button>
+      <button type="button" data-letter="B">la loi des grands nombres</button>
+      <button type="button" data-letter="C">l'inégalité de Markov</button>
+      <button type="button" data-letter="D">le théorème central limite</button>
+    </div>
+    <div class="qcm-fb"><b>A.</b> \(\mathbb{E}[(X-\lambda Y)^2]\ge0\) pour tout \(\lambda\) ⇒ trinôme positif ⇒ discriminant \(\le0\) ⇒ l'inégalité.</div>
+  </div>
+
+  <div class="qcm" data-id="c4-q6" data-answer="3">
+    <span class="qcm-tag">QCM 6</span>
+    <p class="qcm-q">Passer d'une confiance de 95 % à 99,9 % (avec ε fixé) augmente \(n\) :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">de façon explosive (en \(1/\delta\))</button>
+      <button type="button" data-letter="B">au carré</button>
+      <button type="button" data-letter="C">pas du tout</button>
+      <button type="button" data-letter="D">modérément (en \(\ln(1/\delta)\))</button>
+    </div>
+    <div class="qcm-fb"><b>D.</b> \(n\propto\ln(2/\delta)\) : la confiance est « bon marché ». C'est la précision \(\varepsilon\) qui coûte cher (\(1/\varepsilon^2\)).</div>
+  </div>
+
+  <div class="exam-box">
+    <ul>
+      <li><b>Chebyshev se démontre depuis Markov</b> (sur \((X-\mu)^2\)). Sache le refaire.</li>
+      <li>Markov : juste la moyenne (et \(X\ge0\)). Chebyshev : + variance ⇒ plus fin.</li>
+      <li><b>Hoeffding</b> = borne exponentielle ⇒ socle du ML.</li>
+      <li><b>Jensen</b> : convexe ⇒ \(\mathbb{E}[g(X)]\ge g(\mathbb{E}[X])\). Revois la convexité (Analyse).</li>
+    </ul>
+  </div>
+
+  <div class="check-title">À valider — Chapitre 4</div>
+  <div class="check"><input type="checkbox" id="c4a"><label for="c4a">Markov : énoncé, démo, un exercice numérique</label></div>
+  <div class="check"><input type="checkbox" id="c4b"><label for="c4b">Chebyshev : démo depuis Markov + loi des grands nombres</label></div>
+  <div class="check"><input type="checkbox" id="c4c"><label for="c4c">Hoeffding : énoncé et intuition (le ML)</label></div>
+  <div class="check"><input type="checkbox" id="c4d"><label for="c4d">Cauchy–Schwarz (démo discriminant ⇒ \(|\rho|\le1\)) et Jensen (convexité)</label></div>
+  <div class="check"><input type="checkbox" id="c4f"><label for="c4f">Mill (queue Normale) ; Hoeffding ⇒ taille d'échantillon \((\varepsilon,\delta)\)</label></div>
+  <div class="check"><input type="checkbox" id="c4e"><label for="c4e">≥ 6 exercices du chapitre 4 de Wasserman</label></div>
+</section>
+
+<!-- ============================================================ -->
+<!-- EXAMEN FINAL -->
+<!-- ============================================================ -->
+<section class="module" id="final" data-module="final">
+  <div class="mod-head">
+    <span class="mod-num">★</span>
+    <div>
+      <h2>Examen final — 30 questions</h2>
+      <div class="mod-meta">QCM cliquables (instantané) + problèmes à solution cachée · les 4 chapitres mélangés</div>
+    </div>
+  </div>
+  <div class="mod-bar"><div class="mod-fill"></div></div>
+
+  <div class="why"><b>Règle du jeu :</b> chronomètre-toi, feuille et stylo, <b>aucune note</b>. Pour les QCM, réfléchis avant de cliquer (le score ne compte que le 1ᵉʳ essai). Pour les problèmes, rédige ta réponse complète <i>avant</i> d'ouvrir la correction, puis coche « réussie sans aide ».</div>
+
+  <div class="subhead">Partie A — 15 QCM rapides</div>
+
+  <div class="qcm" data-id="f-q1" data-answer="2">
+    <span class="qcm-tag">QCM 1 · Ch.1</span>
+    <p class="qcm-q">\(\mathbb{P}(A)=0{,}7\), \(\mathbb{P}(B)=0{,}6\), indépendants. \(\mathbb{P}(A\cap B)\) ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">1,3</button><button type="button" data-letter="B">0,1</button>
+      <button type="button" data-letter="C">0,42</button><button type="button" data-letter="D">0,65</button>
+    </div>
+    <div class="qcm-fb"><b>C.</b> Indépendants ⇒ on multiplie : \(0{,}7\times0{,}6=0{,}42\).</div>
+  </div>
+
+  <div class="qcm" data-id="f-q2" data-answer="0">
+    <span class="qcm-tag">QCM 2 · Ch.1</span>
+    <p class="qcm-q">On lance 3 pièces. Proba d'au moins un pile ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">7/8</button><button type="button" data-letter="B">1/2</button>
+      <button type="button" data-letter="C">3/8</button><button type="button" data-letter="D">1/8</button>
+    </div>
+    <div class="qcm-fb"><b>A.</b> Complément « aucun pile » = \((1/2)^3=1/8\). Donc \(1-1/8=7/8\).</div>
+  </div>
+
+  <div class="qcm" data-id="f-q3" data-answer="1">
+    <span class="qcm-tag">QCM 3 · Ch.1</span>
+    <p class="qcm-q">\((A\cap B)^c\) est égal à :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">\(A^c\cap B^c\)</button><button type="button" data-letter="B">\(A^c\cup B^c\)</button>
+      <button type="button" data-letter="C">\(A\cup B\)</button><button type="button" data-letter="D">\(A^c\cap B\)</button>
+    </div>
+    <div class="qcm-fb"><b>B.</b> De Morgan : le complément casse l'opération et retourne ∩ en ∪.</div>
+  </div>
+
+  <div class="qcm" data-id="f-q4" data-answer="2">
+    <span class="qcm-tag">QCM 4 · Ch.1</span>
+    <p class="qcm-q">Tirage de 3 personnes parmi 10 pour un comité (sans rôle). Combien de comités ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">1000</button><button type="button" data-letter="B">720</button>
+      <button type="button" data-letter="C">120</button><button type="button" data-letter="D">30</button>
+    </div>
+    <div class="qcm-fb"><b>C.</b> Sans ordre : \(\binom{10}{3}=\frac{10\cdot9\cdot8}{6}=120\).</div>
+  </div>
+
+  <div class="qcm" data-id="f-q5" data-answer="3">
+    <span class="qcm-tag">QCM 5 · Ch.1</span>
+    <p class="qcm-q">Deux événements de proba &gt; 0 et disjoints sont :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">Indépendants</button><button type="button" data-letter="B">Toujours égaux</button>
+      <button type="button" data-letter="C">De même proba</button><button type="button" data-letter="D">Dépendants</button>
+    </div>
+    <div class="qcm-fb"><b>D.</b> Disjoints ⇒ \(\mathbb{P}(A\cap B)=0\neq\mathbb{P}(A)\mathbb{P}(B)\) ⇒ dépendants.</div>
+  </div>
+
+  <div class="qcm" data-id="f-q6" data-answer="1">
+    <span class="qcm-tag">QCM 6 · Ch.2</span>
+    <p class="qcm-q">Une CDF \(F(x)\) est toujours :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">Décroissante</button><button type="button" data-letter="B">Croissante, de 0 à 1</button>
+      <button type="button" data-letter="C">Bornée par \(f(x)\)</button><button type="button" data-letter="D">Symétrique</button>
+    </div>
+    <div class="qcm-fb"><b>B.</b> Croissante, continue à droite, limites 0 (\(-\infty\)) et 1 (\(+\infty\)).</div>
+  </div>
+
+  <div class="qcm" data-id="f-q7" data-answer="0">
+    <span class="qcm-tag">QCM 7 · Ch.2</span>
+    <p class="qcm-q">\(X\sim\)Binomiale(\(n=100,p=0{,}2\)). \(\mathbb{E}[X]\) et \(\mathbb{V}(X)\) ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">20 et 16</button><button type="button" data-letter="B">20 et 20</button>
+      <button type="button" data-letter="C">0,2 et 0,16</button><button type="button" data-letter="D">100 et 20</button>
+    </div>
+    <div class="qcm-fb"><b>A.</b> \(np=20\) ; \(np(1-p)=100\cdot0{,}2\cdot0{,}8=16\).</div>
+  </div>
+
+  <div class="qcm" data-id="f-q8" data-answer="2">
+    <span class="qcm-tag">QCM 8 · Ch.2</span>
+    <p class="qcm-q">Quelle loi a la propriété « sans mémoire » ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">Normale</button><button type="button" data-letter="B">Binomiale</button>
+      <button type="button" data-letter="C">Exponentielle</button><button type="button" data-letter="D">Uniforme</button>
+    </div>
+    <div class="qcm-fb"><b>C.</b> Exponentielle : \(\mathbb{P}(X>s+t\mid X>s)=\mathbb{P}(X>t)\).</div>
+  </div>
+
+  <div class="qcm" data-id="f-q9" data-answer="3">
+    <span class="qcm-tag">QCM 9 · Ch.2</span>
+    <p class="qcm-q">\(X\sim\mathcal{N}(10,4)\) (donc \(\sigma=2\)). Pour standardiser \(x=14\) :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">\(z=14\)</button><button type="button" data-letter="B">\(z=4\)</button>
+      <button type="button" data-letter="C">\(z=1\)</button><button type="button" data-letter="D">\(z=2\)</button>
+    </div>
+    <div class="qcm-fb"><b>D.</b> \(z=\frac{x-\mu}{\sigma}=\frac{14-10}{2}=2\). Attention : \(\sigma=\sqrt4=2\), pas 4.</div>
+  </div>
+
+  <div class="qcm" data-id="f-q10" data-answer="1">
+    <span class="qcm-tag">QCM 10 · Ch.2</span>
+    <p class="qcm-q">\(f(x,y)=f_X(x)f_Y(y)\) pour tous \(x,y\). Cela signifie :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">\(X=Y\)</button><button type="button" data-letter="B">\(X\perp Y\)</button>
+      <button type="button" data-letter="C">Cov &gt; 0</button><button type="button" data-letter="D">Même loi</button>
+    </div>
+    <div class="qcm-fb"><b>B.</b> La jointe se factorise ⇒ indépendance.</div>
+  </div>
+
+  <div class="qcm" data-id="f-q11" data-answer="0">
+    <span class="qcm-tag">QCM 11 · Ch.3</span>
+    <p class="qcm-q">\(\mathbb{E}[X]=3\). Que vaut \(\mathbb{E}[2X-5]\) ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">1</button><button type="button" data-letter="B">6</button>
+      <button type="button" data-letter="C">−5</button><button type="button" data-letter="D">11</button>
+    </div>
+    <div class="qcm-fb"><b>A.</b> Linéarité : \(2\cdot3-5=1\).</div>
+  </div>
+
+  <div class="qcm" data-id="f-q12" data-answer="2">
+    <span class="qcm-tag">QCM 12 · Ch.3</span>
+    <p class="qcm-q">\(\mathbb{V}(X)=5\), \(\mathbb{V}(Y)=3\), \(X\perp Y\). \(\mathbb{V}(X-Y)\) ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">2</button><button type="button" data-letter="B">15</button>
+      <button type="button" data-letter="C">8</button><button type="button" data-letter="D">√8</button>
+    </div>
+    <div class="qcm-fb"><b>C.</b> \(\mathbb{V}(X-Y)=\mathbb{V}(X)+(-1)^2\mathbb{V}(Y)=5+3=8\). Le signe « − » sort au carré.</div>
+  </div>
+
+  <div class="qcm" data-id="f-q13" data-answer="3">
+    <span class="qcm-tag">QCM 13 · Ch.3</span>
+    <p class="qcm-q">\(\mathbb{E}[X]=2\), \(\mathbb{E}[X^2]=13\). \(\mathbb{V}(X)\) ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">13</button><button type="button" data-letter="B">11</button>
+      <button type="button" data-letter="C">17</button><button type="button" data-letter="D">9</button>
+    </div>
+    <div class="qcm-fb"><b>D.</b> \(\mathbb{V}=\mathbb{E}[X^2]-(\mathbb{E}[X])^2=13-4=9\).</div>
+  </div>
+
+  <div class="qcm" data-id="f-q14" data-answer="1">
+    <span class="qcm-tag">QCM 14 · Ch.4</span>
+    <p class="qcm-q">\(X\ge0\), \(\mathbb{E}[X]=6\). Borne de Markov pour \(\mathbb{P}(X\ge12)\) ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">≤ 2</button><button type="button" data-letter="B">≤ 0,5</button>
+      <button type="button" data-letter="C">= 0,5</button><button type="button" data-letter="D">≤ 0,25</button>
+    </div>
+    <div class="qcm-fb"><b>B.</b> \(\mathbb{P}(X\ge12)\le 6/12=0{,}5\) (une borne, pas une égalité).</div>
+  </div>
+
+  <div class="qcm" data-id="f-q15" data-answer="2">
+    <span class="qcm-tag">QCM 15 · Ch.4</span>
+    <p class="qcm-q">Quelle inégalité donne une borne <b>exponentielle</b> en \(n\) ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">Markov</button><button type="button" data-letter="B">Chebyshev</button>
+      <button type="button" data-letter="C">Hoeffding</button><button type="button" data-letter="D">Jensen</button>
+    </div>
+    <div class="qcm-fb"><b>C.</b> Hoeffding : \(2e^{-2n\varepsilon^2/(b-a)^2}\), décroissance exponentielle — d'où son rôle en ML.</div>
+  </div>
+
+  <div class="subhead">Partie B — 15 problèmes rédigés</div>
+
+  <div class="exo">
+    <span class="exo-tag">P1 · Ch.1 — Bayes (spam)</span>
+    <p>Un filtre classe « spam » 98 % des vrais spams et 3 % des e-mails légitimes. 40 % des e-mails sont du spam. Un message est classé « spam » : proba qu'il le soit vraiment ?</p>
+    <details><summary>Solution</summary><div class="sol">
+      <p>\(\mathbb{P}(+)=0{,}98\cdot0{,}4+0{,}03\cdot0{,}6=0{,}392+0{,}018=0{,}41\).</p>
+      <p>\(\mathbb{P}(S\mid +)=\frac{0{,}392}{0{,}41}\approx\mathbf{95{,}6\,\%}\).</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp1"><label for="fp1">Réussie sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P2 · Ch.1 — au moins un as</span>
+    <p>On tire 5 cartes parmi 52. Proba d'au moins un as ?</p>
+    <details><summary>Solution</summary><div class="sol">
+      <p>Complément « aucun as » : \(\binom{48}{5}/\binom{52}{5}\approx0{,}659\). Donc \(\approx\mathbf{0{,}341}\).</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp2"><label for="fp2">Réussie sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P3 · Ch.1 — probabilités totales</span>
+    <p>Usines A (60 % de la production, 2 % défauts) et B (40 %, 5 % défauts). Proba qu'une pièce au hasard soit défectueuse ?</p>
+    <details><summary>Solution</summary><div class="sol">
+      <p>\(\mathbb{P}(D)=0{,}6\cdot0{,}02+0{,}4\cdot0{,}05=0{,}012+0{,}020=\mathbf{0{,}032}\) (3,2 %).</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp3"><label for="fp3">Réussie sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P4 · Ch.2 — densité &amp; CDF</span>
+    <p>\(f(x)=2x\) sur \([0,1]\). Donne \(F(x)\) puis \(\mathbb{P}(0{,}3<X<0{,}7)\).</p>
+    <details><summary>Solution</summary><div class="sol">
+      <p>\(F(x)=x^2\). \(\mathbb{P}=F(0{,}7)-F(0{,}3)=0{,}49-0{,}09=\mathbf{0{,}40}\).</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp4"><label for="fp4">Réussie sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P5 · Ch.2 — Poisson</span>
+    <p>Standard : 3 appels/min en moyenne. Proba d'exactement 0 appel sur une minute ? Et au moins 1 ?</p>
+    <details><summary>Solution</summary><div class="sol">
+      <p>Poisson(3) : \(\mathbb{P}(0)=e^{-3}\approx\mathbf{0{,}0498}\) ; \(\mathbb{P}(\ge1)=1-e^{-3}\approx\mathbf{0{,}950}\).</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp5"><label for="fp5">Réussie sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P6 · Ch.2 — constante de normalisation</span>
+    <p>\(f(x)=c\,e^{-x}\) sur \([0,\infty)\). Trouve \(c\), puis \(\mathbb{P}(X>1)\).</p>
+    <details><summary>Solution</summary><div class="sol">
+      <p>\(\int_0^\infty ce^{-x}dx=c=1\Rightarrow c=1\) (c'est l'Exponentielle \(\beta=1\)).</p>
+      <p>\(\mathbb{P}(X>1)=\int_1^\infty e^{-x}dx=e^{-1}\approx\mathbf{0{,}368}\).</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp6"><label for="fp6">Réussie sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P7 · Ch.2 — transformation</span>
+    <p>\(X\sim\)Exp(\(\beta=1\)) (densité \(e^{-x}\)). Densité de \(Y=\sqrt X\) ?</p>
+    <details><summary>Solution</summary><div class="sol">
+      <p>\(F_Y(y)=\mathbb{P}(X\le y^2)=1-e^{-y^2}\) ⇒ \(f_Y(y)=2y\,e^{-y^2}\), \(y>0\) (loi de Rayleigh).</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp7"><label for="fp7">Réussie sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P8 · Ch.2 — marginale</span>
+    <p>\(f(x,y)=4xy\) sur \([0,1]^2\). Vérifie que c'est une densité et trouve \(f_X(x)\). \(X\perp Y\) ?</p>
+    <details><summary>Solution</summary><div class="sol">
+      <p>\(\int_0^1\!\!\int_0^1 4xy\,dxdy=4\cdot\tfrac12\cdot\tfrac12=1\) ✓.</p>
+      <p>\(f_X(x)=\int_0^1 4xy\,dy=2x\) ; \(f_Y(y)=2y\). Or \(f_Xf_Y=4xy=f\) ⇒ <b>indépendantes</b>.</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp8"><label for="fp8">Réussie sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P9 · Ch.3 — linéarité &amp; variance</span>
+    <p>\(X\perp Y\), \(\mathbb{E}[X]=2,\mathbb{V}(X)=4\), \(\mathbb{E}[Y]=5,\mathbb{V}(Y)=9\). \(\mathbb{E}[3X-2Y+1]\) et \(\mathbb{V}(3X-2Y+1)\) ?</p>
+    <details><summary>Solution</summary><div class="sol">
+      <p>\(\mathbb{E}=3\cdot2-2\cdot5+1=\mathbf{-3}\). \(\mathbb{V}=9\cdot4+4\cdot9=\mathbf{72}\) (le +1 ne change rien).</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp9"><label for="fp9">Réussie sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P10 · Ch.3 — espérance discrète</span>
+    <p>\(X\) prend 0,1,2 avec probas 0,5 / 0,3 / 0,2. Calcule \(\mathbb{E}[X]\) et \(\mathbb{V}(X)\).</p>
+    <details><summary>Solution</summary><div class="sol">
+      <p>\(\mathbb{E}[X]=0{,}3+0{,}4=\mathbf{0{,}7}\). \(\mathbb{E}[X^2]=0{,}3+0{,}8=1{,}1\). \(\mathbb{V}=1{,}1-0{,}49=\mathbf{0{,}61}\).</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp10"><label for="fp10">Réussie sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P11 · Ch.3 — covariance vs indépendance</span>
+    <p>\(X\sim\mathcal{U}(-1,1)\), \(Y=X^2\). Montre \(\text{Cov}(X,Y)=0\) mais \(X,Y\) non indépendantes.</p>
+    <details><summary>Solution</summary><div class="sol">
+      <p>\(\mathbb{E}[X]=0\). \(\text{Cov}=\mathbb{E}[X^3]-0=0\) (fonction impaire intégrée sur \([-1,1]\)). Pourtant \(Y=X^2\) est déterminée par \(X\) ⇒ dépendance totale.</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp11"><label for="fp11">Réussie sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P12 · Ch.3 — espérance conditionnelle</span>
+    <p>On lance un dé \((Y)\), puis on tire \(Y\) pièces ; \(X\)=nb de piles. Calcule \(\mathbb{E}[X]\).</p>
+    <details><summary>Solution</summary><div class="sol">
+      <p>\(\mathbb{E}[X\mid Y]=Y/2\). Tour : \(\mathbb{E}[X]=\tfrac12\mathbb{E}[Y]=\tfrac12\cdot3{,}5=\mathbf{1{,}75}\).</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp12"><label for="fp12">Réussie sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P13 · Ch.4 — Chebyshev</span>
+    <p>Pièces de longueur moyenne 50 mm, écart-type 2 mm. Borne \(\mathbb{P}(|X-50|\ge5)\).</p>
+    <details><summary>Solution</summary><div class="sol">
+      <p>\(\le\frac{\sigma^2}{t^2}=\frac{4}{25}=\mathbf{0{,}16}\) (au plus 16 %).</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp13"><label for="fp13">Réussie sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P14 · Ch.4 — Jensen</span>
+    <p>Avec \(g(x)=x^2\) (convexe), que dit Jensen sur \(\mathbb{E}[X^2]\) et \((\mathbb{E}[X])^2\) ? Quelle quantité connue cela redonne-t-il ?</p>
+    <details><summary>Solution</summary><div class="sol">
+      <p>Jensen : \(\mathbb{E}[X^2]\ge(\mathbb{E}[X])^2\). La différence \(\mathbb{E}[X^2]-(\mathbb{E}[X])^2=\mathbb{V}(X)\ge0\) : on retrouve que la variance est positive.</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp14"><label for="fp14">Réussie sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P15 · Synthèse — loi des grands nombres</span>
+    <p>\(X_1,\dots,X_n\) i.i.d. de moyenne \(\mu\), variance \(\sigma^2\). Via Chebyshev, montre \(\mathbb{P}(|\bar X_n-\mu|\ge\varepsilon)\to0\).</p>
+    <details><summary>Solution</summary><div class="sol">
+      <p>\(\mathbb{E}[\bar X_n]=\mu\), \(\mathbb{V}(\bar X_n)=\sigma^2/n\). Chebyshev : \(\mathbb{P}(|\bar X_n-\mu|\ge\varepsilon)\le\frac{\sigma^2}{n\varepsilon^2}\to0\). C'est la loi faible des grands nombres — le pont vers le chapitre 5.</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp15"><label for="fp15">Réussie sans aide</label></div>
+  </div>
+</section>
+
+<footer>
+  <p class="sig">Proba &amp; Stats — Préparation Summer.</p>
+  <p style="margin-top:8px">Source : Larry Wasserman, <i>All of Statistics</i>, ch. 1–4. Appoint : Stat 110 (Blitzstein, Harvard) · 3Blue1Brown (Bayes). Prochaine matière : <b>02 Algèbre linéaire</b>.</p>
+  <p style="margin-top:8px;font-size:12px">Progression et scores QCM sauvegardés localement dans ce navigateur.</p>
+</footer>
+
+</div>
+
+<div class="toast" id="toast">Sauvegardé ✓</div>
+
+<script>
+(function(){
+  var CK='dsba-ps-checks-v2', QK='dsba-ps-qcm-v2';
+  var checks={}, qcm={};
+  try{ checks=JSON.parse(localStorage.getItem(CK)||'{}'); }catch(e){ checks={}; }
+  try{ qcm=JSON.parse(localStorage.getItem(QK)||'{}'); }catch(e){ qcm={}; }
+
+  var toast=document.getElementById('toast'), tT;
+  function ping(){ toast.classList.add('show'); clearTimeout(tT); tT=setTimeout(function(){toast.classList.remove('show');},1100); }
+
+  function pct(arr){ if(!arr.length)return 0; var n=arr.filter(function(b){return b.checked;}).length; return Math.round(100*n/arr.length); }
+
+  /* ---- checkboxes / progress ---- */
+  var boxes=[].slice.call(document.querySelectorAll('input[type=checkbox]'));
+  function updModule(mod){
+    var sec=document.querySelector('section[data-module="'+mod+'"]'); if(!sec)return;
+    var arr=[].slice.call(sec.querySelectorAll('input[type=checkbox]'));
+    var p=pct(arr);
+    var fill=sec.querySelector('.mod-fill'); if(fill)fill.style.width=p+'%';
+    var nav=document.querySelector('[data-nav="'+mod+'"]'); if(nav)nav.textContent=p+'%';
+  }
+  function updGlobal(){
+    var p=pct(boxes);
+    document.getElementById('global-pct').textContent=p;
+    document.querySelector('#global-bar > span').style.width=p+'%';
+  }
+  boxes.forEach(function(b){
+    if(checks[b.id]) b.checked=true;
+    b.addEventListener('change',function(){
+      checks[b.id]=b.checked;
+      try{ localStorage.setItem(CK,JSON.stringify(checks)); }catch(e){}
+      var sec=b.closest('section[data-module]');
+      if(sec) updModule(sec.getAttribute('data-module'));
+      updGlobal(); ping();
+    });
+  });
+
+  /* ---- QCM ---- */
+  var qcms=[].slice.call(document.querySelectorAll('.qcm'));
+  document.getElementById('qcm-total').textContent=qcms.length;
+  function updQcmScore(){
+    var correct=0;
+    qcms.forEach(function(q){ var id=q.getAttribute('data-id'); if(qcm[id]&&qcm[id].correct) correct++; });
+    document.getElementById('qcm-correct').textContent=correct;
+    document.querySelector('#qcm-bar > span').style.width=Math.round(100*correct/qcms.length)+'%';
+  }
+  qcms.forEach(function(q){
+    var ans=parseInt(q.getAttribute('data-answer'),10);
+    var id=q.getAttribute('data-id');
+    var opts=[].slice.call(q.querySelectorAll('.qcm-opts button'));
+    var fb=q.querySelector('.qcm-fb');
+    function lock(chosen){
+      opts.forEach(function(b){ b.disabled=true; });
+      opts[ans].classList.add('correct');
+      if(chosen!=null && chosen!==ans) opts[chosen].classList.add('wrong');
+      if(fb) fb.classList.add('show');
+      q.dataset.done='1';
+    }
+    if(qcm[id]){ lock(qcm[id].chosen); }
+    opts.forEach(function(b,i){
+      b.addEventListener('click',function(){
+        if(q.dataset.done) return;
+        lock(i);
+        qcm[id]={chosen:i, correct:(i===ans)};
+        try{ localStorage.setItem(QK,JSON.stringify(qcm)); }catch(e){}
+        updQcmScore(); ping();
+      });
+    });
+  });
+
+  ['ch1','ch2','ch3','ch4','final'].forEach(updModule);
+  updGlobal(); updQcmScore();
+})();
+</script>
+</body>
+</html>

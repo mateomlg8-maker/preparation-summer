@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>SQL &amp; Bases de données — Cours Complet (examen à l'aveugle)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script>
+window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] }, options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] } };
+</script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script>
+<style>
+:root{
+  --paper:#FBFAF5;--grid:#DCE6F2;--ink:#1C2B4A;--ink-soft:#5A6685;--red:#C0392B;
+  --green:#2F7D4F;--stabilo:#FFE873;--card:#FFFFFF;--kid:#7B4BC4;--kid-bg:#F3ECFF;
+  --code-bg:#141E36;--code-text:#D8E2F5;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+body{font-family:'Inter',sans-serif;color:var(--ink);background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px, transparent 1px),linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size:32px 32px;line-height:1.6;-webkit-font-smoothing:antialiased;}
+body::before{content:'';position:fixed;top:0;bottom:0;left:max(16px, calc(50% - 560px));width:2px;background:var(--red);opacity:.45;z-index:0;pointer-events:none;}
+.wrap{max-width:1020px;margin:0 auto;padding:0 24px 120px;position:relative;z-index:1}
+header{padding:52px 0 8px}
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--red);font-weight:600}
+h1{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(38px,7vw,72px);line-height:1.02;letter-spacing:-.01em;margin:10px 0 14px}
+h1 .hl{background:linear-gradient(transparent 55%, var(--stabilo) 55%);padding:0 4px}
+.sub{max-width:680px;color:var(--ink-soft);font-size:17px}
+.dash{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin:32px 0 12px}
+.dash-card{background:var(--card);border:1.5px solid var(--ink);padding:16px 18px;box-shadow:4px 4px 0 var(--ink)}
+.dash-card .label{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft)}
+.dash-card .big{font-family:'Fraunces',serif;font-weight:900;font-size:36px;line-height:1.1}
+.dash-card .small{font-size:13px;color:var(--ink-soft)}
+.bar{height:10px;background:#EEF1F6;border:1px solid var(--ink);margin-top:10px;overflow:hidden}
+.bar > span{display:block;height:100%;width:0%;background:var(--green);transition:width .4s ease}
+#qcm-bar > span{background:var(--kid)}
+nav{display:flex;flex-wrap:nowrap;overflow-x:auto;gap:10px;margin:24px 0 8px;position:sticky;top:0;background:var(--paper);padding:12px 0;z-index:5;border-bottom:1.5px solid var(--ink);-webkit-overflow-scrolling:touch;scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
+nav a{font-family:'JetBrains Mono',monospace;font-size:12.5px;font-weight:600;text-decoration:none;color:var(--ink);border:1.5px solid var(--ink);background:var(--card);padding:8px 13px;white-space:nowrap;transition:transform .1s ease, box-shadow .1s ease}
+nav a:hover,nav a:focus-visible{box-shadow:3px 3px 0 var(--ink);transform:translate(-1px,-1px)}
+nav a:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+nav a .pct{color:var(--red)}
+section.module{margin-top:64px;scroll-margin-top:70px}
+.mod-head{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap}
+.mod-num{font-family:'Fraunces',serif;font-weight:900;font-size:18px;background:var(--ink);color:var(--paper);width:38px;height:38px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;align-self:center}
+h2{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(26px,4vw,38px);line-height:1.1}
+.mod-meta{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-soft);margin-top:4px}
+.mod-meta b{color:var(--red);font-weight:600}
+.mod-bar{height:7px;background:#EEF1F6;border:1px solid var(--ink);margin:16px 0 22px;overflow:hidden}
+.mod-fill{height:100%;width:0%;background:var(--green);transition:width .4s ease}
+.why{border-left:4px solid var(--stabilo);background:#FFFDF2;padding:12px 16px;margin-bottom:22px;font-size:14.5px}
+.why b{font-weight:700}
+.idea{border:1.5px solid var(--ink);background:#EEF4FF;padding:14px 18px;margin:18px 0;font-size:14.5px}
+.idea .idea-tag{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);font-weight:600;display:block;margin-bottom:6px}
+.subhead{font-family:'Fraunces',serif;font-weight:900;font-size:21px;margin:34px 0 6px;padding-bottom:6px;border-bottom:2px solid var(--ink)}
+.eli5{border:1.5px solid var(--kid);background:var(--kid-bg);padding:13px 16px 13px 46px;margin:14px 0;font-size:14.5px;position:relative;border-radius:2px}
+.eli5::before{content:'🧒';position:absolute;left:13px;top:11px;font-size:20px}
+.eli5 .eli5-tag{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--kid);font-weight:600;display:block;margin-bottom:3px}
+.eli5 b{color:var(--kid)}
+.fiche{border:1.5px solid var(--ink);background:#FDFDFB;padding:16px 18px;margin:16px 0;box-shadow:3px 3px 0 rgba(28,43,74,.10)}
+.fiche-tag{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#fff;background:var(--ink);display:inline-block;padding:3px 9px;margin-bottom:10px;font-weight:600}
+.fiche-tag.red{background:var(--red)}
+.fiche-tag.green{background:var(--green)}
+.fiche h4{font-family:'Fraunces',serif;font-weight:900;font-size:18px;margin-bottom:6px}
+.fiche p{font-size:14.5px;margin:7px 0}
+.fiche ul,.fiche ol{margin:6px 0 6px 20px;font-size:14.5px}
+.fiche li{margin:4px 0}
+.formula{background:#F4F7FB;border:1px solid var(--grid);padding:10px 14px;margin:10px 0;font-size:15px;overflow-x:auto}
+.note{font-size:13px;color:var(--ink-soft);font-style:italic}
+.warn{border-left:3px solid var(--red);background:#FFF6F4;padding:8px 12px;margin:10px 0;font-size:14px}
+.warn b{color:var(--red)}
+.table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:10px 0}
+.mini-table{width:100%;border-collapse:collapse;font-size:13.5px;background:var(--card);min-width:380px}
+.mini-table th{background:var(--ink);color:var(--paper);font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;padding:8px 10px;text-align:left;font-weight:600}
+.mini-table td{padding:8px 10px;border-bottom:1px solid var(--grid);vertical-align:top}
+.mini-table tr:last-child td{border-bottom:none}
+.mini-table code{font-family:'JetBrains Mono',monospace;font-size:12px;background:#EEF1F6;padding:1px 5px;border:1px solid var(--grid)}
+/* data tables (training DB) */
+.data-tables{display:flex;gap:14px;flex-wrap:wrap;margin:12px 0}
+.data-tables figure{flex:1;min-width:240px;margin:0}
+.data-tables figcaption{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;background:var(--stabilo);display:inline-block;padding:2px 8px;border:1px solid var(--ink);margin-bottom:-1px}
+.data-tables .mini-table{margin-top:0;min-width:0}
+.data-tables .mini-table th{font-size:10px;padding:6px 8px}
+.data-tables .mini-table td{padding:5px 8px;font-family:'JetBrains Mono',monospace;font-size:12px}
+.nullcell{color:var(--red);font-style:italic}
+.exo{border:1.5px dashed var(--ink);background:#FFFEF6;padding:14px 16px;margin:14px 0}
+.exo-tag{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--red);font-weight:600;letter-spacing:.14em;text-transform:uppercase;display:block;margin-bottom:6px}
+.exo p{font-size:14.5px}
+.exo details{margin-top:10px}
+.exo details summary{cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:var(--ink);user-select:none;list-style:none;display:inline-block;border:1.5px solid var(--ink);padding:8px 14px;background:var(--card);min-height:38px}
+.exo details summary::-webkit-details-marker{display:none}
+.exo details summary:hover{box-shadow:2px 2px 0 var(--ink)}
+.exo details summary:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+.exo .sol{padding:12px 14px;background:#F2F7F2;border-left:3px solid var(--green);margin-top:10px;font-size:14px}
+.exo .sol p{margin:5px 0}
+.qcm{border:1.5px solid var(--kid);background:#FCFAFF;padding:14px 16px;margin:16px 0;border-radius:2px}
+.qcm .qcm-tag{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--kid);font-weight:600;letter-spacing:.12em;text-transform:uppercase;display:block;margin-bottom:6px}
+.qcm .qcm-q{font-size:14.5px;font-weight:500;margin-bottom:10px}
+.qcm-opts{display:flex;flex-direction:column;gap:8px}
+.qcm-opts button{font-family:'Inter',sans-serif;font-size:14px;text-align:left;color:var(--ink);background:var(--card);border:1.5px solid var(--ink);padding:11px 14px;cursor:pointer;min-height:44px;transition:box-shadow .1s, transform .1s;display:flex;align-items:center;gap:10px;width:100%}
+.qcm-opts button::before{content:attr(data-letter);font-family:'JetBrains Mono',monospace;font-weight:600;font-size:12px;background:#EEF1F6;border:1px solid var(--grid);width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+.qcm-opts button:not(:disabled):hover{box-shadow:2px 2px 0 var(--ink);transform:translate(-1px,-1px)}
+.qcm-opts button:disabled{cursor:default}
+.qcm-opts button.correct{background:#E7F5EC;border-color:var(--green);color:var(--green);font-weight:600}
+.qcm-opts button.correct::before{background:var(--green);color:#fff;border-color:var(--green);content:'✓'}
+.qcm-opts button.wrong{background:#FCEBEA;border-color:var(--red);color:var(--red)}
+.qcm-opts button.wrong::before{background:var(--red);color:#fff;border-color:var(--red);content:'✕'}
+.qcm-fb{display:none;margin-top:11px;padding:11px 14px;background:#F3ECFF;border-left:3px solid var(--kid);font-size:13.5px}
+.qcm-fb.show{display:block}
+.qcm-fb b{color:var(--kid)}
+pre{background:var(--code-bg);color:var(--code-text);font-family:'JetBrains Mono',monospace;font-size:13px;padding:14px 16px;overflow-x:auto;margin:12px 0;border:1.5px solid var(--ink);line-height:1.55}
+pre .c{color:#7C8DB5}
+pre .k{color:#FFD479}
+pre .s{color:#9FE8A8}
+.check-title{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--green);font-weight:600;margin:18px 0 4px;border-top:1.5px solid var(--ink);padding-top:12px}
+.check{display:flex;align-items:flex-start;gap:11px;padding:11px 0;border-bottom:1px solid #F0F2F6;font-size:14.5px}
+.check:last-child{border-bottom:none}
+.check input{appearance:none;-webkit-appearance:none;width:24px;height:24px;flex-shrink:0;margin-top:1px;border:1.5px solid var(--ink);background:var(--card);cursor:pointer;display:inline-grid;place-content:center}
+.check input:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+.check input::after{content:'✕';font-size:15px;font-weight:700;color:var(--red);transform:scale(0);transition:transform .1s}
+.check input:checked::after{transform:scale(1)}
+.check input:checked + label{color:var(--ink-soft);text-decoration:line-through;text-decoration-color:var(--red);text-decoration-thickness:1.5px}
+.check label{cursor:pointer}
+.check label code{font-family:'JetBrains Mono',monospace;font-size:12.5px;background:#EEF1F6;padding:1px 5px;border:1px solid var(--grid)}
+.exam-box{border:2px solid var(--red);background:#FFF6F4;padding:22px 22px 18px;margin:22px 0;position:relative}
+.exam-box::before{content:'⚠ À RETENIR POUR L\'EXAMEN';font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.12em;color:#fff;background:var(--red);position:absolute;top:-12px;left:16px;padding:3px 10px}
+.exam-box ol,.exam-box ul{margin:8px 0 0 20px;font-size:14.5px}
+.exam-box li{margin:6px 0}
+.dbpanel{border:2px solid var(--ink);background:var(--card);padding:18px 20px;margin:20px 0;box-shadow:5px 5px 0 var(--ink)}
+.dbpanel h3{font-family:'Fraunces',serif;font-weight:900;font-size:20px;margin-bottom:4px}
+.dbpanel .dbsub{font-size:13.5px;color:var(--ink-soft);margin-bottom:10px}
+footer{margin-top:80px;padding-top:24px;border-top:1.5px solid var(--ink);font-size:13px;color:var(--ink-soft)}
+footer .sig{font-family:'Fraunces',serif;font-style:italic;font-size:15px;color:var(--ink)}
+.toast{position:fixed;bottom:20px;right:20px;background:var(--ink);color:var(--paper);font-family:'JetBrains Mono',monospace;font-size:12px;padding:10px 16px;opacity:0;transform:translateY(8px);transition:opacity .25s, transform .25s;pointer-events:none;z-index:50}
+.toast.show{opacity:1;transform:translateY(0)}
+@media(max-width:760px){
+  .dash{grid-template-columns:1fr}
+  body::before{left:8px}
+  .wrap{padding:0 16px 90px}
+  header{padding:36px 0 8px}
+  .sub{font-size:16px}
+  section.module{margin-top:52px}
+  .fiche,.exo,.qcm,.idea,.eli5,.dbpanel{padding-left:14px;padding-right:14px}
+  .eli5{padding-left:44px}
+  .data-tables{flex-direction:column}
+}
+</style>
+<script src="firebase-sync.js"></script>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">Préparation Summer · Matière 04 / 05</div>
+  <h1>SQL &amp;<br><span class="hl">Bases de données</span></h1>
+  <p class="sub">Cours complet et autonome, taillé pour l'<b>examen à l'aveugle</b> : prédire le résultat exact d'une requête sans ordinateur. Une petite base d'entraînement avec des pièges intégrés, l'ordre d'exécution logique, les règles NULL, et des QCM « combien de lignes ? ». Expliqué <b>comme à un enfant</b> 🧒, avec section <b>Approfondissements niveau Master</b> et examen final 30 Q. Tout est sauvegardé dans ton navigateur.</p>
+</header>
+
+<div class="dash">
+  <div class="dash-card">
+    <div class="label">Progression du cours</div>
+    <div class="big"><span id="global-pct">0</span>%</div>
+    <div class="bar" id="global-bar"><span></span></div>
+    <div class="small" style="margin-top:6px">Cases « j'ai compris » cochées</div>
+  </div>
+  <div class="dash-card">
+    <div class="label">Score QCM</div>
+    <div class="big"><span id="qcm-correct">0</span><span style="font-size:18px;color:var(--ink-soft)">/<span id="qcm-total">0</span></span></div>
+    <div class="bar" id="qcm-bar"><span></span></div>
+    <div class="small" style="margin-top:6px">Bonnes réponses au 1ᵉʳ essai</div>
+  </div>
+  <div class="dash-card">
+    <div class="label">Contenu</div>
+    <div class="big">4<span style="font-size:18px;color:var(--ink-soft)"> ch.</span></div>
+    <div class="small">Ordre logique · NULL · Agrégation · Jointures · + Examen 30 Q</div>
+  </div>
+</div>
+
+<nav aria-label="Chapitres">
+  <a href="#ch1">Ch.1 Ordre logique <span class="pct" data-nav="ch1"></span></a>
+  <a href="#ch2">Ch.2 NULL <span class="pct" data-nav="ch2"></span></a>
+  <a href="#ch3">Ch.3 Agrégation <span class="pct" data-nav="ch3"></span></a>
+  <a href="#ch4">Ch.4 Jointures <span class="pct" data-nav="ch4"></span></a>
+  <a href="#final">★ Examen final</a>
+</nav>
+
+<div class="why"><b>Méthode examen à l'aveugle :</b> pour chaque requête, demande-toi dans l'ordre — (1) quelles <b>lignes</b> survivent au <code>WHERE</code> ? (2) comment sont-elles <b>regroupées</b> ? (3) que reste-t-il après <code>HAVING</code> ? (4) quelles <b>colonnes</b> sortent ? Et surtout : <b>où se cachent les NULL et les lignes orphelines ?</b></div>
+
+<!-- TRAINING DATABASE -->
+<div class="dbpanel">
+  <h3>🗄️ La base d'entraînement</h3>
+  <p class="dbsub">Toutes les requêtes du cours s'appuient sur ces 3 tables. <b>Apprends-les par cœur</b> — les pièges sont volontaires : <span style="color:var(--red)">David n'a aucun cours</span>, <span style="color:var(--red)">History n'a aucun inscrit</span>, et il y a des <span class="nullcell">NULL</span>.</p>
+  <div class="data-tables">
+    <figure>
+      <figcaption>students</figcaption>
+      <table class="mini-table">
+        <tr><th>id</th><th>name</th><th>age</th></tr>
+        <tr><td>1</td><td>Alice</td><td>22</td></tr>
+        <tr><td>2</td><td>Bob</td><td>25</td></tr>
+        <tr><td>3</td><td>Carol</td><td class="nullcell">NULL</td></tr>
+        <tr><td>4</td><td>David</td><td>20</td></tr>
+      </table>
+    </figure>
+    <figure>
+      <figcaption>courses</figcaption>
+      <table class="mini-table">
+        <tr><th>id</th><th>title</th><th>credits</th></tr>
+        <tr><td>10</td><td>Math</td><td>6</td></tr>
+        <tr><td>20</td><td>SQL</td><td>4</td></tr>
+        <tr><td>30</td><td>History</td><td>3</td></tr>
+      </table>
+    </figure>
+    <figure>
+      <figcaption>enrollments</figcaption>
+      <table class="mini-table">
+        <tr><th>student_id</th><th>course_id</th><th>grade</th></tr>
+        <tr><td>1</td><td>10</td><td>15</td></tr>
+        <tr><td>1</td><td>20</td><td>12</td></tr>
+        <tr><td>2</td><td>10</td><td>8</td></tr>
+        <tr><td>3</td><td>20</td><td class="nullcell">NULL</td></tr>
+      </table>
+    </figure>
+  </div>
+  <p class="note" style="margin-top:10px">Résumé : Alice → Math+SQL · Bob → Math · Carol → SQL (note NULL) · David → rien. Côté cours : Math (Alice,Bob), SQL (Alice,Carol), History (personne).</p>
+</div>
+
+<!-- ============================================================ -->
+<!-- CHAPITRE 1 -->
+<!-- ============================================================ -->
+<section class="module" id="ch1" data-module="ch1">
+  <div class="mod-head">
+    <span class="mod-num">1</span>
+    <div>
+      <h2>Le modèle relationnel &amp; l'ordre logique</h2>
+      <div class="mod-meta">Tables, clés, et l'ordre <b>FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY</b></div>
+    </div>
+  </div>
+  <div class="mod-bar"><div class="mod-fill"></div></div>
+
+  <div class="idea">
+    <span class="idea-tag">L'idée du chapitre</span>
+    SQL ne s'exécute <b>pas</b> dans l'ordre où on l'écrit. On écrit <code>SELECT</code> en premier, mais la base le traite presque en <b>dernier</b>. Connaître l'<b>ordre d'exécution logique</b> est la clé n°1 pour prédire un résultat à l'aveugle (et pour comprendre les messages d'erreur).
+  </div>
+
+  <div class="subhead">1.1 — Tables, lignes, colonnes, clés</div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair</span>
+    Une <b>table</b>, c'est un tableau Excel : des <b>colonnes</b> (les champs, ex. <code>name</code>) et des <b>lignes</b> (les enregistrements, ex. « Alice, 22 »). La <b>clé primaire</b> est le numéro unique de chaque ligne (comme un numéro de sécurité sociale). La <b>clé étrangère</b> est un champ qui <b>pointe vers</b> la clé d'une autre table (ex. <code>enrollments.student_id</code> pointe vers <code>students.id</code>) : c'est ce qui relie les tables.
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag">Fiche · Vocabulaire relationnel</span>
+    <ul>
+      <li><b>Table</b> = relation ; <b>ligne</b> = enregistrement ; <b>colonne</b> = attribut.</li>
+      <li><b>Clé primaire (PK)</b> : identifie chaque ligne de façon unique (jamais NULL, jamais en double).</li>
+      <li><b>Clé étrangère (FK)</b> : référence la PK d'une autre table. Ex. <code>enrollments.student_id → students.id</code>.</li>
+      <li><b>Intégrité référentielle</b> : une FK doit pointer vers une ligne existante (ou être NULL).</li>
+    </ul>
+  </div>
+
+  <div class="subhead">1.2 — L'ordre d'exécution logique (LA fiche clé)</div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair</span>
+    Imagine une chaîne de montage. D'abord on <b>va chercher la table</b> (FROM), on <b>jette les lignes non voulues</b> (WHERE), on <b>fait des paquets</b> (GROUP BY), on <b>jette des paquets entiers</b> (HAVING), on <b>choisit les colonnes à afficher</b> (SELECT), on <b>trie</b> (ORDER BY), puis on <b>coupe</b> (LIMIT). Tu écris SELECT en haut, mais l'ouvrier le fait presque à la fin !
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag red">Fiche clé · Ordre d'exécution</span>
+    <div class="formula" style="font-family:'JetBrains Mono',monospace;font-size:13.5px">
+      1. <b>FROM</b> / JOIN &nbsp;→&nbsp; 2. <b>WHERE</b> &nbsp;→&nbsp; 3. <b>GROUP BY</b> &nbsp;→&nbsp; 4. <b>HAVING</b> &nbsp;→&nbsp; 5. <b>SELECT</b> &nbsp;→&nbsp; 6. <b>ORDER BY</b> &nbsp;→&nbsp; 7. <b>LIMIT</b>
+    </div>
+    <p>Conséquences pratiques (sources d'erreurs aux examens) :</p>
+    <ul>
+      <li>Un <b>alias défini dans le SELECT</b> n'existe pas encore au moment du <code>WHERE</code> (SELECT vient après) — mais il existe dans <code>ORDER BY</code>.</li>
+      <li><code>WHERE</code> filtre des <b>lignes brutes</b> ; <code>HAVING</code> filtre des <b>groupes</b> (après agrégation).</li>
+      <li>On ne peut pas mettre une fonction d'agrégat (<code>COUNT</code>, <code>AVG</code>…) dans un <code>WHERE</code>.</li>
+    </ul>
+  </div>
+
+  <pre><span class="c">-- Squelette complet, dans l'ordre où on l'ÉCRIT</span>
+<span class="k">SELECT</span>   colonnes, AGG(...)      <span class="c">-- 5</span>
+<span class="k">FROM</span>     table                  <span class="c">-- 1</span>
+<span class="k">WHERE</span>    condition_ligne        <span class="c">-- 2</span>
+<span class="k">GROUP BY</span> colonnes               <span class="c">-- 3</span>
+<span class="k">HAVING</span>   condition_groupe       <span class="c">-- 4</span>
+<span class="k">ORDER BY</span> colonnes               <span class="c">-- 6</span>
+<span class="k">LIMIT</span>    n;                     <span class="c">-- 7</span></pre>
+
+  <div class="qcm" data-id="s1-q1" data-answer="1">
+    <span class="qcm-tag">QCM 1</span>
+    <p class="qcm-q">Quelle clause est exécutée <b>en premier</b> ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">SELECT</button>
+      <button type="button" data-letter="B">FROM</button>
+      <button type="button" data-letter="C">WHERE</button>
+      <button type="button" data-letter="D">ORDER BY</button>
+    </div>
+    <div class="qcm-fb"><b>B.</b> FROM (on récupère la table) avant tout. SELECT n'arrive qu'en 5ᵉ position, malgré sa place en haut du code.</div>
+  </div>
+
+  <div class="qcm" data-id="s1-q2" data-answer="2">
+    <span class="qcm-tag">QCM 2</span>
+    <p class="qcm-q">Pourquoi <code>SELECT age AS a FROM students WHERE a > 21</code> échoue ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">car age est NULL pour Carol</button>
+      <button type="button" data-letter="B">car il manque un GROUP BY</button>
+      <button type="button" data-letter="C">car l'alias « a » n'existe pas encore au WHERE (SELECT vient après)</button>
+      <button type="button" data-letter="D">car age n'est pas une clé</button>
+    </div>
+    <div class="qcm-fb"><b>C.</b> WHERE (2) s'exécute avant SELECT (5), donc l'alias « a » n'est pas encore défini. Il faut écrire <code>WHERE age > 21</code>.</div>
+  </div>
+
+  <div class="qcm" data-id="s1-q3" data-answer="0">
+    <span class="qcm-tag">QCM 3 · prédis le résultat</span>
+    <p class="qcm-q">Combien de lignes renvoie <code>SELECT * FROM students;</code> ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">4</button>
+      <button type="button" data-letter="B">3</button>
+      <button type="button" data-letter="C">5</button>
+      <button type="button" data-letter="D">1</button>
+    </div>
+    <div class="qcm-fb"><b>A.</b> 4 étudiants (Alice, Bob, Carol, David). <code>SELECT *</code> sans filtre = toutes les lignes.</div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">Exercice corrigé — l'ordre logique en action</span>
+    <p>Lis cette requête et dis ce qu'elle renvoie : <code>SELECT name FROM students WHERE age >= 22 ORDER BY age DESC;</code></p>
+    <details><summary>Voir la solution</summary>
+      <div class="sol">
+        <p>FROM students → 4 lignes. WHERE age ≥ 22 → Alice (22), Bob (25). Carol (NULL) exclue, David (20) exclu. ORDER BY age DESC → Bob, puis Alice. SELECT name.</p>
+        <p>Résultat : <b>Bob, Alice</b> (2 lignes, dans cet ordre).</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="check-title">À valider — Chapitre 1</div>
+  <div class="check"><input type="checkbox" id="c1a"><label for="c1a">Vocabulaire : table, ligne, colonne, PK, FK, intégrité référentielle</label></div>
+  <div class="check"><input type="checkbox" id="c1b"><label for="c1b">L'ordre d'exécution logique récité de tête</label></div>
+  <div class="check"><input type="checkbox" id="c1c"><label for="c1c">Alias indisponible au WHERE, disponible à ORDER BY</label></div>
+  <div class="check"><input type="checkbox" id="c1d"><label for="c1d">WHERE filtre des lignes / HAVING filtre des groupes</label></div>
+  <div class="check"><input type="checkbox" id="c1e"><label for="c1e">La base d'entraînement mémorisée (avec ses pièges)</label></div>
+</section>
+
+<!-- ============================================================ -->
+<!-- CHAPITRE 2 -->
+<!-- ============================================================ -->
+<section class="module" id="ch2" data-module="ch2">
+  <div class="mod-head">
+    <span class="mod-num">2</span>
+    <div>
+      <h2>Filtrer &amp; les règles NULL</h2>
+      <div class="mod-meta">SELECT, WHERE, opérateurs, et la <b>logique à trois valeurs</b> de NULL</div>
+    </div>
+  </div>
+  <div class="mod-bar"><div class="mod-fill"></div></div>
+
+  <div class="idea">
+    <span class="idea-tag">L'idée du chapitre</span>
+    <code>NULL</code> n'est <b>pas</b> zéro ni une chaîne vide : c'est « <b>valeur inconnue</b> ». Toute comparaison avec NULL donne <b>UNKNOWN</b> (ni vrai ni faux), et le <code>WHERE</code> ne garde que ce qui est <b>VRAI</b>. C'est la première source de bugs « invisibles » aux examens.
+  </div>
+
+  <div class="subhead">2.1 — SELECT &amp; WHERE</div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair</span>
+    <code>SELECT</code> = « quelles colonnes je veux voir ». <code>WHERE</code> = « quelles lignes je garde ». Pense au WHERE comme à un videur à l'entrée : il pose une question à chaque ligne et ne laisse entrer que celles qui répondent <b>VRAI</b>. Si la ligne répond « je ne sais pas » (à cause d'un NULL), le videur la <b>refuse</b>.
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag">Fiche · Opérateurs du WHERE</span>
+    <div class="table-scroll"><table class="mini-table">
+      <tr><th>Opérateur</th><th>Sens</th></tr>
+      <tr><td><code>=, &lt;&gt;, &lt;, &gt;, &lt;=, &gt;=</code></td><td>comparaisons</td></tr>
+      <tr><td><code>AND, OR, NOT</code></td><td>combiner des conditions</td></tr>
+      <tr><td><code>BETWEEN a AND b</code></td><td>intervalle (bornes incluses)</td></tr>
+      <tr><td><code>IN (...)</code></td><td>appartient à une liste</td></tr>
+      <tr><td><code>LIKE 'A%'</code></td><td>motif (<code>%</code>=n'importe quoi, <code>_</code>=1 car.)</td></tr>
+      <tr><td><code>IS NULL / IS NOT NULL</code></td><td>tester la présence de NULL</td></tr>
+    </table></div>
+  </div>
+
+  <div class="subhead">2.2 — Les règles NULL (le piège n°1)</div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair</span>
+    NULL = « case vide, on ne sait pas ce qu'il y a dedans ». Donc « <code>age = NULL</code> ? » n'a pas de réponse : peut-être oui, peut-être non → <b>UNKNOWN</b>. Même <code>NULL = NULL</code> donne UNKNOWN (deux inconnues ne sont pas « égales »). Pour tester une case vide, il faut un test spécial : <code>IS NULL</code>.
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag red">Fiche clé · Logique à 3 valeurs</span>
+    <ul>
+      <li>Toute comparaison <b>avec</b> NULL (<code>=, &lt;, &gt;</code>…) donne <b>UNKNOWN</b>, jamais TRUE/FALSE.</li>
+      <li>Le <code>WHERE</code> ne garde que les lignes <b>TRUE</b> (UNKNOWN est rejeté, comme FALSE).</li>
+      <li>Pour tester un NULL : <code>IS NULL</code> / <code>IS NOT NULL</code> (jamais <code>= NULL</code>).</li>
+      <li>NULL en arithmétique « contamine » : <code>NULL + 5 = NULL</code>, <code>NULL || 'x' = NULL</code>.</li>
+      <li>Les <b>agrégats ignorent</b> NULL (sauf <code>COUNT(*)</code>) — voir ch. 3.</li>
+    </ul>
+    <div class="warn"><b>Piège :</b> <code>WHERE age &lt;&gt; 22</code> n'inclut <b>pas</b> Carol (age NULL), car <code>NULL &lt;&gt; 22</code> = UNKNOWN, pas TRUE. Beaucoup d'étudiants l'oublient.</div>
+  </div>
+
+  <pre><span class="c">-- Gérer proprement les NULL</span>
+<span class="k">SELECT</span> name, <span class="k">COALESCE</span>(age, <span class="s">0</span>) <span class="k">AS</span> age_ou_zero
+<span class="k">FROM</span> students
+<span class="k">WHERE</span> age <span class="k">IS NOT NULL</span>;     <span class="c">-- exclut Carol explicitement</span></pre>
+
+  <div class="qcm" data-id="s2-q1" data-answer="2">
+    <span class="qcm-tag">QCM 1 · prédis le résultat</span>
+    <p class="qcm-q">Combien de lignes : <code>SELECT * FROM students WHERE age > 21;</code> ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">4</button>
+      <button type="button" data-letter="B">3</button>
+      <button type="button" data-letter="C">2</button>
+      <button type="button" data-letter="D">1</button>
+    </div>
+    <div class="qcm-fb"><b>C.</b> Alice (22) et Bob (25). David (20) ne passe pas, et Carol (NULL) non plus car <code>NULL > 21</code> = UNKNOWN. → 2 lignes.</div>
+  </div>
+
+  <div class="qcm" data-id="s2-q2" data-answer="3">
+    <span class="qcm-tag">QCM 2 · prédis le résultat</span>
+    <p class="qcm-q">Combien de lignes : <code>SELECT * FROM students WHERE age &lt;&gt; 22;</code> ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">3 (tous sauf Alice)</button>
+      <button type="button" data-letter="B">1</button>
+      <button type="button" data-letter="C">4</button>
+      <button type="button" data-letter="D">2 (Bob et David)</button>
+    </div>
+    <div class="qcm-fb"><b>D.</b> Bob (25) et David (20). Alice (22) est exclue (=22), et Carol (NULL) aussi car <code>NULL &lt;&gt; 22</code> = UNKNOWN. → 2 lignes. Le piège classique !</div>
+  </div>
+
+  <div class="qcm" data-id="s2-q3" data-answer="0">
+    <span class="qcm-tag">QCM 3</span>
+    <p class="qcm-q">Pour récupérer Carol (age inconnu), j'écris :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A"><code>WHERE age IS NULL</code></button>
+      <button type="button" data-letter="B"><code>WHERE age = NULL</code></button>
+      <button type="button" data-letter="C"><code>WHERE age = 0</code></button>
+      <button type="button" data-letter="D"><code>WHERE age = ''</code></button>
+    </div>
+    <div class="qcm-fb"><b>A.</b> <code>= NULL</code> donne toujours UNKNOWN (0 ligne). Seul <code>IS NULL</code> teste l'absence de valeur.</div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">Exercice corrigé — NULL et NOT IN</span>
+    <p>Que renvoie <code>SELECT name FROM students WHERE age NOT IN (20, 25);</code> ?</p>
+    <details><summary>Voir la solution</summary>
+      <div class="sol">
+        <p>David (20) et Bob (25) exclus. Alice (22) passe. Carol (NULL) : <code>NULL NOT IN (20,25)</code> = UNKNOWN → exclue.</p>
+        <p>Résultat : <b>Alice</b> seulement (1 ligne). Le NULL disparaît silencieusement, même avec NOT IN.</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="check-title">À valider — Chapitre 2</div>
+  <div class="check"><input type="checkbox" id="c2a"><label for="c2a">SELECT vs WHERE ; opérateurs (BETWEEN, IN, LIKE)</label></div>
+  <div class="check"><input type="checkbox" id="c2b"><label for="c2b">Logique à 3 valeurs : comparaison avec NULL = UNKNOWN</label></div>
+  <div class="check"><input type="checkbox" id="c2c"><label for="c2c">IS NULL / IS NOT NULL ; jamais <code>= NULL</code></label></div>
+  <div class="check"><input type="checkbox" id="c2d"><label for="c2d">Pièges <code>&lt;&gt;</code> et <code>NOT IN</code> avec NULL</label></div>
+  <div class="check"><input type="checkbox" id="c2e"><label for="c2e">COALESCE pour remplacer les NULL</label></div>
+</section>
+
+<!-- ============================================================ -->
+<!-- CHAPITRE 3 -->
+<!-- ============================================================ -->
+<section class="module" id="ch3" data-module="ch3">
+  <div class="mod-head">
+    <span class="mod-num">3</span>
+    <div>
+      <h2>Agrégation &amp; GROUP BY</h2>
+      <div class="mod-meta">COUNT, SUM, AVG, GROUP BY, HAVING — et <b>COUNT(*) vs COUNT(colonne)</b></div>
+    </div>
+  </div>
+  <div class="mod-bar"><div class="mod-fill"></div></div>
+
+  <div class="idea">
+    <span class="idea-tag">L'idée du chapitre</span>
+    Agréger, c'est <b>résumer plusieurs lignes en une seule</b> (un total, une moyenne, un comptage). <code>GROUP BY</code> fait des paquets, et l'agrégat s'applique <b>à chaque paquet</b>. Le piège-roi : <code>COUNT(*)</code> compte les lignes, <code>COUNT(colonne)</code> compte les valeurs <b>non NULL</b>.
+  </div>
+
+  <div class="subhead">3.1 — Fonctions d'agrégation</div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair</span>
+    Une fonction d'agrégation prend une <b>colonne entière et la réduit à un seul chiffre</b> : <code>COUNT</code> compte, <code>SUM</code> additionne, <code>AVG</code> fait la moyenne, <code>MIN/MAX</code> trouvent le plus petit/grand. Détail crucial : elles <b>sautent les cases vides (NULL)</b> — sauf <code>COUNT(*)</code> qui compte les lignes coûte que coûte.
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag red">Fiche clé · COUNT(*) vs COUNT(col)</span>
+    <ul>
+      <li><code>COUNT(*)</code> : nombre de <b>lignes</b> (NULL compris).</li>
+      <li><code>COUNT(colonne)</code> : nombre de valeurs <b>non NULL</b> de cette colonne.</li>
+      <li><code>COUNT(DISTINCT col)</code> : nombre de valeurs <b>distinctes non NULL</b>.</li>
+      <li><code>SUM, AVG, MIN, MAX</code> : <b>ignorent les NULL</b>. ⚠️ <code>AVG</code> divise par le nombre de non-NULL, pas par le total.</li>
+    </ul>
+    <div class="warn"><b>Sur notre base :</b> <code>COUNT(*) FROM students</code> = 4, mais <code>COUNT(age)</code> = 3 (Carol exclue). Et <code>AVG(age)</code> = (22+25+20)/3 = 22,33 — pas /4.</div>
+  </div>
+
+  <div class="qcm" data-id="s3-q1" data-answer="1">
+    <span class="qcm-tag">QCM 1 · prédis le résultat</span>
+    <p class="qcm-q"><code>SELECT COUNT(*), COUNT(age) FROM students;</code> renvoie :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">4 et 4</button>
+      <button type="button" data-letter="B">4 et 3</button>
+      <button type="button" data-letter="C">3 et 3</button>
+      <button type="button" data-letter="D">4 et 0</button>
+    </div>
+    <div class="qcm-fb"><b>B.</b> <code>COUNT(*)</code> = 4 lignes. <code>COUNT(age)</code> = 3 car l'age de Carol est NULL (non compté).</div>
+  </div>
+
+  <div class="qcm" data-id="s3-q2" data-answer="2">
+    <span class="qcm-tag">QCM 2 · prédis le résultat</span>
+    <p class="qcm-q"><code>SELECT AVG(age) FROM students;</code> vaut :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">16,75 (=67/4)</button>
+      <button type="button" data-letter="B">21</button>
+      <button type="button" data-letter="C">22,33 (=67/3)</button>
+      <button type="button" data-letter="D">NULL</button>
+    </div>
+    <div class="qcm-fb"><b>C.</b> AVG ignore le NULL : (22+25+20)/3 = 22,33. Il ne divise PAS par 4. C'est différent de <code>SUM(age)/COUNT(*)</code> !</div>
+  </div>
+
+  <div class="subhead">3.2 — GROUP BY &amp; HAVING</div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair</span>
+    <code>GROUP BY</code> = <b>trier les lignes en paquets</b> qui partagent la même valeur (ex. un paquet par cours). Ensuite l'agrégat compte/additionne <b>dans chaque paquet</b>. <code>HAVING</code> = un deuxième videur, mais qui juge les <b>paquets entiers</b> après comptage (ex. « ne garde que les cours avec ≥ 2 inscrits »), alors que <code>WHERE</code> jugeait les lignes une par une, avant.
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag">Fiche · La règle d'or du GROUP BY</span>
+    <p>Dans un <code>SELECT</code> avec <code>GROUP BY</code>, chaque colonne du SELECT doit être <b>soit dans le GROUP BY, soit dans un agrégat</b>. Sinon : erreur (ou résultat imprévisible selon le SGBD).</p>
+    <pre><span class="c">-- Nb d'inscrits par cours, seulement ceux avec >= 2</span>
+<span class="k">SELECT</span> course_id, <span class="k">COUNT</span>(*) <span class="k">AS</span> n
+<span class="k">FROM</span> enrollments
+<span class="k">GROUP BY</span> course_id
+<span class="k">HAVING</span> <span class="k">COUNT</span>(*) >= <span class="s">2</span>;</pre>
+    <p class="note">WHERE filtrerait des inscriptions <i>avant</i> le comptage ; HAVING filtre des <i>cours</i> après comptage.</p>
+  </div>
+
+  <div class="qcm" data-id="s3-q3" data-answer="0">
+    <span class="qcm-tag">QCM 3 · prédis le résultat</span>
+    <p class="qcm-q">La requête ci-dessus (<code>GROUP BY course_id HAVING COUNT(*)>=2</code> sur enrollments) renvoie combien de lignes ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">2 (Math=2, SQL=2)</button>
+      <button type="button" data-letter="B">3</button>
+      <button type="button" data-letter="C">1</button>
+      <button type="button" data-letter="D">0</button>
+    </div>
+    <div class="qcm-fb"><b>A.</b> enrollments groupé : course 10 (Math) = 2, course 20 (SQL) = 2. Les deux passent HAVING ≥ 2. History (30) n'apparaît même pas (aucune inscription dans la table). → 2 lignes.</div>
+  </div>
+
+  <div class="qcm" data-id="s3-q4" data-answer="3">
+    <span class="qcm-tag">QCM 4</span>
+    <p class="qcm-q">Pour garder seulement les groupes ayant <code>COUNT(*) > 1</code>, on utilise :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">WHERE COUNT(*) > 1</button>
+      <button type="button" data-letter="B">SELECT COUNT(*) > 1</button>
+      <button type="button" data-letter="C">ORDER BY COUNT(*)</button>
+      <button type="button" data-letter="D">HAVING COUNT(*) > 1</button>
+    </div>
+    <div class="qcm-fb"><b>D.</b> Un agrégat ne peut pas aller dans WHERE (qui s'exécute avant le regroupement). On filtre les groupes avec HAVING.</div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">Exercice corrigé — moyenne par étudiant</span>
+    <p>Que renvoie <code>SELECT student_id, AVG(grade) FROM enrollments GROUP BY student_id;</code> ?</p>
+    <details><summary>Voir la solution</summary>
+      <div class="sol">
+        <p>Paquets par student_id : 1 → notes 15,12 → AVG 13,5. 2 → note 8 → AVG 8. 3 → note NULL → AVG sur 0 valeur = <b>NULL</b>.</p>
+        <p>Résultat : (1 ; 13,5), (2 ; 8), (3 ; NULL). 3 lignes. David (4) n'apparaît pas (aucune ligne dans enrollments).</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="subhead">3.3 — Approfondissements (niveau Master)</div>
+
+  <div class="fiche">
+    <span class="fiche-tag">Fiche · Au-delà du GROUP BY de base</span>
+    <ul>
+      <li><b>Sous-requêtes :</b> une requête dans une requête. Ex. étudiants au-dessus de la moyenne d'âge : <code>WHERE age > (SELECT AVG(age) FROM students)</code>.</li>
+      <li><b>Fonctions fenêtre (window) :</b> <code>AVG(grade) OVER (PARTITION BY student_id)</code> agrège <b>sans</b> réduire le nombre de lignes (garde le détail + le résumé côte à côte). Essentiel en data science.</li>
+      <li><b>CTE</b> (<code>WITH ... AS</code>) : nommer une sous-requête pour lisibilité et réutilisation.</li>
+      <li><b>RANK / ROW_NUMBER / DENSE_RANK</b> : classements (top-N par groupe).</li>
+    </ul>
+  </div>
+
+  <div class="qcm" data-id="s3-q5" data-answer="1">
+    <span class="qcm-tag">QCM 5</span>
+    <p class="qcm-q">Qu'est-ce qui distingue une fonction fenêtre (<code>OVER</code>) d'un <code>GROUP BY</code> ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">elle est plus rapide</button>
+      <button type="button" data-letter="B">elle agrège sans réduire le nombre de lignes</button>
+      <button type="button" data-letter="C">elle ignore les NULL différemment</button>
+      <button type="button" data-letter="D">elle ne marche que sur une colonne</button>
+    </div>
+    <div class="qcm-fb"><b>B.</b> Une window function ajoute le résumé en gardant chaque ligne de détail ; GROUP BY, lui, écrase les lignes d'un groupe en une seule.</div>
+  </div>
+
+  <div class="check-title">À valider — Chapitre 3</div>
+  <div class="check"><input type="checkbox" id="c3a"><label for="c3a">COUNT/SUM/AVG/MIN/MAX et leur traitement des NULL</label></div>
+  <div class="check"><input type="checkbox" id="c3b"><label for="c3b">COUNT(*) vs COUNT(col) vs COUNT(DISTINCT) — sans hésiter</label></div>
+  <div class="check"><input type="checkbox" id="c3c"><label for="c3c">GROUP BY + règle d'or (colonnes groupées ou agrégées)</label></div>
+  <div class="check"><input type="checkbox" id="c3d"><label for="c3d">HAVING (groupes) vs WHERE (lignes)</label></div>
+  <div class="check"><input type="checkbox" id="c3e"><label for="c3e">Sous-requêtes, fonctions fenêtre, CTE (idées)</label></div>
+</section>
+
+<!-- ============================================================ -->
+<!-- CHAPITRE 4 -->
+<!-- ============================================================ -->
+<section class="module" id="ch4" data-module="ch4">
+  <div class="mod-head">
+    <span class="mod-num">4</span>
+    <div>
+      <h2>Jointures</h2>
+      <div class="mod-meta">INNER, LEFT, RIGHT, FULL — et les <b>pièges des lignes orphelines</b></div>
+    </div>
+  </div>
+  <div class="mod-bar"><div class="mod-fill"></div></div>
+
+  <div class="idea">
+    <span class="idea-tag">L'idée du chapitre</span>
+    Une jointure <b>recolle deux tables</b> via une clé commune. La grande question d'examen : <b>que deviennent les lignes sans correspondance ?</b> <code>INNER</code> les jette ; <code>LEFT</code> garde toutes celles de gauche (en remplissant par NULL). David (sans cours) et History (sans inscrit) sont là pour tester exactement ça.
+  </div>
+
+  <div class="subhead">4.1 — Les types de jointures</div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair</span>
+    Tu as deux listes et tu veux les apparier (les étudiants ↔ leurs inscriptions). <b>INNER JOIN</b> = ne garde que les paires qui matchent des <b>deux côtés</b> (David, sans inscription, disparaît). <b>LEFT JOIN</b> = garde <b>tout le monde à gauche</b>, et met des cases vides (NULL) là où il n'y a pas de partenaire (David reste, avec des NULL). RIGHT = pareil mais à droite. FULL = tout le monde des deux côtés.
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag red">Fiche clé · INNER vs LEFT vs RIGHT vs FULL</span>
+    <div class="table-scroll"><table class="mini-table">
+      <tr><th>Jointure</th><th>Garde…</th><th>Lignes sans match</th></tr>
+      <tr><td><b>INNER</b></td><td>seulement les correspondances</td><td>jetées des deux côtés</td></tr>
+      <tr><td><b>LEFT</b></td><td>toutes celles de gauche</td><td>gauche gardée (droite = NULL)</td></tr>
+      <tr><td><b>RIGHT</b></td><td>toutes celles de droite</td><td>droite gardée (gauche = NULL)</td></tr>
+      <tr><td><b>FULL</b></td><td>toutes des deux côtés</td><td>les deux gardées (NULL en face)</td></tr>
+    </table></div>
+    <pre><span class="k">SELECT</span> s.name, e.course_id
+<span class="k">FROM</span> students s
+<span class="k">LEFT JOIN</span> enrollments e <span class="k">ON</span> s.id = e.student_id;</pre>
+  </div>
+
+  <div class="qcm" data-id="s4-q1" data-answer="2">
+    <span class="qcm-tag">QCM 1 · prédis le résultat</span>
+    <p class="qcm-q"><code>SELECT * FROM students s INNER JOIN enrollments e ON s.id=e.student_id;</code> → combien de lignes ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">5</button>
+      <button type="button" data-letter="B">3</button>
+      <button type="button" data-letter="C">4</button>
+      <button type="button" data-letter="D">16</button>
+    </div>
+    <div class="qcm-fb"><b>C.</b> Une ligne par inscription qui matche : (Alice,10),(Alice,20),(Bob,10),(Carol,20) = 4. David (sans inscription) <b>disparaît</b> en INNER JOIN.</div>
+  </div>
+
+  <div class="qcm" data-id="s4-q2" data-answer="0">
+    <span class="qcm-tag">QCM 2 · prédis le résultat</span>
+    <p class="qcm-q">Même requête mais en <code>LEFT JOIN</code> → combien de lignes ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">5</button>
+      <button type="button" data-letter="B">4</button>
+      <button type="button" data-letter="C">3</button>
+      <button type="button" data-letter="D">8</button>
+    </div>
+    <div class="qcm-fb"><b>A.</b> Les 4 lignes de l'INNER + David une fois avec course_id = NULL = 5 lignes. LEFT garde tout le monde à gauche.</div>
+  </div>
+
+  <div class="subhead">4.2 — Jointures + agrégation : le combo qui piège</div>
+
+  <div class="eli5">
+    <span class="eli5-tag">En clair</span>
+    Quand on compte après un LEFT JOIN, il faut choisir <b>quoi</b> compter. Pour David (qui n'a aucun cours mais qu'on garde grâce au LEFT), <code>COUNT(*)</code> dirait « 1 » (il a bien une ligne, avec des NULL), alors qu'on veut « 0 ». La bonne réponse : compter une <b>colonne de la table de droite</b>, <code>COUNT(e.course_id)</code>, qui ne compte pas les NULL → David obtient bien 0.
+  </div>
+
+  <div class="fiche">
+    <span class="fiche-tag red">Fiche clé · LEFT JOIN + COUNT</span>
+    <pre><span class="c">-- Nb de cours par étudiant, David inclus avec 0</span>
+<span class="k">SELECT</span> s.name, <span class="k">COUNT</span>(e.course_id) <span class="k">AS</span> nb_cours
+<span class="k">FROM</span> students s
+<span class="k">LEFT JOIN</span> enrollments e <span class="k">ON</span> s.id = e.student_id
+<span class="k">GROUP BY</span> s.name;</pre>
+    <p>Résultat : Alice 2, Bob 1, Carol 1, <b>David 0</b>. Si on avait écrit <code>COUNT(*)</code>, David afficherait <b>1</b> (sa ligne LEFT avec des NULL) — l'erreur classique.</p>
+  </div>
+
+  <div class="qcm" data-id="s4-q3" data-answer="1">
+    <span class="qcm-tag">QCM 3 · prédis le résultat</span>
+    <p class="qcm-q">Dans la requête ci-dessus, mais avec <code>COUNT(*)</code> au lieu de <code>COUNT(e.course_id)</code>, David affiche :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">0</button>
+      <button type="button" data-letter="B">1</button>
+      <button type="button" data-letter="C">NULL</button>
+      <button type="button" data-letter="D">il n'apparaît pas</button>
+    </div>
+    <div class="qcm-fb"><b>B.</b> <code>COUNT(*)</code> compte la ligne (même pleine de NULL) → David = 1, faux. <code>COUNT(e.course_id)</code> ignore le NULL → David = 0, correct.</div>
+  </div>
+
+  <div class="qcm" data-id="s4-q4" data-answer="2">
+    <span class="qcm-tag">QCM 4 · prédis le résultat</span>
+    <p class="qcm-q">Pour lister les cours <b>sans aucun inscrit</b> (donc History), quelle approche ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">INNER JOIN courses/enrollments</button>
+      <button type="button" data-letter="B">WHERE enrollments IS NULL</button>
+      <button type="button" data-letter="C">LEFT JOIN courses→enrollments puis WHERE e.course_id IS NULL</button>
+      <button type="button" data-letter="D">GROUP BY sans HAVING</button>
+    </div>
+    <div class="qcm-fb"><b>C.</b> On part de courses (gauche), LEFT JOIN vers enrollments, et on garde les cours dont le côté droit est resté NULL = aucun inscrit. History ressort. (« anti-join ».)</div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">Exercice corrigé — anti-join</span>
+    <p>Écris la requête qui liste les cours sans inscrit, et donne le résultat.</p>
+    <details><summary>Voir la solution</summary>
+      <div class="sol">
+        <pre style="margin:6px 0"><span class="k">SELECT</span> c.title
+<span class="k">FROM</span> courses c
+<span class="k">LEFT JOIN</span> enrollments e <span class="k">ON</span> c.id = e.course_id
+<span class="k">WHERE</span> e.course_id <span class="k">IS NULL</span>;</pre>
+        <p>Math et SQL ont des inscriptions (côté droit non NULL) → éliminés. History n'en a pas → côté droit NULL → gardé.</p>
+        <p>Résultat : <b>History</b> (1 ligne).</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="subhead">4.3 — Approfondissements (niveau Master)</div>
+
+  <div class="fiche">
+    <span class="fiche-tag">Fiche · Plus loin sur les jointures</span>
+    <ul>
+      <li><b>CROSS JOIN :</b> produit cartésien (toutes les paires). <code>students × courses</code> = 4×3 = 12 lignes. À éviter par accident (oubli du <code>ON</code> !).</li>
+      <li><b>SELF JOIN :</b> joindre une table à elle-même (ex. hiérarchies employé/manager).</li>
+      <li><b>Semi-join / anti-join :</b> <code>EXISTS</code> / <code>NOT EXISTS</code> — tester la présence sans dupliquer les lignes.</li>
+      <li><b>Ordre de jointure &amp; index :</b> les clés étrangères indexées rendent les jointures rapides ; sans index, coût quadratique.</li>
+    </ul>
+  </div>
+
+  <div class="qcm" data-id="s4-q5" data-answer="3">
+    <span class="qcm-tag">QCM 5 · prédis le résultat</span>
+    <p class="qcm-q"><code>SELECT COUNT(*) FROM students CROSS JOIN courses;</code> vaut :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">4</button>
+      <button type="button" data-letter="B">7</button>
+      <button type="button" data-letter="C">3</button>
+      <button type="button" data-letter="D">12</button>
+    </div>
+    <div class="qcm-fb"><b>D.</b> Produit cartésien : 4 étudiants × 3 cours = 12 paires. C'est ce qui arrive aussi si on oublie la condition <code>ON</code> d'une jointure.</div>
+  </div>
+
+  <div class="exam-box">
+    <ul>
+      <li><b>INNER</b> jette les orphelins ; <b>LEFT</b> garde la gauche (NULL à droite). David teste ça.</li>
+      <li><b>LEFT JOIN + COUNT(colonne_droite)</b> pour compter 0 correctement (jamais <code>COUNT(*)</code>).</li>
+      <li><b>Anti-join</b> (LEFT JOIN + <code>WHERE droite IS NULL</code>) pour « ceux sans correspondance » (History).</li>
+      <li>Oublier le <code>ON</code> → produit cartésien (explosion du nombre de lignes).</li>
+      <li>Toujours se demander : <b>où sont les NULL, où sont les lignes orphelines ?</b></li>
+    </ul>
+  </div>
+
+  <div class="check-title">À valider — Chapitre 4</div>
+  <div class="check"><input type="checkbox" id="c4a"><label for="c4a">INNER / LEFT / RIGHT / FULL et le sort des orphelins</label></div>
+  <div class="check"><input type="checkbox" id="c4b"><label for="c4b">Prédire le nb de lignes d'un INNER vs LEFT (David)</label></div>
+  <div class="check"><input type="checkbox" id="c4c"><label for="c4c">LEFT JOIN + COUNT(col) pour les zéros (pas COUNT(*))</label></div>
+  <div class="check"><input type="checkbox" id="c4d"><label for="c4d">Anti-join : trouver les sans-correspondance (History)</label></div>
+  <div class="check"><input type="checkbox" id="c4e"><label for="c4e">CROSS/SELF JOIN, EXISTS/NOT EXISTS, rôle des index</label></div>
+</section>
+
+<!-- ============================================================ -->
+<!-- EXAMEN FINAL -->
+<!-- ============================================================ -->
+<section class="module" id="final" data-module="final">
+  <div class="mod-head">
+    <span class="mod-num">★</span>
+    <div>
+      <h2>Examen final — 30 questions</h2>
+      <div class="mod-meta">QCM « prédis le résultat » + requêtes à écrire · sur la base d'entraînement</div>
+    </div>
+  </div>
+  <div class="mod-bar"><div class="mod-fill"></div></div>
+
+  <div class="why"><b>Règle du jeu :</b> <b>aucun ordinateur</b>. Pour chaque QCM, calcule le résultat exact dans ta tête (lignes, NULL, orphelins) avant de cliquer. Pour les requêtes, écris-les sur papier puis vérifie. Garde la base d'entraînement sous les yeux.</div>
+
+  <div class="subhead">Partie A — 15 QCM « prédis le résultat »</div>
+
+  <div class="qcm" data-id="f-q1" data-answer="1">
+    <span class="qcm-tag">QCM 1 · Ch.1</span>
+    <p class="qcm-q">Quelle clause s'exécute juste après FROM ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">SELECT</button><button type="button" data-letter="B">WHERE</button>
+      <button type="button" data-letter="C">HAVING</button><button type="button" data-letter="D">ORDER BY</button>
+    </div>
+    <div class="qcm-fb"><b>B.</b> FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY → LIMIT.</div>
+  </div>
+
+  <div class="qcm" data-id="f-q2" data-answer="2">
+    <span class="qcm-tag">QCM 2 · Ch.2</span>
+    <p class="qcm-q"><code>SELECT COUNT(*) FROM students WHERE age >= 22;</code></p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">4</button><button type="button" data-letter="B">3</button>
+      <button type="button" data-letter="C">2</button><button type="button" data-letter="D">1</button>
+    </div>
+    <div class="qcm-fb"><b>C.</b> Alice (22), Bob (25). Carol NULL exclue, David 20 exclu. = 2.</div>
+  </div>
+
+  <div class="qcm" data-id="f-q3" data-answer="0">
+    <span class="qcm-tag">QCM 3 · Ch.2</span>
+    <p class="qcm-q"><code>SELECT COUNT(*) FROM students WHERE age = NULL;</code></p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">0</button><button type="button" data-letter="B">1</button>
+      <button type="button" data-letter="C">4</button><button type="button" data-letter="D">erreur</button>
+    </div>
+    <div class="qcm-fb"><b>A.</b> <code>= NULL</code> donne UNKNOWN pour toutes les lignes → 0. Il fallait <code>IS NULL</code> (qui aurait donné 1).</div>
+  </div>
+
+  <div class="qcm" data-id="f-q4" data-answer="3">
+    <span class="qcm-tag">QCM 4 · Ch.3</span>
+    <p class="qcm-q"><code>SELECT COUNT(grade) FROM enrollments;</code></p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">4</button><button type="button" data-letter="B">1</button>
+      <button type="button" data-letter="C">2</button><button type="button" data-letter="D">3</button>
+    </div>
+    <div class="qcm-fb"><b>D.</b> 4 inscriptions, mais la note de Carol est NULL → COUNT(grade) = 3.</div>
+  </div>
+
+  <div class="qcm" data-id="f-q5" data-answer="1">
+    <span class="qcm-tag">QCM 5 · Ch.3</span>
+    <p class="qcm-q"><code>SELECT SUM(grade) FROM enrollments;</code></p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">NULL</button><button type="button" data-letter="B">35</button>
+      <button type="button" data-letter="C">35 + NULL</button><button type="button" data-letter="D">8,75</button>
+    </div>
+    <div class="qcm-fb"><b>B.</b> 15+12+8 = 35 (la note NULL est ignorée par SUM).</div>
+  </div>
+
+  <div class="qcm" data-id="f-q6" data-answer="2">
+    <span class="qcm-tag">QCM 6 · Ch.3</span>
+    <p class="qcm-q"><code>SELECT COUNT(DISTINCT student_id) FROM enrollments;</code></p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">4</button><button type="button" data-letter="B">2</button>
+      <button type="button" data-letter="C">3</button><button type="button" data-letter="D">1</button>
+    </div>
+    <div class="qcm-fb"><b>C.</b> student_id présents : 1,1,2,3 → distincts = {1,2,3} = 3. David (4) n'y est pas.</div>
+  </div>
+
+  <div class="qcm" data-id="f-q7" data-answer="0">
+    <span class="qcm-tag">QCM 7 · Ch.4</span>
+    <p class="qcm-q"><code>SELECT COUNT(*) FROM students s LEFT JOIN enrollments e ON s.id=e.student_id;</code></p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">5</button><button type="button" data-letter="B">4</button>
+      <button type="button" data-letter="C">3</button><button type="button" data-letter="D">12</button>
+    </div>
+    <div class="qcm-fb"><b>A.</b> 4 inscriptions matchées + David (gardé en LEFT, course NULL) = 5.</div>
+  </div>
+
+  <div class="qcm" data-id="f-q8" data-answer="1">
+    <span class="qcm-tag">QCM 8 · Ch.4</span>
+    <p class="qcm-q">Même chose en <code>INNER JOIN</code> :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">5</button><button type="button" data-letter="B">4</button>
+      <button type="button" data-letter="C">3</button><button type="button" data-letter="D">2</button>
+    </div>
+    <div class="qcm-fb"><b>B.</b> INNER jette David (sans match) → 4 lignes.</div>
+  </div>
+
+  <div class="qcm" data-id="f-q9" data-answer="3">
+    <span class="qcm-tag">QCM 9 · Ch.4</span>
+    <p class="qcm-q"><code>SELECT COUNT(*) FROM courses c LEFT JOIN enrollments e ON c.id=e.course_id;</code></p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">3</button><button type="button" data-letter="B">4</button>
+      <button type="button" data-letter="C">6</button><button type="button" data-letter="D">5</button>
+    </div>
+    <div class="qcm-fb"><b>D.</b> Math (2 inscriptions) + SQL (2) + History (0 → 1 ligne NULL en LEFT) = 2+2+1 = 5.</div>
+  </div>
+
+  <div class="qcm" data-id="f-q10" data-answer="0">
+    <span class="qcm-tag">QCM 10 · Ch.4</span>
+    <p class="qcm-q"><code>SELECT COUNT(*) FROM students CROSS JOIN courses;</code></p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">12</button><button type="button" data-letter="B">7</button>
+      <button type="button" data-letter="C">4</button><button type="button" data-letter="D">3</button>
+    </div>
+    <div class="qcm-fb"><b>A.</b> 4 × 3 = 12 (produit cartésien).</div>
+  </div>
+
+  <div class="qcm" data-id="f-q11" data-answer="2">
+    <span class="qcm-tag">QCM 11 · Ch.2</span>
+    <p class="qcm-q"><code>SELECT COUNT(*) FROM students WHERE age NOT IN (20,25);</code></p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">3</button><button type="button" data-letter="B">2</button>
+      <button type="button" data-letter="C">1</button><button type="button" data-letter="D">4</button>
+    </div>
+    <div class="qcm-fb"><b>C.</b> Exclut Bob(25), David(20). Carol(NULL) → UNKNOWN → exclue. Reste Alice. = 1.</div>
+  </div>
+
+  <div class="qcm" data-id="f-q12" data-answer="1">
+    <span class="qcm-tag">QCM 12 · Ch.3</span>
+    <p class="qcm-q"><code>GROUP BY course_id HAVING COUNT(*)=2</code> sur enrollments renvoie combien de groupes ?</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">3</button><button type="button" data-letter="B">2</button>
+      <button type="button" data-letter="C">1</button><button type="button" data-letter="D">0</button>
+    </div>
+    <div class="qcm-fb"><b>B.</b> Math = 2, SQL = 2 → 2 groupes. History absent de la table.</div>
+  </div>
+
+  <div class="qcm" data-id="f-q13" data-answer="3">
+    <span class="qcm-tag">QCM 13 · Ch.3</span>
+    <p class="qcm-q">Une window function <code>OVER(PARTITION BY ...)</code> :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">réduit les lignes comme GROUP BY</button><button type="button" data-letter="B">est interdite en SQL</button>
+      <button type="button" data-letter="C">ne marche qu'avec COUNT</button><button type="button" data-letter="D">garde toutes les lignes en ajoutant l'agrégat</button>
+    </div>
+    <div class="qcm-fb"><b>D.</b> Elle calcule par groupe sans écraser le détail.</div>
+  </div>
+
+  <div class="qcm" data-id="f-q14" data-answer="0">
+    <span class="qcm-tag">QCM 14 · Ch.1</span>
+    <p class="qcm-q">Une fonction d'agrégat dans le <code>WHERE</code> :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">est interdite (utiliser HAVING)</button><button type="button" data-letter="B">est obligatoire</button>
+      <button type="button" data-letter="C">est plus rapide</button><button type="button" data-letter="D">ignore les NULL</button>
+    </div>
+    <div class="qcm-fb"><b>A.</b> WHERE s'exécute avant l'agrégation, donc COUNT/SUM/AVG y sont impossibles. On filtre les groupes via HAVING.</div>
+  </div>
+
+  <div class="qcm" data-id="f-q15" data-answer="2">
+    <span class="qcm-tag">QCM 15 · Ch.4</span>
+    <p class="qcm-q">Pour trouver les étudiants <b>sans aucune inscription</b> (David) :</p>
+    <div class="qcm-opts">
+      <button type="button" data-letter="A">INNER JOIN</button><button type="button" data-letter="B">CROSS JOIN</button>
+      <button type="button" data-letter="C">LEFT JOIN + WHERE e.student_id IS NULL</button><button type="button" data-letter="D">GROUP BY name</button>
+    </div>
+    <div class="qcm-fb"><b>C.</b> Anti-join : on garde les étudiants dont le côté droit est resté NULL après LEFT JOIN. David ressort.</div>
+  </div>
+
+  <div class="subhead">Partie B — 15 requêtes à écrire</div>
+
+  <div class="exo">
+    <span class="exo-tag">P1 · Ch.1</span>
+    <p>Liste les noms des étudiants par âge croissant (les NULL à la fin selon le SGBD).</p>
+    <details><summary>Solution</summary><div class="sol">
+      <pre style="margin:6px 0"><span class="k">SELECT</span> name <span class="k">FROM</span> students <span class="k">ORDER BY</span> age <span class="k">ASC</span>;</pre>
+      <p>David(20), Alice(22), Bob(25), Carol(NULL).</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp1"><label for="fp1">Réussi sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P2 · Ch.2</span>
+    <p>Étudiants dont l'âge est entre 21 et 26 inclus.</p>
+    <details><summary>Solution</summary><div class="sol">
+      <pre style="margin:6px 0"><span class="k">SELECT</span> name <span class="k">FROM</span> students <span class="k">WHERE</span> age <span class="k">BETWEEN</span> <span class="s">21</span> <span class="k">AND</span> <span class="s">26</span>;</pre>
+      <p>Alice (22), Bob (25). Carol exclue (NULL).</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp2"><label for="fp2">Réussi sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P3 · Ch.2</span>
+    <p>Étudiants dont le nom commence par un « A » ou un « B ».</p>
+    <details><summary>Solution</summary><div class="sol">
+      <pre style="margin:6px 0"><span class="k">SELECT</span> name <span class="k">FROM</span> students
+<span class="k">WHERE</span> name <span class="k">LIKE</span> <span class="s">'A%'</span> <span class="k">OR</span> name <span class="k">LIKE</span> <span class="s">'B%'</span>;</pre>
+      <p>Alice, Bob.</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp3"><label for="fp3">Réussi sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P4 · Ch.2</span>
+    <p>Remplace l'âge manquant par 0 dans l'affichage.</p>
+    <details><summary>Solution</summary><div class="sol">
+      <pre style="margin:6px 0"><span class="k">SELECT</span> name, <span class="k">COALESCE</span>(age, <span class="s">0</span>) <span class="k">AS</span> age <span class="k">FROM</span> students;</pre>
+      <p>Carol affiche 0 au lieu de NULL.</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp4"><label for="fp4">Réussi sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P5 · Ch.3</span>
+    <p>Nombre d'inscriptions par cours (course_id).</p>
+    <details><summary>Solution</summary><div class="sol">
+      <pre style="margin:6px 0"><span class="k">SELECT</span> course_id, <span class="k">COUNT</span>(*) <span class="k">AS</span> n
+<span class="k">FROM</span> enrollments <span class="k">GROUP BY</span> course_id;</pre>
+      <p>(10 ; 2), (20 ; 2). History (30) n'apparaît pas (absent de enrollments).</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp5"><label for="fp5">Réussi sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P6 · Ch.3</span>
+    <p>Moyenne des notes par étudiant, arrondie n'est pas requise.</p>
+    <details><summary>Solution</summary><div class="sol">
+      <pre style="margin:6px 0"><span class="k">SELECT</span> student_id, <span class="k">AVG</span>(grade) <span class="k">AS</span> moy
+<span class="k">FROM</span> enrollments <span class="k">GROUP BY</span> student_id;</pre>
+      <p>(1 ; 13,5), (2 ; 8), (3 ; NULL — note unique NULL).</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp6"><label for="fp6">Réussi sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P7 · Ch.3</span>
+    <p>Cours ayant au moins 2 inscrits.</p>
+    <details><summary>Solution</summary><div class="sol">
+      <pre style="margin:6px 0"><span class="k">SELECT</span> course_id <span class="k">FROM</span> enrollments
+<span class="k">GROUP BY</span> course_id <span class="k">HAVING</span> <span class="k">COUNT</span>(*) >= <span class="s">2</span>;</pre>
+      <p>Math (10), SQL (20).</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp7"><label for="fp7">Réussi sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P8 · Ch.4</span>
+    <p>Affiche chaque inscription avec le nom de l'étudiant et le titre du cours.</p>
+    <details><summary>Solution</summary><div class="sol">
+      <pre style="margin:6px 0"><span class="k">SELECT</span> s.name, c.title, e.grade
+<span class="k">FROM</span> enrollments e
+<span class="k">JOIN</span> students s <span class="k">ON</span> e.student_id = s.id
+<span class="k">JOIN</span> courses  c <span class="k">ON</span> e.course_id = c.id;</pre>
+      <p>4 lignes : (Alice,Math,15),(Alice,SQL,12),(Bob,Math,8),(Carol,SQL,NULL).</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp8"><label for="fp8">Réussi sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P9 · Ch.4</span>
+    <p>Nombre de cours suivis par chaque étudiant, <b>David inclus avec 0</b>.</p>
+    <details><summary>Solution</summary><div class="sol">
+      <pre style="margin:6px 0"><span class="k">SELECT</span> s.name, <span class="k">COUNT</span>(e.course_id) <span class="k">AS</span> nb
+<span class="k">FROM</span> students s
+<span class="k">LEFT JOIN</span> enrollments e <span class="k">ON</span> s.id = e.student_id
+<span class="k">GROUP BY</span> s.name;</pre>
+      <p>Alice 2, Bob 1, Carol 1, David 0. (<code>COUNT(e.course_id)</code>, pas <code>COUNT(*)</code> !)</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp9"><label for="fp9">Réussi sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P10 · Ch.4</span>
+    <p>Cours sans aucun inscrit.</p>
+    <details><summary>Solution</summary><div class="sol">
+      <pre style="margin:6px 0"><span class="k">SELECT</span> c.title <span class="k">FROM</span> courses c
+<span class="k">LEFT JOIN</span> enrollments e <span class="k">ON</span> c.id = e.course_id
+<span class="k">WHERE</span> e.course_id <span class="k">IS NULL</span>;</pre>
+      <p>History.</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp10"><label for="fp10">Réussi sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P11 · Ch.4</span>
+    <p>Étudiants n'ayant aucune inscription.</p>
+    <details><summary>Solution</summary><div class="sol">
+      <pre style="margin:6px 0"><span class="k">SELECT</span> s.name <span class="k">FROM</span> students s
+<span class="k">LEFT JOIN</span> enrollments e <span class="k">ON</span> s.id = e.student_id
+<span class="k">WHERE</span> e.student_id <span class="k">IS NULL</span>;</pre>
+      <p>David.</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp11"><label for="fp11">Réussi sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P12 · Ch.3+4</span>
+    <p>Titre du cours et sa note moyenne, pour les cours qui ont au moins un inscrit.</p>
+    <details><summary>Solution</summary><div class="sol">
+      <pre style="margin:6px 0"><span class="k">SELECT</span> c.title, <span class="k">AVG</span>(e.grade) <span class="k">AS</span> moy
+<span class="k">FROM</span> courses c
+<span class="k">JOIN</span> enrollments e <span class="k">ON</span> c.id = e.course_id
+<span class="k">GROUP BY</span> c.title;</pre>
+      <p>Math : AVG(15,8)=11,5. SQL : AVG(12,NULL)=12 (NULL ignoré). History absent (INNER JOIN).</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp12"><label for="fp12">Réussi sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P13 · Ch.2+3</span>
+    <p>Âge moyen des étudiants (en gérant le NULL) — explique le diviseur.</p>
+    <details><summary>Solution</summary><div class="sol">
+      <pre style="margin:6px 0"><span class="k">SELECT</span> <span class="k">AVG</span>(age) <span class="k">FROM</span> students;</pre>
+      <p>(22+25+20)/3 = 22,33. AVG divise par le nombre de valeurs <b>non NULL</b> (3), pas par 4.</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp13"><label for="fp13">Réussi sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P14 · Ch.3 (sous-requête)</span>
+    <p>Étudiants plus âgés que la moyenne.</p>
+    <details><summary>Solution</summary><div class="sol">
+      <pre style="margin:6px 0"><span class="k">SELECT</span> name <span class="k">FROM</span> students
+<span class="k">WHERE</span> age > (<span class="k">SELECT</span> <span class="k">AVG</span>(age) <span class="k">FROM</span> students);</pre>
+      <p>Moyenne ≈ 22,33. Bob (25) seul dépasse. (Alice 22 &lt; 22,33 ; Carol NULL exclue.)</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp14"><label for="fp14">Réussi sans aide</label></div>
+  </div>
+
+  <div class="exo">
+    <span class="exo-tag">P15 · Synthèse</span>
+    <p>Pour chaque étudiant, son nom et son nombre de cours, triés du plus actif au moins actif, David inclus.</p>
+    <details><summary>Solution</summary><div class="sol">
+      <pre style="margin:6px 0"><span class="k">SELECT</span> s.name, <span class="k">COUNT</span>(e.course_id) <span class="k">AS</span> nb
+<span class="k">FROM</span> students s
+<span class="k">LEFT JOIN</span> enrollments e <span class="k">ON</span> s.id = e.student_id
+<span class="k">GROUP BY</span> s.name
+<span class="k">ORDER BY</span> nb <span class="k">DESC</span>;</pre>
+      <p>Alice 2, puis Bob 1 et Carol 1, puis David 0. (LEFT JOIN + COUNT(col) + ORDER BY : la requête « complète » type examen.)</p>
+    </div></details>
+    <div class="check" style="margin-top:8px"><input type="checkbox" id="fp15"><label for="fp15">Réussi sans aide</label></div>
+  </div>
+</section>
+
+<footer>
+  <p class="sig">SQL &amp; Bases de données — Préparation Summer.</p>
+  <p style="margin-top:8px">Entraîne-toi sur <b>sqlzoo.net</b>, <b>pgexercises.com</b> et <b>LeetCode (Database)</b>. Pour réviser : <b>Use The Index, Luke!</b> (index &amp; perf). Prochaine matière : <b>05 Python</b>.</p>
+  <p style="margin-top:8px;font-size:12px">Progression et scores QCM sauvegardés localement dans ce navigateur.</p>
+</footer>
+
+</div>
+
+<div class="toast" id="toast">Sauvegardé ✓</div>
+
+<script>
+(function(){
+  var CK='dsba-sql-checks-v1', QK='dsba-sql-qcm-v1';
+  var checks={}, qcm={};
+  try{ checks=JSON.parse(localStorage.getItem(CK)||'{}'); }catch(e){ checks={}; }
+  try{ qcm=JSON.parse(localStorage.getItem(QK)||'{}'); }catch(e){ qcm={}; }
+  var toast=document.getElementById('toast'), tT;
+  function ping(){ toast.classList.add('show'); clearTimeout(tT); tT=setTimeout(function(){toast.classList.remove('show');},1100); }
+  function pct(arr){ if(!arr.length)return 0; var n=arr.filter(function(b){return b.checked;}).length; return Math.round(100*n/arr.length); }
+  var boxes=[].slice.call(document.querySelectorAll('input[type=checkbox]'));
+  function updModule(mod){
+    var sec=document.querySelector('section[data-module="'+mod+'"]'); if(!sec)return;
+    var arr=[].slice.call(sec.querySelectorAll('input[type=checkbox]'));
+    var p=pct(arr);
+    var fill=sec.querySelector('.mod-fill'); if(fill)fill.style.width=p+'%';
+    var nav=document.querySelector('[data-nav="'+mod+'"]'); if(nav)nav.textContent=p+'%';
+  }
+  function updGlobal(){
+    var p=pct(boxes);
+    document.getElementById('global-pct').textContent=p;
+    document.querySelector('#global-bar > span').style.width=p+'%';
+  }
+  boxes.forEach(function(b){
+    if(checks[b.id]) b.checked=true;
+    b.addEventListener('change',function(){
+      checks[b.id]=b.checked;
+      try{ localStorage.setItem(CK,JSON.stringify(checks)); }catch(e){}
+      var sec=b.closest('section[data-module]');
+      if(sec) updModule(sec.getAttribute('data-module'));
+      updGlobal(); ping();
+    });
+  });
+  var qcms=[].slice.call(document.querySelectorAll('.qcm'));
+  document.getElementById('qcm-total').textContent=qcms.length;
+  function updQcmScore(){
+    var correct=0;
+    qcms.forEach(function(q){ var id=q.getAttribute('data-id'); if(qcm[id]&&qcm[id].correct) correct++; });
+    document.getElementById('qcm-correct').textContent=correct;
+    document.querySelector('#qcm-bar > span').style.width=Math.round(100*correct/qcms.length)+'%';
+  }
+  qcms.forEach(function(q){
+    var ans=parseInt(q.getAttribute('data-answer'),10);
+    var id=q.getAttribute('data-id');
+    var opts=[].slice.call(q.querySelectorAll('.qcm-opts button'));
+    var fb=q.querySelector('.qcm-fb');
+    function lock(chosen){
+      opts.forEach(function(b){ b.disabled=true; });
+      opts[ans].classList.add('correct');
+      if(chosen!=null && chosen!==ans) opts[chosen].classList.add('wrong');
+      if(fb) fb.classList.add('show');
+      q.dataset.done='1';
+    }
+    if(qcm[id]){ lock(qcm[id].chosen); }
+    opts.forEach(function(b,i){
+      b.addEventListener('click',function(){
+        if(q.dataset.done) return;
+        lock(i);
+        qcm[id]={chosen:i, correct:(i===ans)};
+        try{ localStorage.setItem(QK,JSON.stringify(qcm)); }catch(e){}
+        updQcmScore(); ping();
+      });
+    });
+  });
+  ['ch1','ch2','ch3','ch4','final'].forEach(updModule);
+  updGlobal(); updQcmScore();
+})();
+</script>
+</body>
+</html>
