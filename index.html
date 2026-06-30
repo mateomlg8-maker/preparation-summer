@@ -237,12 +237,12 @@ footer .sig{font-family:'Fraunces',serif;font-style:italic;font-size:15px;color:
       document.getElementById('fb-off').addEventListener('click', function(){ S.disable(); });
     } else {
       box.innerHTML =
-        '<input type="text" id="fb-code" placeholder="ton code perso (ex : summer-2026-x7k3)" autocomplete="off">'+
+        '<input type="text" id="fb-code" placeholder="ton code (ex : 0000)" autocomplete="off">'+
         '<button id="fb-on" type="button">Activer la synchro</button>'+
         '<p class="sync-note">Choisis un code <b>long et unique</b> (il sert d\'identifiant ET de clé d\'accès). Note-le : tu le retaperas sur ton téléphone.</p>';
       document.getElementById('fb-on').addEventListener('click', function(){
         var v = document.getElementById('fb-code').value.trim();
-        if(v.length < 6){ alert('Choisis un code d\'au moins 6 caractères.'); return; }
+        if(!v){ return; }
         S.setCode(v);
       });
     }

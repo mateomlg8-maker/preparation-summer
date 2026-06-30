@@ -72,8 +72,42 @@ var FIREBASE_CONFIG = {
     }
   };
 
-  // Si pas configuré ou pas de code : mode 100% local, on s'arrête là.
-  if(!configured() || !getCode()) return;
+  // --- Modale "entre ton code" : s'affiche au premier plan tant qu'aucun code n'est défini ---
+  function showCodeModal(){
+    if(!configured() || getCode()) return;
+    if(document.getElementById('prep-sync-modal')) return;
+    if(sessionStorage.getItem('prep-sync-dismissed')) return;
+    if(!document.body){ document.addEventListener('DOMContentLoaded', showCodeModal); return; }
+    var ov = document.createElement('div');
+    ov.id = 'prep-sync-modal';
+    ov.style.cssText = 'position:fixed;inset:0;background:rgba(20,30,54,.55);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;font-family:Inter,system-ui,sans-serif';
+    ov.innerHTML =
+      '<div style="background:#fff;border:2px solid #1C2B4A;box-shadow:6px 6px 0 #1C2B4A;max-width:430px;width:100%;padding:24px">'
+      + '<div style="font-family:Fraunces,Georgia,serif;font-weight:900;font-size:22px;color:#1C2B4A;margin:0 0 8px">🔄 Synchroniser ta progression</div>'
+      + '<p style="font-size:14px;line-height:1.5;color:#5A6685;margin:0 0 14px">Entre un code de ton choix, le <b>même</b> sur ton ordinateur et ton téléphone. Mets ce que tu veux — par exemple <b>0000</b>.</p>'
+      + '<input id="prep-sync-input" type="text" autocomplete="off" placeholder="ex : 0000" style="width:100%;font-size:17px;padding:12px 14px;border:1.5px solid #1C2B4A;margin:0 0 12px;box-sizing:border-box">'
+      + '<div style="display:flex;gap:12px;align-items:center">'
+      + '<button id="prep-sync-go" style="font:600 14px Inter,sans-serif;background:#2F7D4F;color:#fff;border:1.5px solid #1C2B4A;box-shadow:3px 3px 0 #1C2B4A;padding:12px 18px;cursor:pointer">Activer</button>'
+      + '<button id="prep-sync-later" style="font:13px Inter,sans-serif;background:none;border:none;color:#5A6685;cursor:pointer;text-decoration:underline">plus tard</button>'
+      + '</div></div>';
+    document.body.appendChild(ov);
+    var inp = ov.querySelector('#prep-sync-input');
+    try { inp.focus(); } catch(e){}
+    function go(){ var v = inp.value.trim(); if(!v){ inp.focus(); return; } window.PREP_SYNC.setCode(v); }
+    ov.querySelector('#prep-sync-go').onclick = go;
+    inp.addEventListener('keydown', function(e){ if(e.key === 'Enter') go(); });
+    ov.querySelector('#prep-sync-later').onclick = function(){ ov.remove(); try{ sessionStorage.setItem('prep-sync-dismissed','1'); }catch(e){} };
+  }
+
+  // Pas de Firebase configuré → tout reste en local.
+  if(!configured()) return;
+
+  // Configuré mais pas encore de code → on propose la modale au premier plan, puis on s'arrête.
+  if(!getCode()){
+    if(document.readyState === 'loading'){ document.addEventListener('DOMContentLoaded', showCodeModal); }
+    else { showCodeModal(); }
+    return;
+  }
 
   // --- Chargement dynamique du SDK Firebase (compat) puis init ---
   function loadScript(src){
