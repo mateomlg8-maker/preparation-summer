@@ -31,7 +31,8 @@ var FIREBASE_CONFIG = {
     'dsba-alg-checks-v1','dsba-alg-qcm-v1',
     'dsba-ana-checks-v1','dsba-ana-qcm-v1',
     'dsba-sql-checks-v1','dsba-sql-qcm-v1',
-    'dsba-py-checks-v1','dsba-py-qcm-v1'
+    'dsba-py-checks-v1','dsba-py-qcm-v1',
+    'dsba-flash-v1'
   ];
   var CODE_KEY  = 'dsba-sync-code';   // identifiant perso (passphrase)
   var STAMP_KEY = 'dsba-sync-stamp';  // horodatage de la dernière écriture

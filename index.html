@@ -53,6 +53,12 @@ h1 .hl{background:linear-gradient(transparent 55%, var(--stabilo) 55%);padding:0
 .course .go{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:var(--ink);margin-top:12px;display:inline-block;border-top:1.5px solid var(--ink);padding-top:8px;width:100%}
 .course .go::after{content:' →'}
 
+.fc-banner{display:flex;align-items:center;justify-content:space-between;gap:16px;text-decoration:none;color:inherit;background:#F3ECFF;border:1.5px solid var(--ink);box-shadow:4px 4px 0 var(--ink);padding:18px 22px;margin:6px 0 2px;transition:transform .12s ease,box-shadow .12s ease}
+.fc-banner:hover,.fc-banner:focus-visible{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--ink);outline:none}
+.fc-banner .fc-t{font-family:'Fraunces',serif;font-weight:900;font-size:22px;line-height:1.1}
+.fc-banner .fc-s{font-size:13.5px;color:var(--ink-soft);margin-top:3px}
+.fc-banner .fc-cta{font-family:'JetBrains Mono',monospace;font-size:12.5px;font-weight:600;color:#fff;background:var(--kid);border:1.5px solid var(--ink);padding:10px 14px;white-space:nowrap}
+
 .bridge{border:1.5px solid var(--ink);background:#EEF4FF;padding:16px 20px;margin:20px 0;font-size:14.5px}
 .bridge h4{font-family:'Fraunces',serif;font-weight:900;font-size:18px;margin-bottom:6px}
 .bridge ul{margin:6px 0 0 20px}
@@ -119,6 +125,16 @@ footer .sig{font-family:'Fraunces',serif;font-style:italic;font-size:15px;color:
 <div class="sec-sub">Ordre conseillé : commence par les maths (01→03), puis les outils (04, 05). Chaque carte montre ta progression et ton score QCM.</div>
 
 <div class="courses" id="courses"></div>
+
+<div class="sec-title">Mémoriser — Flashcards</div>
+<div class="sec-sub">Ancre les définitions, formules et pièges en répétition espacée (les cartes reviennent au bon moment).</div>
+<a class="fc-banner" href="flashcards.html">
+  <div>
+    <div class="fc-t">🃏 Flashcards</div>
+    <div class="fc-s"><span id="fc-count">Proba &amp; Stats</span> · Su / À revoir / Raté, et ça se synchronise avec ton code.</div>
+  </div>
+  <span class="fc-cta">Réviser →</span>
+</a>
 
 <div class="sec-title">La règle des ponts</div>
 <div class="sec-sub">Le carnet est conçu pour faire <b>collisionner les matières</b> — c'est là qu'on comprend vraiment.</div>
@@ -239,7 +255,7 @@ footer .sig{font-family:'Fraunces',serif;font-style:italic;font-size:15px;color:
       box.innerHTML =
         '<input type="text" id="fb-code" placeholder="ton code (ex : 0000)" autocomplete="off">'+
         '<button id="fb-on" type="button">Activer la synchro</button>'+
-        '<p class="sync-note">Choisis un code <b>long et unique</b> (il sert d\'identifiant ET de clé d\'accès). Note-le : tu le retaperas sur ton téléphone.</p>';
+        '<p class="sync-note">Mets ce que tu veux (ex. <b>0000</b>), le <b>même</b> sur tes autres appareils. Note-le : tu le retaperas sur ton téléphone.</p>';
       document.getElementById('fb-on').addEventListener('click', function(){
         var v = document.getElementById('fb-code').value.trim();
         if(!v){ return; }
@@ -255,6 +271,7 @@ footer .sig{font-family:'Fraunces',serif;font-style:italic;font-size:15px;color:
       data[c.ck] = localStorage.getItem(c.ck) || '{}';
       data[c.qk] = localStorage.getItem(c.qk) || '{}';
     });
+    data['dsba-flash-v1'] = localStorage.getItem('dsba-flash-v1') || '{}';
     var blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
     var url = URL.createObjectURL(blob);
     var a = document.createElement('a');
@@ -289,10 +306,20 @@ footer .sig{font-family:'Fraunces',serif;font-style:italic;font-size:15px;color:
 
   // reset
   document.getElementById('reset-btn').addEventListener('click', function(){
-    if(!confirm('Effacer toute ta progression (cases + QCM) des 5 matières ? Action irréversible.')) return;
+    if(!confirm('Effacer toute ta progression (cases + QCM + flashcards) ? Action irréversible.')) return;
     COURSES.forEach(function(c){ localStorage.removeItem(c.ck); localStorage.removeItem(c.qk); });
+    localStorage.removeItem('dsba-flash-v1');
     location.reload();
   });
+
+  // compteur flashcards sur le bandeau
+  (function(){
+    var el = document.getElementById('fc-count'); if(!el) return;
+    var fs = {}; try{ fs = JSON.parse(localStorage.getItem('dsba-flash-v1')||'{}'); }catch(e){}
+    var now = Date.now(), due = 0, acq = 0;
+    Object.keys(fs).forEach(function(k){ var r = fs[k]; if(r && r.box >= 5) acq++; if(!r || (r.due||0) <= now) due++; });
+    if(acq > 0) el.textContent = 'Proba & Stats · ' + acq + ' carte' + (acq>1?'s':'') + ' acquise' + (acq>1?'s':'');
+  })();
 })();
 </script>
 </body>
